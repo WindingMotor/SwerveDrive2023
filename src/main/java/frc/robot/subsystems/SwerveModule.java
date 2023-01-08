@@ -14,6 +14,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.DriveConstants;
@@ -165,6 +166,10 @@ public class SwerveModule extends SubsystemBase {
   public double getTurningVelocity() {
       return turningEncoder.getVelocity();
     }
+    
+  public SwerveModulePosition getPosition(){
+    return( new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad())));
+  }
 
   /* Convert absolute value of the encoder to radians and then subtract the radian offset
   then check if the encoder is reversed.*/

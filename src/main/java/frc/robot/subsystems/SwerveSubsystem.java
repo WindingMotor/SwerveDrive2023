@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -63,12 +64,28 @@ public class SwerveSubsystem extends SubsystemBase {
   // Create the navX using roboRIO expansion port
   private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
+
+  public SwerveModulePosition[] getModulePositions(){
+    return( new SwerveModulePosition[]{
+      backRight.getPosition(), 
+      frontRight.getPosition(), 
+      backLeft.getPosition(),
+      frontLeft.getPosition()});
+  }
   // Create a robot monitor
   //private final Monitor monitor = new Monitor();
 
-
+  // BROKEN FOR 2023
   // Create odometer for error correction
-  private SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0));
+  private SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
+  new Rotation2d(0), getModulePositions());
+  // BROKEN FOR 2023
+
+  /*
+   * 
+   * 
+   *   
+   */
 
   // Create empty right joystick for live speed control: BORKED!
   Joystick rightJoystick;
@@ -132,7 +149,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Reset odometer to new location
   public void resetOdometry(Pose2d pose){
-    odometer.resetPosition(pose, getRotation2d());
+   // odometer.resetPosition(pose, getRotation2d());
+   odometer.resetPosition(getRotation2d(),getModulePositions(), pose);
   }
 
   // Reset all swerve module encoders
@@ -155,7 +173,9 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic(){
 
     // Periodicly update odometer for it to caculate position
-    odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
+   // odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
+
+    
 
     // Odometry
     SmartDashboard.putNumber("Heading", getHeading());
@@ -163,6 +183,8 @@ public class SwerveSubsystem extends SubsystemBase {
     
     // Update robot monitor
     //monitor.update();
+
+
     
     frontLeft.update();
     frontRight.update();

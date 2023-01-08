@@ -34,7 +34,7 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
             // Commands to run sequentially
             new SequentialCommandGroup(
               // Move robot with path planner swerve command
-              new PPSwerveControllerCommand(pptrajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, ppthetaController, swerveSubsystem::setModuleStates, eventMap, swerveSubsystem),
+              //new PPSwerveControllerCommand(pptrajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, ppthetaController, swerveSubsystem::setModuleStates, eventMap, swerveSubsystem),
               // Tell driver station that command is running
               new ReportWarning("Trajectory weaver: " + pptrajectory.toString()),
               // Stop all module movement
