@@ -199,7 +199,7 @@ public class SwerveModule extends SubsystemBase {
     angle *= ( absoluteEncoderReversed ? -1.0 : 1.0);
     
     // Report setting to driver station
-    DriverStation.reportError(moduleName + " called getAbsoluteEncoderRad: " + angle + "  " + absoluteEncoderOffsetRad, true);
+    //DriverStation.reportError(moduleName + " called getAbsoluteEncoderRad: " + angle + "  " + absoluteEncoderOffsetRad, true);
 
     // Return angle in radians for neo turning motor encoder
     return angle;
@@ -210,12 +210,12 @@ public class SwerveModule extends SubsystemBase {
   public void resetEncoders(){
     driveEncoder.setPosition(0);
     REVLibError error = turningEncoder.setPosition(getAbsoluteEncoderRad());
-    DriverStation.reportError("RESET ENCODER" + getAbsoluteEncoderRad() + " ", true);
+    //DriverStation.reportError("RESET ENCODER" + getAbsoluteEncoderRad() + " ", true);
     if(error.value != 0){
-      DriverStation.reportError(moduleName + " reset encoders error!: " + error.value, true);
+      //DriverStation.reportError(moduleName + " reset encoders error!: " + error.value, true);
     }
     else if(error.value == 0){
-      DriverStation.reportWarning(moduleName + " reset encoders has been ran without errors: " + getAbsoluteEncoderRad(), true);
+      //DriverStation.reportWarning(moduleName + " reset encoders has been ran without errors: " + getAbsoluteEncoderRad(), true);
     }
   }
 
@@ -239,7 +239,7 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
 
     // Use PID to calculate angle setpoint
-    //turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+    turningMotor.set(turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
     //turningMotor.set(builtinTurningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
     
 

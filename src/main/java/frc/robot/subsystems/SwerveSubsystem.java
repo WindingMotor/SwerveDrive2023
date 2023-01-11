@@ -67,10 +67,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public SwerveModulePosition[] getModulePositions(){
     return( new SwerveModulePosition[]{
-      backRight.getPosition(), 
+      frontLeft.getPosition(), 
       frontRight.getPosition(), 
       backLeft.getPosition(),
-      frontLeft.getPosition()});
+      frontRight.getPosition()});
   }
   // Create a robot monitor
   //private final Monitor monitor = new Monitor();
@@ -155,7 +155,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Reset all swerve module encoders
   public void resetAllEncoders(){
-    DriverStation.reportError("RESET ALL ALL ENCODERS", true);
+    //DriverStation.reportError("RESET ALL ALL ENCODERS", true);
       frontLeft.resetEncoders();
       frontRight.resetEncoders();
       backLeft.resetEncoders();
@@ -173,7 +173,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic(){
 
     // Periodicly update odometer for it to caculate position
-   // odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
+    odometer.update(getRotation2d(), getModulePositions());
 
     
 
