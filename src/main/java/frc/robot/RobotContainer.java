@@ -66,7 +66,14 @@ public class RobotContainer {
     () -> rightJoystick.getRawAxis(0), // X-Axis
     () -> rightJoystick.getRawAxis(1), // Y-Axis
     () -> leftJoystick.getRawAxis(0), // R-Axis
-    () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); // Field Oriented
+    () -> trueFunct()));  // Field Oriented
+
+    // DEBUG SETUP
+/*     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
+    () -> zeroFunct(), // X-Axis
+    () -> rightJoystick.getRawAxis(2), // Y-Axis
+    () -> zeroFunct(), // R-Axis
+    () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); */
     
     //>--------------T-R-A-N-S-----------------// // Might be working...
     /* 
@@ -91,6 +98,16 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
+  private double zeroFunct()
+  {
+    return 0;
+  }
+
+  private boolean trueFunct()
+  {
+    return true;
+  }
+
   //------------------------------------B-U-T-T-O-N-S------------------------------------//
 
   // Create buttons bindings
@@ -111,7 +128,7 @@ public class RobotContainer {
 
     public void containerResetAllEncoders(){
       DriverStation.reportWarning("Running containerResetAllEncoders() in RobotContainer", true);
-      //swerveSubsystem.resetAllEncoders();
+      swerveSubsystem.resetAllEncoders();
     }
 
   //------------------------------------A-U-T-O-N-O-M-O-U-S------------------------------------//

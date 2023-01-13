@@ -53,11 +53,14 @@ public class SwerveModule extends SubsystemBase {
   // Class constructor where we assign default values for variable
    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoLuteEncoderReversed, String name) {
 
+
     // Set offsets for absolute encoder in RADIANS!!!!!
     absoluteEncoderOffsetRad = absoluteEncoderOffset;
     absoluteEncoderReversed = absoLuteEncoderReversed;
 
     moduleName = name;
+
+    SmartDashboard.putNumber(moduleName + " ABE Manual", 0);
 
     // Create absolute encoder
     absoluteEncoder = new DutyCycleEncoder(absoluteEncoderId);
@@ -157,6 +160,7 @@ public class SwerveModule extends SubsystemBase {
 
   public double getTurningPosition() {
       return turningEncoder.getPosition();
+      //return getAbsoluteEncoderRad();
     }
 
   public double getDriveVelocity() {
@@ -168,7 +172,7 @@ public class SwerveModule extends SubsystemBase {
     }
     
   public SwerveModulePosition getPosition(){
-    return( new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAbsoluteEncoderRad())));
+    return( new SwerveModulePosition(getDrivePosition(), new Rotation2d(getTurningPosition())));
   }
 
   /* Convert absolute value of the encoder to radians and then subtract the radian offset
@@ -179,13 +183,15 @@ public class SwerveModule extends SubsystemBase {
     double angle;
 
     // Get encoder absolute position goes from 1 to 0
-    angle = absoluteEncoder.getAbsolutePosition();
+    angle = 1 - absoluteEncoder.getAbsolutePosition();
 
     // Convert into radians
     angle *= 2.0 * Math.PI;
-
-    // Apply magnetic offsets in radians
+    //angle -= (SmartDashboard.getNumber(moduleName + " ABE Manual", 0) / 180.0) * Math.PI;
+    //System.out.println("WARNING: " + moduleName + " is at " + SmartDashboard.getNumber(moduleName + " ABE Manual", 0));
     angle -= absoluteEncoderOffsetRad;
+    // Apply magnetic offsets in radians
+    //angle -= absoluteEncoderOffsetRad;
 
     /*
     if(angle < 0){
@@ -193,10 +199,10 @@ public class SwerveModule extends SubsystemBase {
     } 
     */
 
-    angle = Math.abs(angle);
+    //angle = Math.abs(angle);
 
     // Make negative if set
-    angle *= ( absoluteEncoderReversed ? -1.0 : 1.0);
+    //angle *= ( absoluteEncoderReversed ? -1.0 : 1.0);
     
     // Report setting to driver station
     //DriverStation.reportError(moduleName + " called getAbsoluteEncoderRad: " + angle + "  " + absoluteEncoderOffsetRad, true);
@@ -233,7 +239,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     // Optimize swerve module state to do fastest rotation movement, aka never rotate more than 90*
-   state = SwerveModuleState.optimize(state, getState().angle);
+   //state = SwerveModuleState.optimize(state, getState().angle);
 
     // Scale velocity down using robot max speed
     driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);

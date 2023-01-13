@@ -70,7 +70,7 @@ public class SwerveSubsystem extends SubsystemBase {
       frontLeft.getPosition(), 
       frontRight.getPosition(), 
       backLeft.getPosition(),
-      frontRight.getPosition()});
+      backRight.getPosition()});
   }
   // Create a robot monitor
   //private final Monitor monitor = new Monitor();
