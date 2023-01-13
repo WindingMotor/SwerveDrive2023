@@ -66,7 +66,8 @@ public class RobotContainer {
     () -> rightJoystick.getRawAxis(0), // X-Axis
     () -> rightJoystick.getRawAxis(1), // Y-Axis
     () -> leftJoystick.getRawAxis(0), // R-Axis
-    () -> trueFunct()));  // Field Oriented
+    () -> trueFunct(),
+    () -> swerveSubsystem.getHeading()));  // Field Oriented
 
     // DEBUG SETUP
 /*     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,

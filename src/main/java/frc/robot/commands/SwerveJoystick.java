@@ -16,14 +16,16 @@ public class SwerveJoystick extends CommandBase {
 
   // Create empty variables for reassignment
   private final SwerveSubsystem swerveSubsystem;
-  private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
+  private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, headingFunction;
   private final Supplier<Boolean> fieldOrientedFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+  private double initialHeading;
+  private final double turningPValue = .2;
 
   // Command constructor and requirements 
   public SwerveJoystick(SwerveSubsystem swerveSubsystem,
   Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
-  Supplier<Boolean> fieldOrientedFunction) {
+  Supplier<Boolean> fieldOrientedFunction, Supplier<Double> headingFunction) {
 
     // Assign empty variables values passed from constructor and requirements
     this.swerveSubsystem = swerveSubsystem;
@@ -31,6 +33,8 @@ public class SwerveJoystick extends CommandBase {
     this.ySpdFunction = ySpdFunction;
     this.turningSpdFunction = turningSpdFunction;
     this.fieldOrientedFunction = fieldOrientedFunction;
+    this.headingFunction = headingFunction;
+    this.initialHeading = headingFunction.get();
 
     // Slew rate limiter
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -60,6 +64,19 @@ public class SwerveJoystick extends CommandBase {
     xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+
+    // Test heading control, throws away previous turning values
+    initialHeading += turningSpeed;
+    turningSpeed = (headingFunction.get() - initialHeading) * turningPValue;
+    turningSpeed = Math.abs(turningSpeed) > IOConstants.kDeadband ? turningSpeed : 0.0;
+    if (turningSpeed > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond)
+    {
+      turningSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+    }
+    else if (turningSpeed < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond)
+    {
+      turningSpeed = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+    }
 
     // Apply field oriented mode
     ChassisSpeeds chassisSpeeds;
