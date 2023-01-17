@@ -5,6 +5,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.Constants.DriveConstants;
 import frc.robot.util.Constants.IOConstants;
 import java.util.function.Supplier;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -20,7 +22,9 @@ public class SwerveJoystick extends CommandBase {
   private final Supplier<Boolean> fieldOrientedFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   private double initialHeading;
-  private final double turningPValue = .2;
+  private final double turningPValue = 0.01;
+
+  private PIDController turningPidController = new PIDController(turningPValue, 0, 0);
 
   // Command constructor and requirements 
   public SwerveJoystick(SwerveSubsystem swerveSubsystem,
@@ -65,6 +69,30 @@ public class SwerveJoystick extends CommandBase {
     ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
+    
+    // Based off motor changes
+    initialHeading += turningSpeed;
+
+    // Deadband for motors
+    turningSpeed = Math.abs(turningSpeed) > IOConstants.kDeadband ? turningSpeed : 0.0;
+
+    // Find turning point 
+    turningSpeed = turningPidController.calculate(initialHeading, turningSpeed);
+
+    //System.out.println(initialHeading);
+
+    // Limit turning speed
+    if (turningSpeed > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond)
+    {
+      turningSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+    }
+    else if (turningSpeed < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond)
+    {
+      turningSpeed = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+    }
+    
+
+    /* 
     // Test heading control, throws away previous turning values
     initialHeading += turningSpeed;
     // PID
@@ -80,7 +108,8 @@ public class SwerveJoystick extends CommandBase {
     {
       turningSpeed = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
     }
-
+    
+*/
     // Apply field oriented mode
     ChassisSpeeds chassisSpeeds;
     
@@ -96,6 +125,7 @@ public class SwerveJoystick extends CommandBase {
 
     // Create chassis speeds
     chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
+    //chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
 
     // Put field oriented value on smart dashboard
     SmartDashboard.putBoolean("Field Oriented: ", fieldOrientedFunction.get());
