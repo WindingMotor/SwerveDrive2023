@@ -67,8 +67,11 @@ public class SwerveJoystick extends CommandBase {
 
     // Test heading control, throws away previous turning values
     initialHeading += turningSpeed;
+    // PID
     turningSpeed = (headingFunction.get() - initialHeading) * turningPValue;
+    // Deadband
     turningSpeed = Math.abs(turningSpeed) > IOConstants.kDeadband ? turningSpeed : 0.0;
+    // Limit turning rat
     if (turningSpeed > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond)
     {
       turningSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
@@ -91,6 +94,7 @@ public class SwerveJoystick extends CommandBase {
     }
     */
 
+    // Create chassis speeds
     chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
 
     // Put field oriented value on smart dashboard

@@ -4,7 +4,7 @@ package frc.robot.commands;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.Constants.DriveConstants;
 import java.util.function.Supplier;
-import edu.wpi.first.math.filter.SlewRateLimiter;
+//import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -19,7 +19,7 @@ public class SwerveThrottledJoystick extends CommandBase {
   private final SwerveSubsystem swerveSubsystem;
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, throttleFunction;
   private final Supplier<Boolean> fieldOrientedFunction;
-  private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+  //private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
 
   // Command constructor and requirements 
   public SwerveThrottledJoystick(SwerveSubsystem swerveSubsystem,
@@ -35,9 +35,11 @@ public class SwerveThrottledJoystick extends CommandBase {
     this.throttleFunction = throttleFunction;
 
     // Slew rate limiter
+    /* 
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
+    */
 
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem);

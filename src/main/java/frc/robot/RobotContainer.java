@@ -117,7 +117,7 @@ public class RobotContainer {
     // Assign button to manually zero heading
 
   // DEPRECATED 2023
-   new JoystickButton(rightJoystick,Constants.IOConstants.kZeroHeadingButton).whenPressed(() -> swerveSubsystem.zeroHeading());
+  //new JoystickButton(rightJoystick,Constants.IOConstants.kZeroHeadingButton).whenPressed(() -> swerveSubsystem.zeroHeading());
   // DEPRECATED 2023
 
     // Rotate robot 90* using swerve rotator
@@ -138,7 +138,7 @@ public class RobotContainer {
   private Command forward2M = new TrajectoryRunner(swerveSubsystem, xController, yController, thetaController, Forward2M.getTrajectory(), Forward2M.getTrajectoryConfig());
     
   // Create a command using a routine which uses TrajectoryWeaver internally
-  private Command testRoutine = new TestRoutine(swerveSubsystem, xController, yController, ppThetaController);
+  private Command testRoutine = new TestRoutine(swerveSubsystem,xController, yController, ppThetaController);
 
   // Return the command to run during auto
   public Command getAutonomousCommand(){

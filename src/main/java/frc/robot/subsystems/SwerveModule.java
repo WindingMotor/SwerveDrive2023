@@ -1,7 +1,6 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -37,7 +36,7 @@ public class SwerveModule extends SubsystemBase {
 
   private final DutyCycleEncoder absoluteEncoder;
 
-  private final boolean absoluteEncoderReversed;
+  //private final boolean absoluteEncoderReversed;
   private final double absoluteEncoderOffsetRad;
 
   private String moduleName;
@@ -56,7 +55,7 @@ public class SwerveModule extends SubsystemBase {
 
     // Set offsets for absolute encoder in RADIANS!!!!!
     absoluteEncoderOffsetRad = absoluteEncoderOffset;
-    absoluteEncoderReversed = absoLuteEncoderReversed;
+    //absoluteEncoderReversed = absoLuteEncoderReversed;
 
     moduleName = name;
 
@@ -132,7 +131,7 @@ public class SwerveModule extends SubsystemBase {
 
     simTurn2 = root2.append(new MechanismLigament2d("Swerve Turn", 2, 1.75));
     simDirection2 = simTurn2.append(new MechanismLigament2d("Wheel direction", 1, 0, 6, new Color8Bit(Color.kPurple)));
-    SmartDashboard.putData(moduleName+"  real Turn", mod);
+    SmartDashboard.putData(moduleName+"  real Turn", mod2);
 
     //>-------------------------------<//
 

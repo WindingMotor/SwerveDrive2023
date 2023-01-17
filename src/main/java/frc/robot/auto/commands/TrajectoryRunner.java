@@ -28,7 +28,7 @@ public class TrajectoryRunner extends SequentialCommandGroup{
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, thetaController, swerveSubsystem::setModuleStates, swerveSubsystem);
 
         // Create report warning command, prints running trajectory to driver station
-        ReportWarning sendData = new ReportWarning("Trajectory runner: " + trajectory.toString());
+        ReportWarning sendData = new ReportWarning("Trajectory runner: " + trajectory.toString(), true);
 
         addCommands(
             // Commands to run sequentially
