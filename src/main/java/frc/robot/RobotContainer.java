@@ -61,14 +61,14 @@ public class RobotContainer {
     // Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
 
     //>-------------N-O-R-M-A-L----------------<//
-   
+   /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> rightJoystick.getRawAxis(0), // X-Axis
     () -> rightJoystick.getRawAxis(1), // Y-Axis
     () -> leftJoystick.getRawAxis(0), // R-Axis
     () -> trueFunct(),
-    () -> swerveSubsystem.getHeading()));  // Field Oriented
-
+    () -> swerveSubsystem.getHeading())); 
+*/
     // DEBUG SETUP
 /*     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> zeroFunct(), // X-Axis
@@ -77,13 +77,14 @@ public class RobotContainer {
     () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); */
     
     //>--------------T-R-A-N-S-----------------// // Might be working...
-    /* 
+    
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> transmitter.getRoll(), // X-Axis
-    () -> transmitter.getPitch(), // Y-Axis
-    () -> transmitter.getYaw(), // R-Axis
-    () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); // Field Oriented
-    */
+    () -> -transmitter.getPitch(), // Y-Axis
+    () -> -transmitter.getYaw(), // R-Axis
+    () -> trueFunct(),
+    () -> swerveSubsystem.getHeading())); 
+    
 
     //>----------T-H-R-T-L----------<// // Might maybe be working?!
     /*

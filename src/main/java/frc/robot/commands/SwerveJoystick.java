@@ -22,7 +22,7 @@ public class SwerveJoystick extends CommandBase {
   private final Supplier<Boolean> fieldOrientedFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   private double initialHeading;
-  private final double turningPValue = .2;
+  private final double turningPValue = 0.001;
   private PIDController tunringPidController;
 
   // Command constructor and requirements 
@@ -45,6 +45,8 @@ public class SwerveJoystick extends CommandBase {
     this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
     tunringPidController = new PIDController(turningPValue, 0, 0);
+
+    //tunringPidController.enableContinuousInput(0, 360);
 
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem);
@@ -70,14 +72,23 @@ public class SwerveJoystick extends CommandBase {
     ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
+ 
+    
+    SmartDashboard.putNumber("TURN-S", turningSpeed);
     // Update heading based off changes
     initialHeading += turningSpeed;
+    SmartDashboard.putNumber("INIT-H", initialHeading);
+    initialHeading = Math.IEEEremainder(initialHeading, 360);
+    SmartDashboard.putNumber("INIT-H-REMAIN", initialHeading);
+
+    SmartDashboard.putNumber("PID-O", tunringPidController.calculate(headingFunction.get(), initialHeading));
+
 
     // Wpilib PID, takes in current heading and heading to be at
     turningSpeed = tunringPidController.calculate(headingFunction.get(), initialHeading);
 
     // Apply deadband for motors
-    turningSpeed = Math.abs(turningSpeed) > IOConstants.kDeadband ? turningSpeed : 0.0;
+    //turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.05 ? turningSpeed : 0.0;
 
     // Limit turning speed
     if (turningSpeed > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
@@ -90,6 +101,7 @@ public class SwerveJoystick extends CommandBase {
     /* 
     // Test heading control, throws away previous turning values
     initialHeading += turningSpeed;
+    //initialHeading =  Math.IEEEremainder(initialHeading, 360);
     // PID
     turningSpeed = (headingFunction.get() - initialHeading) * turningPValue;
     // Deadband
