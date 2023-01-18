@@ -21,7 +21,6 @@ import frc.robot.util.Constants.ModuleConstants;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 
-
 public class SwerveModule extends SubsystemBase {
  
   // Create empty variables for reassignment
