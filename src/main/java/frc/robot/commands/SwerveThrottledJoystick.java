@@ -10,7 +10,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-
 // The same thing as swerve joystick but with throttle control
 
 public class SwerveThrottledJoystick extends CommandBase {

@@ -3,7 +3,6 @@
 package frc.robot.auto.routines;
 import java.util.HashMap;
 import java.util.function.Consumer;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -16,7 +15,7 @@ import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.commands.ReportWarning;
 import frc.robot.subsystems.SwerveSubsystem;
 
-// Runs a given pp-trajectory as a command 
+// Run multiple commands in a routine
 public class TestRoutine extends SequentialCommandGroup{
 
     // Routine command constructor
