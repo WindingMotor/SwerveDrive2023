@@ -28,14 +28,14 @@ public class TrajectoryRunner extends SequentialCommandGroup{
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, thetaController, swerveSubsystem::setModuleStates, swerveSubsystem);
 
         // Create report warning command, prints running trajectory to driver station
-        ReportWarning sendData = new ReportWarning("Trajectory runner: " + trajectory.toString(), true);
+       // ReportWarning sendData = new ReportWarning("Trajectory runner: " + trajectory.toString(), true);
 
         addCommands(
             // Commands to run sequentially
             new SequentialCommandGroup(
                 new ResetOdometry(swerveSubsystem, trajectory.getInitialPose()),  // Reset robot odometry before movement 
                 swerveControllerCommand, // Move robot with trajectory and module states
-                sendData, // Tell driver station that command is running
+                //sendData, // Tell driver station that command is running
                 new InstantCommand(() -> swerveSubsystem.stopModules()) // Stop all modules
             )
         ); 

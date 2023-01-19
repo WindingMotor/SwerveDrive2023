@@ -61,14 +61,14 @@ public class RobotContainer {
     // Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
 
   //>-------------N-O-R-M-A-L----------------<//
-   /* 
+   
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> rightJoystick.getRawAxis(0), // X-Axis
     () -> rightJoystick.getRawAxis(1), // Y-Axis
     () -> leftJoystick.getRawAxis(0), // R-Axis
     () -> trueFunct(),
     () -> swerveSubsystem.getHeading())); 
-*/
+
 
     // DEBUG SETUP -> ZERO MOVEMENT
 /*     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
@@ -78,14 +78,14 @@ public class RobotContainer {
     () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); */
     
   //>--------------T-R-A-N-S-----------------//
-    
+    /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> transmitter.getRoll(), // X-Axis
     () -> -transmitter.getPitch(), // Y-Axis
     () -> -transmitter.getYaw(), // R-Axis
     () -> transmitter.getSwitchVeryRight(),
     () -> swerveSubsystem.getHeading() )); 
-    
+    */
   //>----------T-H-R-T-L----------<// // No clue if working...
     /*
     swerveSubsystem.setDefaultCommand(new SwerveThrottledJoystick(swerveSubsystem,
@@ -155,7 +155,6 @@ public class RobotContainer {
       autoCommand = testRoutine;
     }
 
-    return autoCommand;
+    return testRoutine;
   }
 }
-

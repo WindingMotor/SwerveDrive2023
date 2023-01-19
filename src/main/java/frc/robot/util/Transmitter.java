@@ -51,7 +51,7 @@ public class Transmitter {
     }
 
     public boolean getSwitchVeryRight(){
-        return(joystick.getRawButton(0));
+        return(joystick.getRawButton(1));
     }
 
     public boolean getSwitchRight(){
@@ -59,11 +59,11 @@ public class Transmitter {
     }
 
     public boolean getSwitchVeryLeft(){
-        return(joystick.getRawButton(2));
+        return(joystick.getRawButton(1));
     }
 
     public boolean getSwitchLeft(){
-        return(joystick.getRawButton(3));
+        return(joystick.getRawButton(1));
     }
 
 }

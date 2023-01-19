@@ -100,8 +100,8 @@ public final class Constants {
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond;
-        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 2;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 2;
+        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 1;
+        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 1;
 
         public static final double kMaxDriveMotorTemp = 33.0;
 
@@ -114,9 +114,9 @@ public final class Constants {
         public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 15;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
-        public static final double kPXController = 1.5;
-        public static final double kPYController = 1.5;
-        public static final double kPThetaController = 3;
+        public static final double kPXController = 1;
+        public static final double kPYController = 1;
+        public static final double kPThetaController = 1;
 
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = 
         new TrapezoidProfile.Constraints(
