@@ -49,4 +49,21 @@ public class Transmitter {
         SmartDashboard.putNumber("Yaw", calculateOffset(joystick.getRawAxis(3)));
         return(calculateOffset(joystick.getRawAxis(3)));
     }
+
+    public boolean getSwitchVeryRight(){
+        return(joystick.getRawButton(0));
+    }
+
+    public boolean getSwitchRight(){
+        return(joystick.getRawButton(1));
+    }
+
+    public boolean getSwitchVeryLeft(){
+        return(joystick.getRawButton(2));
+    }
+
+    public boolean getSwitchLeft(){
+        return(joystick.getRawButton(3));
+    }
+
 }

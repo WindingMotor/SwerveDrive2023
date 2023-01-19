@@ -60,7 +60,7 @@ public class RobotContainer {
     // Joystick Axises: 0 = left/right : 1 = forward/backwards : 2 = dial
     // Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
 
-    //>-------------N-O-R-M-A-L----------------<//
+  //>-------------N-O-R-M-A-L----------------<//
    /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> rightJoystick.getRawAxis(0), // X-Axis
@@ -69,24 +69,24 @@ public class RobotContainer {
     () -> trueFunct(),
     () -> swerveSubsystem.getHeading())); 
 */
-    // DEBUG SETUP
+
+    // DEBUG SETUP -> ZERO MOVEMENT
 /*     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> zeroFunct(), // X-Axis
     () -> rightJoystick.getRawAxis(2), // Y-Axis
     () -> zeroFunct(), // R-Axis
     () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); */
     
-    //>--------------T-R-A-N-S-----------------// // Might be working...
+  //>--------------T-R-A-N-S-----------------//
     
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> transmitter.getRoll(), // X-Axis
     () -> -transmitter.getPitch(), // Y-Axis
     () -> -transmitter.getYaw(), // R-Axis
-    () -> trueFunct(),
-    () -> swerveSubsystem.getHeading())); 
+    () -> transmitter.getSwitchVeryRight(),
+    () -> swerveSubsystem.getHeading() )); 
     
-
-    //>----------T-H-R-T-L----------<// // Might maybe be working?!
+  //>----------T-H-R-T-L----------<// // No clue if working...
     /*
     swerveSubsystem.setDefaultCommand(new SwerveThrottledJoystick(swerveSubsystem,
     () -> rightJoystick.getRawAxis(0), // X-Axis
@@ -100,15 +100,11 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
-  private double zeroFunct()
-  {
-    return 0;
-  }
+  //------------------------------------D-E-B-U-G------------------------------------//
 
-  private boolean trueFunct()
-  {
-    return true;
-  }
+  private double zeroFunct(){return 0;}
+
+  private boolean trueFunct(){return true;}
 
   //------------------------------------B-U-T-T-O-N-S------------------------------------//
 
@@ -126,7 +122,7 @@ public class RobotContainer {
 
   }
 
-    //------------------------------------R-E-F-E-R-R-E-R-S------------------------------------//
+  //------------------------------------R-E-F-E-R-R-E-R-S------------------------------------//
 
     public void containerResetAllEncoders(){
       DriverStation.reportWarning("Running containerResetAllEncoders() in RobotContainer", true);

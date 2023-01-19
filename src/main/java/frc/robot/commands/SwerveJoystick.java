@@ -73,7 +73,7 @@ public class SwerveJoystick extends CommandBase {
     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
  
-    
+    /* 
     SmartDashboard.putNumber("TURN-S", turningSpeed);
     // Update heading based off changes
     initialHeading += turningSpeed;
@@ -96,7 +96,7 @@ public class SwerveJoystick extends CommandBase {
     } else if (turningSpeed < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
       turningSpeed = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
     }
-
+*/
 
     /* 
     // Test heading control, throws away previous turning values
@@ -117,21 +117,17 @@ public class SwerveJoystick extends CommandBase {
     }
     */
 
-    // Apply field oriented mode - currently disabled
+    // Apply field oriented mode 
     ChassisSpeeds chassisSpeeds;
-    
-    /* 
+
     if(fieldOrientedFunction.get()){
+      // Create wheel speeds for FIELD oriented
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     }
-    // Apply non-field oriented mode
+    // Create wheel speeds for NON-FIELD oriented
     else{
       chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
     }
-    */
-
-    // Create chassis speeds
-    chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
 
     // Put field oriented value on smart dashboard
     SmartDashboard.putBoolean("Field Oriented: ", fieldOrientedFunction.get());
@@ -142,7 +138,7 @@ public class SwerveJoystick extends CommandBase {
     // Set each module state
     swerveSubsystem.setModuleStates(moduleStates);
   }
-  
+
   // Stop all module motor movement when command ends
   @Override
   public void end(boolean interrupted){swerveSubsystem.stopModules();}
