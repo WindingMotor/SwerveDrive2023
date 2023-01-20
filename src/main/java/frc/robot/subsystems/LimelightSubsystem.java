@@ -6,11 +6,16 @@ import frc.robot.util.Constants.VisionConstants;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 // Ignore unused variable warnings
 @SuppressWarnings("unused")
 
+
+
 public class LimelightSubsystem extends SubsystemBase{
+
+    private Spark grab = new Spark(0);
     
     // Create private instance variables  
     NetworkTable table;
@@ -86,5 +91,16 @@ public class LimelightSubsystem extends SubsystemBase{
 
     // Update vision variables once per scheduler run
     @Override
-    public void periodic(){update();}
+    public void periodic(){}
+
+    public void close(double s){
+        grab.set(s);
+      }
+    
+      public void open(double s){
+        grab.set(-s);
+      }
+    
+
+
 }

@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -50,6 +51,8 @@ public class SwerveModule extends SubsystemBase {
 
   // Class constructor where we assign default values for variable
    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoLuteEncoderReversed, String name) {
+
+
 
 
     // Set offsets for absolute encoder in RADIANS!!!!!
@@ -106,6 +109,9 @@ public class SwerveModule extends SubsystemBase {
     builtinTurningPidController.setFF(0.0);
     builtinTurningPidController.setOutputRange(-1, 1);
     turningMotor.burnFlash();
+
+    driveMotor.setIdleMode(IdleMode.kBrake);
+    turningMotor.setIdleMode(IdleMode.kBrake);
 
     // Call resetEncoders
     resetEncoders();
@@ -237,7 +243,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     // Optimize swerve module state to do fastest rotation movement, aka never rotate more than 90*
-   //state = SwerveModuleState.optimize(state, getState().angle);
+   state = SwerveModuleState.optimize(state, getState().angle);
 
     // Scale velocity down using robot max speed
     driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);

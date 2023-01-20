@@ -6,12 +6,17 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.auto.commands.TrajectoryRunner;
 import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.TestRoutine;
+import frc.robot.commands.GrabberClose;
+import frc.robot.commands.GrabberOpen;
+import frc.robot.commands.ResetOdometry;
 import frc.robot.commands.SwerveJoystick;
 import frc.robot.commands.SwerveRotator;
 import frc.robot.commands.SwerveThrottledJoystick;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.Constants;
 import frc.robot.util.Transmitter;
@@ -36,7 +41,8 @@ public class RobotContainer {
 
   // Create swerve subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(rightJoystick);
-
+  
+  private final LimelightSubsystem limelightSubsystem =  new LimelightSubsystem();
   // Create Xbox controller
   private final XboxController xboxController = new XboxController(IOConstants.kXboxController);
 
@@ -51,6 +57,9 @@ public class RobotContainer {
   // Create transmitter object
   private final Transmitter transmitter = new Transmitter(4);
 
+  private final XboxController xbox = new XboxController(3);
+
+
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
   public RobotContainer(){
@@ -61,14 +70,21 @@ public class RobotContainer {
     // Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
 
   //>-------------N-O-R-M-A-L----------------<//
-   
+   /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> rightJoystick.getRawAxis(0), // X-Axis
     () -> rightJoystick.getRawAxis(1), // Y-Axis
     () -> leftJoystick.getRawAxis(0), // R-Axis
     () -> trueFunct(),
     () -> swerveSubsystem.getHeading())); 
+*/
 
+swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
+() -> xbox.getRawAxis(4), // X-Axis
+() -> xbox.getRawAxis(5), // Y-Axis
+() -> xbox.getRawAxis(0), // R-Axis
+() -> trueFunct(),
+() -> swerveSubsystem.getHeading())); 
 
     // DEBUG SETUP -> ZERO MOVEMENT
 /*     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
@@ -107,13 +123,16 @@ public class RobotContainer {
   private boolean trueFunct(){return true;}
 
   //------------------------------------B-U-T-T-O-N-S------------------------------------//
-
+ 
   // Create buttons bindings
   private void configureButtonBindings(){
 
-    // Assign button to manually zero heading
-
+    new JoystickButton(xbox, 6).onTrue(new GrabberOpen(limelightSubsystem));
+   new JoystickButton(xbox, 5).onTrue(new GrabberClose(limelightSubsystem));
+    //new JoystickButton(leftJoystick, 0).onTrue() ->swerveSubsystem.zeroHeading()
   // DEPRECATED 2023
+  //
+  
   //new JoystickButton(rightJoystick,Constants.IOConstants.kZeroHeadingButton).whenPressed(() -> swerveSubsystem.zeroHeading());
   // DEPRECATED 2023
 

@@ -19,7 +19,8 @@ public class Forward2M {
 //--------------------------------T-R-A-J-E-C-T-O-R-Y---S-T-A-R-T------------------------------//
 
     private static Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-     /* Starting point*/ new Pose2d(0,0,Rotation2d.fromDegrees(45)), List.of(
+     /* Starting point*/ new Pose2d(0
+     ,0,Rotation2d.fromDegrees(45)), List.of(
     // Interior points
     //new Translation2d(1,0),
     new Translation2d(0,0.25)),

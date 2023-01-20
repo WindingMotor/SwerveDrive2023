@@ -58,7 +58,7 @@ public class SwerveJoystick extends CommandBase {
     // Set joystick inputs to speed variables
     double xSpeed = xSpdFunction.get();
     double ySpeed = ySpdFunction.get();
-    double turningSpeed = turningSpdFunction.get();
+    double turningSpeed = turningSpdFunction.get() * -1;
 
     // Apply deadband to protect motors
     xSpeed = Math.abs(xSpeed) > IOConstants.kDeadband ? xSpeed : 0.0;
@@ -118,6 +118,7 @@ public class SwerveJoystick extends CommandBase {
     // Apply field oriented mode 
     ChassisSpeeds chassisSpeeds;
 
+    /* 
     if(fieldOrientedFunction.get()){
       // Create wheel speeds for FIELD oriented
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
@@ -126,7 +127,8 @@ public class SwerveJoystick extends CommandBase {
     else{
       chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
     }
-
+*/
+chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
     // Put field oriented value on smart dashboard
     SmartDashboard.putBoolean("Field Oriented: ", fieldOrientedFunction.get());
 
