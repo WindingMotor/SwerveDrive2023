@@ -66,7 +66,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Create the navX using roboRIO expansion port
   private AHRS gyro = new AHRS(SPI.Port.kMXP);
-
+  
 
   public SwerveModulePosition[] getModulePositions(){
     return( new SwerveModulePosition[]{
@@ -95,6 +95,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Swerve subsystem constructor
   public SwerveSubsystem(Joystick rightJoystick) {
+
+    //gyro.setAngleAdjustment(90);
 
     // Assign right joystick
     this.rightJoystick = rightJoystick;
@@ -125,7 +127,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public Rotation2d getRotation2d(){
     return Rotation2d.fromDegrees(getHeading());
   }
-
+  
   // Stop all module movement
   public void stopModules() {
     frontLeft.stop();

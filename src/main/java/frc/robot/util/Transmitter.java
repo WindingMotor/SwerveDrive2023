@@ -21,12 +21,12 @@ public class Transmitter {
     public double calculateOffset(double d){
 
         // Convert double to smaller decimal value by type conversion
-        double x =  Double.parseDouble(df.format(d));
-
+        double x = d; // Double.parseDouble(df.format(d));
+        
         // Return value with applied offsets depending on if negative or postitive or zero
         if(x > 0.000){return(x * Constants.IOConstants.kTransmitterOffset);}
         if(x <  0.000){return(x * Constants.IOConstants.kTransmitterOffset);}
-        else{return(0.000);}
+        else{return(0.000);} 
 
     }
 

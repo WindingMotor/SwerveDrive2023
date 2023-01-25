@@ -1,6 +1,10 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -8,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.auto.commands.TrajectoryRunner;
+import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.GrabberClose;
@@ -49,7 +54,7 @@ public class RobotContainer {
   // Create PID controllers for trajectory tracking
   private final PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
   private final PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-  private final ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+  private final ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
 
   // Create a non profiled PID controller for path planner
   private final PIDController ppThetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
@@ -57,7 +62,7 @@ public class RobotContainer {
   // Create transmitter object
   private final Transmitter transmitter = new Transmitter(4);
 
-  private final XboxController xbox = new XboxController(3);
+  private final XboxController xbox = new XboxController(4);
 
 
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
@@ -77,15 +82,16 @@ public class RobotContainer {
     () -> leftJoystick.getRawAxis(0), // R-Axis
     () -> trueFunct(),
     () -> swerveSubsystem.getHeading())); 
-*/
+    */
 
+/* 
 swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 () -> xbox.getRawAxis(4), // X-Axis
 () -> xbox.getRawAxis(5), // Y-Axis
 () -> xbox.getRawAxis(0), // R-Axis
 () -> trueFunct(),
 () -> swerveSubsystem.getHeading())); 
-
+*/
     // DEBUG SETUP -> ZERO MOVEMENT
 /*     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> zeroFunct(), // X-Axis
@@ -94,14 +100,14 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); */
     
   //>--------------T-R-A-N-S-----------------//
-    /* 
+    
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> transmitter.getRoll(), // X-Axis
     () -> -transmitter.getPitch(), // Y-Axis
-    () -> -transmitter.getYaw(), // R-Axis
+    () -> transmitter.getYaw(), // R-Axis
     () -> transmitter.getSwitchVeryRight(),
     () -> swerveSubsystem.getHeading() )); 
-    */
+    
   //>----------T-H-R-T-L----------<// // No clue if working...
     /*
     swerveSubsystem.setDefaultCommand(new SwerveThrottledJoystick(swerveSubsystem,
@@ -127,8 +133,8 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   // Create buttons bindings
   private void configureButtonBindings(){
 
-    new JoystickButton(xbox, 6).onTrue(new GrabberOpen(limelightSubsystem));
-   new JoystickButton(xbox, 5).onTrue(new GrabberClose(limelightSubsystem));
+    new JoystickButton(xbox, 7).onTrue(new GrabberOpen(limelightSubsystem));
+   new JoystickButton(xbox, 8).onTrue(new GrabberClose(limelightSubsystem));
     //new JoystickButton(leftJoystick, 0).onTrue() ->swerveSubsystem.zeroHeading()
   // DEPRECATED 2023
   //
@@ -156,6 +162,8 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   // Create a command using a routine which uses TrajectoryWeaver internally
   private Command testRoutine = new TestRoutine(swerveSubsystem,xController, yController, ppThetaController);
 
+  PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(4, 2)); 
+ private Command forward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
   // Return the command to run during auto
   public Command getAutonomousCommand(){
 
@@ -166,14 +174,16 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 
   //------------------------------------S-E-L-E-C-T-O-R------------------------------------//
 
+  /* 
     // Selector if-statement
     if(autoSelector == "forward2M"){
       autoCommand = forward2M;
     }
     else if(autoSelector == "testRoutine"){
       autoCommand = testRoutine;
-    }
+    }\
+    */
 
-    return testRoutine;
+    return forward;
   }
 }
