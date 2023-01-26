@@ -23,7 +23,7 @@ public class TestRoutine extends SequentialCommandGroup{
     PIDController yController,  PIDController ppthetaController){
 
         // Create event map for this routine
-        HashMap<String, Command> eventMap = new HashMap<>();
+        //HashMap<String, Command> eventMap = new HashMap<>();
 
         // Add commands to markers
        // eventMap.put("marker1", new PrintCommand("TRAJ1: Passed Marker 1"));
