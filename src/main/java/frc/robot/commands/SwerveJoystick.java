@@ -20,8 +20,7 @@ public class SwerveJoystick extends CommandBase {
   private final Supplier<Boolean> fieldOrientedFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   private double initialHeading;
-  private final double turningPValue = 0.001;
-  private PIDController tunringPidController;
+  private PIDController thetaController;
 
   // Command constructor and requirements 
   public SwerveJoystick(SwerveSubsystem swerveSubsystem,
@@ -42,7 +41,7 @@ public class SwerveJoystick extends CommandBase {
     this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
-    tunringPidController = new PIDController(turningPValue, 0, 0);
+    thetaController = new PIDController(DriveConstants.kPThetaController, DriveConstants.kIThetaController, DriveConstants.kDThetaController);
 
     //tunringPidController.enableContinuousInput(0, 360);
 
@@ -71,6 +70,17 @@ public class SwerveJoystick extends CommandBase {
     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
  
+    // Updated inital heading
+    initialHeading += turningSpeed;
+
+    // Limit from 0 to 360
+    initialHeading =  Math.IEEEremainder(initialHeading, 360);
+
+    // Update turning speed to math heading
+    turningSpeed = thetaController.calculate(headingFunction.get(), initialHeading);
+
+
+
     /* 
     SmartDashboard.putNumber("TURN-S", turningSpeed);
     // Update heading based off changes
@@ -115,20 +125,12 @@ public class SwerveJoystick extends CommandBase {
     }
     */
 
-    // Apply field oriented mode 
+    // Create chassis speeds
     ChassisSpeeds chassisSpeeds;
 
-    /* 
-    if(fieldOrientedFunction.get()){
-      // Create wheel speeds for FIELD oriented
-      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
-    }
-    // Create wheel speeds for NON-FIELD oriented
-    else{
-      chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
-    }
-*/
-chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
+    //chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+    chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
+
     // Put field oriented value on smart dashboard
     SmartDashboard.putBoolean("Field Oriented: ", fieldOrientedFunction.get());
 
