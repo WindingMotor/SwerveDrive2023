@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.auto.commands.TrajectoryRunner;
 import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
+import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.GrabberClose;
 import frc.robot.commands.GrabberOpen;
@@ -52,9 +53,10 @@ public class RobotContainer {
   private final XboxController xboxController = new XboxController(IOConstants.kXboxController);
 
   // Create PID controllers for trajectory tracking
-  private final PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-  private final PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-  private final ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
+  public final PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
+  public final PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+  public final ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
+
 
   // Create a non profiled PID controller for path planner
   private final PIDController ppThetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
@@ -156,14 +158,12 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 
   //------------------------------------A-U-T-O-N-O-M-O-U-S------------------------------------//
   
-  // Create a command using TrajectoryRunner which takes in a manual path and gets its values
-  private Command forward2M = new TrajectoryRunner(swerveSubsystem, xController, yController, thetaController, Forward2M.getTrajectory(), Forward2M.getTrajectoryConfig());
-    
-  // Create a command using a routine which uses TrajectoryWeaver internally
-  private Command testRoutine = new TestRoutine(swerveSubsystem,xController, yController, ppThetaController);
 
+  private Command autoOne = new AutoOne(swerveSubsystem, xController, yController, ppThetaController);
+  
   PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(4, 2)); 
- private Command forward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
+  private Command forward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
+
   // Return the command to run during auto
   public Command getAutonomousCommand(){
 

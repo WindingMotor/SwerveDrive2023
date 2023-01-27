@@ -1,6 +1,10 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot.util;
+import com.pathplanner.lib.PathConstraints;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -103,7 +107,13 @@ public final class Constants {
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 1.75;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 2;
 
+        public static final double kPThetaController = 0.01;
+        public static final double kIThetaController = 0.0;
+        public static final double kDThetaController = 0.005;
+        
         public static final double kMaxDriveMotorTemp = 33.0;
+
+        
 
     }
 
@@ -116,6 +126,8 @@ public final class Constants {
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
         public static final double kPXController = 1;
         public static final double kPYController = 1;
+        public static final PathConstraints generatedPathConstraints = new PathConstraints(0.5, 0.5);
+
         public static final double kPThetaController = 0.01;
         public static final double kIThetaController = 0.0;
         public static final double kDThetaController = 0.005;

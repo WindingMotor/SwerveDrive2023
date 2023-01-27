@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.auto.commands.TrajectoryWeaver;
-import frc.robot.commands.ReportWarning;
 import frc.robot.subsystems.SwerveSubsystem;
 
 // Run multiple commands in a routine
