@@ -34,7 +34,7 @@ public class SwerveJoystick extends CommandBase {
     this.turningSpdFunction = turningSpdFunction;
     this.fieldOrientedFunction = fieldOrientedFunction;
     this.headingFunction = headingFunction;
-    this.initialHeading = headingFunction.get();
+    this.initialHeading = headingFunction.get() + 180;
 
     // Slew rate limiter
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -69,7 +69,6 @@ public class SwerveJoystick extends CommandBase {
     ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
- 
     // Updated inital heading
     initialHeading += turningSpeed;
 
@@ -77,9 +76,14 @@ public class SwerveJoystick extends CommandBase {
     initialHeading =  Math.IEEEremainder(initialHeading, 360);
 
     // Update turning speed to math heading
-    turningSpeed = thetaController.calculate(headingFunction.get(), initialHeading);
+    turningSpeed = thetaController.calculate(headingFunction.get() + 180, initialHeading);
 
+    SmartDashboard.putNumber("Inital Heading", initialHeading);
+    SmartDashboard.putNumber("Turning speed", turningSpeed);
+    SmartDashboard.putNumber("Heading Get", headingFunction.get());
+    SmartDashboard.putNumber("Heading Get Clamped",(headingFunction.get() + 180));
 
+    //turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.05 ? turningSpeed : 0.0;
 
     /* 
     SmartDashboard.putNumber("TURN-S", turningSpeed);

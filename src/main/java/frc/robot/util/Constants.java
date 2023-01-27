@@ -142,7 +142,7 @@ public final class Constants {
     // Input and Output 
     public static final class IOConstants {
 
-        public static final double kDeadband = 0.05;
+        public static final double kDeadband = 0.1;
 
         public static final int kLeftJoystick = 0;
         public static final int kRightJoystick = 1;

@@ -235,7 +235,7 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void setDesiredState(SwerveModuleState state){
-    
+
     // Check if new command has high driving power 
     if(Math.abs(state.speedMetersPerSecond) < 0.001){
       stop();

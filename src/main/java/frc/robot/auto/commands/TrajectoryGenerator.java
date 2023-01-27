@@ -1,6 +1,6 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.auto.routines;
+package frc.robot.auto.commands;
 import java.util.HashMap;
 import java.util.function.Consumer;
 import com.pathplanner.lib.PathConstraints;
@@ -20,6 +20,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 // Generate a command that goes to a specified position on the field
 public class TrajectoryGenerator extends SequentialCommandGroup{
 
+    /* 
     public TrajectoryGenerator(SwerveSubsystem swerveSubsystem,PIDController xController,
     PIDController yController,  PIDController ppthetaController,
     double x, double, y, double radian){
@@ -41,7 +42,7 @@ public class TrajectoryGenerator extends SequentialCommandGroup{
         );
     }
 
-
+*/
 
 
 

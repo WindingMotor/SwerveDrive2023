@@ -66,6 +66,8 @@ public class RobotContainer {
 
   private final XboxController xbox = new XboxController(4);
 
+  PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
+
 
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
@@ -77,14 +79,13 @@ public class RobotContainer {
     // Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
 
   //>-------------N-O-R-M-A-L----------------<//
-   /* 
+   
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> rightJoystick.getRawAxis(0), // X-Axis
     () -> rightJoystick.getRawAxis(1), // Y-Axis
     () -> leftJoystick.getRawAxis(0), // R-Axis
     () -> trueFunct(),
     () -> swerveSubsystem.getHeading())); 
-    */
 
 /* 
 swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
@@ -102,14 +103,14 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); */
     
   //>--------------T-R-A-N-S-----------------//
-    
+    /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> transmitter.getRoll(), // X-Axis
     () -> -transmitter.getPitch(), // Y-Axis
     () -> transmitter.getYaw(), // R-Axis
     () -> transmitter.getSwitchVeryRight(),
     () -> swerveSubsystem.getHeading() )); 
-    
+    */
   //>----------T-H-R-T-L----------<// // No clue if working...
     /*
     swerveSubsystem.setDefaultCommand(new SwerveThrottledJoystick(swerveSubsystem,
@@ -135,12 +136,18 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   // Create buttons bindings
   private void configureButtonBindings(){
 
+    /* 
     new JoystickButton(xbox, 7).onTrue(new GrabberOpen(limelightSubsystem));
    new JoystickButton(xbox, 8).onTrue(new GrabberClose(limelightSubsystem));
+   new JoystickButton(xbox, 1).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, false));
     //new JoystickButton(leftJoystick, 0).onTrue() ->swerveSubsystem.zeroHeading()
+    */
+
+    new JoystickButton(rightJoystick, 1).onTrue(new GrabberOpen(limelightSubsystem));
+    new JoystickButton(leftJoystick, 1).onTrue(new GrabberClose(limelightSubsystem));
+    //new JoystickButton(rightJoystick, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
+
   // DEPRECATED 2023
-  //
-  
   //new JoystickButton(rightJoystick,Constants.IOConstants.kZeroHeadingButton).whenPressed(() -> swerveSubsystem.zeroHeading());
   // DEPRECATED 2023
 
@@ -161,7 +168,6 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 
   private Command autoOne = new AutoOne(swerveSubsystem, xController, yController, ppThetaController);
   
-  PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(4, 2)); 
   private Command forward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
 
   // Return the command to run during auto
