@@ -7,8 +7,8 @@ This codebase is currently in development.
 #### Command based auto with Pathplanner libary
 
 ## Here is what is currently being worked on:
-### Teleop heading control
-### Other commands with auto
-### Limelight/photonvision with april tags
+#### Teleop heading control
+#### Other commands with auto
+#### Limelight/photonvision with april tags
 
 
