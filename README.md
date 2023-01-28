@@ -3,8 +3,8 @@ A swerve drive based off SRX Mag Encoders, Neos, and Spark Maxes. Recently updat
 This codebase is currently in development.
 
 ## This part of the code is working:
-### Basic teleop control with FPV Transmitter and Joysticks:
-### Command based auto with Pathplanner libary
+#### Basic teleop control with FPV Transmitter and Joysticks:
+#### Command based auto with Pathplanner libary
 
 ## Here is what is currently being worked on:
 ### Teleop heading control
