@@ -13,9 +13,11 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.DriveConstants;
 import frc.robot.util.Constants.ModuleConstants;
@@ -95,7 +97,7 @@ public class SwerveModule extends SubsystemBase {
     turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0);
 
     // Tell PID controller that it is a *wheel*
-    turningPidController.enableContinuousInput(0, 2*Math.PI);
+    turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
     //-----SPARK-MAX-PID-----//
 
@@ -243,7 +245,7 @@ public class SwerveModule extends SubsystemBase {
     }
 
     // Optimize swerve module state to do fastest rotation movement, aka never rotate more than 90*
-   state = SwerveModuleState.optimize(state, getState().angle);
+    state = SwerveModuleState.optimize(state, getState().angle);
 
     // Scale velocity down using robot max speed
     driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond);

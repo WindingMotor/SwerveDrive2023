@@ -120,7 +120,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Return heading in -180* to 180* format
   public double getHeading(){
-    return Math.IEEEremainder(gyro.getAngle(), 360);
+    return gyro.getAngle();
   }
 
   // Return heading in Rotation2d format

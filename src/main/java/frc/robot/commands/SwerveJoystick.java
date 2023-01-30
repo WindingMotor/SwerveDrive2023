@@ -34,7 +34,8 @@ public class SwerveJoystick extends CommandBase {
     this.turningSpdFunction = turningSpdFunction;
     this.fieldOrientedFunction = fieldOrientedFunction;
     this.headingFunction = headingFunction;
-    this.initialHeading = headingFunction.get() + 180;
+    this.initialHeading = headingFunction.get();
+    System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE INITAL HEADING:" + initialHeading);
 
     // Slew rate limiter
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -42,8 +43,8 @@ public class SwerveJoystick extends CommandBase {
     this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
     thetaController = new PIDController(DriveConstants.kPThetaController, DriveConstants.kIThetaController, DriveConstants.kDThetaController);
+    thetaController.enableContinuousInput(0, 360);
 
-    //tunringPidController.enableContinuousInput(0, 360);
 
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem);
@@ -69,19 +70,34 @@ public class SwerveJoystick extends CommandBase {
     ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
+    
     // Updated inital heading
     initialHeading += turningSpeed;
 
+    SmartDashboard.putNumber("INITAL HEADING", initialHeading);
+
+   // SmartDashboard.putNumber("Inital Before IEEE", initialHeading);
     // Limit from 0 to 360
-    initialHeading =  Math.IEEEremainder(initialHeading, 360);
+    //initialHeading;  Math.IEEEremainder(initialHeading, 360);
 
     // Update turning speed to math heading
-    turningSpeed = thetaController.calculate(headingFunction.get() + 180, initialHeading);
+    turningSpeed = thetaController.calculate(headingFunction.get(), initialHeading);
+    
+    if(turningSpeed > 0){
+      turningSpeed = Math.abs(turningSpeed);
+    }else{
+      turningSpeed = -Math.abs(turningSpeed);
+    }
+    
 
-    SmartDashboard.putNumber("Inital Heading", initialHeading);
-    SmartDashboard.putNumber("Turning speed", turningSpeed);
-    SmartDashboard.putNumber("Heading Get", headingFunction.get());
-    SmartDashboard.putNumber("Heading Get Clamped",(headingFunction.get() + 180));
+    SmartDashboard.putNumber("tunring SPEED",turningSpeed);
+  turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.1 ? turningSpeed : 0.0;
+    
+
+   // SmartDashboard.putNumber("Inital After IEEE", initialHeading);
+    //SmartDashboard.putNumber("Turning speed", turningSpeed);
+    
+  
 
     //turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.05 ? turningSpeed : 0.0;
 
