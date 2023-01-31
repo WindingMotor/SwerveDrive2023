@@ -34,17 +34,16 @@ public class SwerveJoystick extends CommandBase {
     this.turningSpdFunction = turningSpdFunction;
     this.fieldOrientedFunction = fieldOrientedFunction;
     this.headingFunction = headingFunction;
-    this.initialHeading = headingFunction.get();
-    System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE INITAL HEADING:" + initialHeading);
 
+    // Set the inital heading to the navx +||-inf heading. Should be zero on startup!
+    this.initialHeading = headingFunction.get();
     // Slew rate limiter
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
+    // Set PID values for thetaPID
     thetaController = new PIDController(DriveConstants.kPThetaController, DriveConstants.kIThetaController, DriveConstants.kDThetaController);
-    thetaController.enableContinuousInput(0, 360);
-
 
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem);
@@ -70,36 +69,30 @@ public class SwerveJoystick extends CommandBase {
     ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
 
-    
-    // Updated inital heading
+    // Get the turning PID P value from smart dashboard
+    SmartDashboard.putNumber("Turning P", DriveConstants.kPThetaController);
+    double smartDashboardP = SmartDashboard.getNumber("Turning P", DriveConstants.kPThetaController);
+
+    // Set P value of the turning PID to smart dashboard value
+    thetaController.setP(smartDashboardP);
+
+    // Changes the joystick +||-inf heading angle by adding or subtracting the turning speed
+    // Starts at 0 and goes between -inf and +inf depending on rotation
     initialHeading += turningSpeed;
 
-    SmartDashboard.putNumber("INITAL HEADING", initialHeading);
-
-   // SmartDashboard.putNumber("Inital Before IEEE", initialHeading);
-    // Limit from 0 to 360
-    //initialHeading;  Math.IEEEremainder(initialHeading, 360);
-
-    // Update turning speed to math heading
+    /* Caculate the desired turning speed using the navx +||-inf heading 
+      and the turningspeed +||-inf heading */
     turningSpeed = thetaController.calculate(headingFunction.get(), initialHeading);
-    
-    if(turningSpeed > 0){
-      turningSpeed = Math.abs(turningSpeed);
-    }else{
-      turningSpeed = -Math.abs(turningSpeed);
-    }
+
+    // Put initalHeading on smartdashboard
+    SmartDashboard.putNumber("Turning Speed", turningSpeed);
+    SmartDashboard.putNumber("Inital Heading", initialHeading);
     
 
-    SmartDashboard.putNumber("tunring SPEED",turningSpeed);
-  turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.1 ? turningSpeed : 0.0;
     
 
-   // SmartDashboard.putNumber("Inital After IEEE", initialHeading);
-    //SmartDashboard.putNumber("Turning speed", turningSpeed);
-    
-  
-
-    //turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.05 ? turningSpeed : 0.0;
+    // Apply a dead band to not stress out motors
+    //turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.1 ? turningSpeed : 0.0;
 
     /* 
     SmartDashboard.putNumber("TURN-S", turningSpeed);
@@ -129,8 +122,7 @@ public class SwerveJoystick extends CommandBase {
     /* 
     // Test heading control, throws away previous turning values
     initialHeading += turningSpeed;
-    //initialHeading =  Math.IEEEremainder(initialHeading, 360);
-    // PID
+
     turningSpeed = (headingFunction.get() - initialHeading) * turningPValue;
     // Deadband
     turningSpeed = Math.abs(turningSpeed) > IOConstants.kDeadband ? turningSpeed : 0.0;
