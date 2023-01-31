@@ -37,12 +37,13 @@ public class SwerveJoystick extends CommandBase {
 
     // Set the inital heading to the navx +||-inf heading. Should be zero on startup!
     this.initialHeading = headingFunction.get();
+
     // Slew rate limiter
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
 
-    // Set PID values for thetaPID
+    // Set default PID values for thetaPID
     thetaController = new PIDController(DriveConstants.kPThetaController, DriveConstants.kIThetaController, DriveConstants.kDThetaController);
 
     // Tell command that it needs swerveSubsystem
@@ -87,39 +88,14 @@ public class SwerveJoystick extends CommandBase {
     // Put initalHeading on smartdashboard
     SmartDashboard.putNumber("Turning Speed", turningSpeed);
     SmartDashboard.putNumber("Inital Heading", initialHeading);
+    SmartDashboard.putNumber("NavX Heading", headingFunction.get());
     
-
-    
-
-    // Apply a dead band to not stress out motors
+    // Apply a dead band for the motors
     //turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.1 ? turningSpeed : 0.0;
 
-    /* 
-    SmartDashboard.putNumber("TURN-S", turningSpeed);
-    // Update heading based off changes
-    initialHeading += turningSpeed;
-    SmartDashboard.putNumber("INIT-H", initialHeading);
-    initialHeading = Math.IEEEremainder(initialHeading, 360);
-    SmartDashboard.putNumber("INIT-H-REMAIN", initialHeading);
 
-    SmartDashboard.putNumber("PID-O", tunringPidController.calculate(headingFunction.get(), initialHeading));
-
-
-    // Wpilib PID, takes in current heading and heading to be at
-    turningSpeed = tunringPidController.calculate(headingFunction.get(), initialHeading);
-
-    // Apply deadband for motors
-    //turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.05 ? turningSpeed : 0.0;
-
-    // Limit turning speed
-    if (turningSpeed > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
-      turningSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-    } else if (turningSpeed < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
-      turningSpeed = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-    }
-*/
-
-    /* 
+    
+    /* JAMES Code:
     // Test heading control, throws away previous turning values
     initialHeading += turningSpeed;
 
@@ -144,12 +120,12 @@ public class SwerveJoystick extends CommandBase {
     chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
 
     // Put field oriented value on smart dashboard
-    SmartDashboard.putBoolean("Field Oriented: ", fieldOrientedFunction.get());
+    //SmartDashboard.putBoolean("Field Oriented: ", fieldOrientedFunction.get());
 
     // Create module states using array
     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
  
-    // Set each module state
+    // Set the module state
     swerveSubsystem.setModuleStates(moduleStates);
   }
 
