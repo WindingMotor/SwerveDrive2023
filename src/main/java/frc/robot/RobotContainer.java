@@ -26,6 +26,7 @@ import frc.robot.commands.SwerveThrottledJoystick;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
 import frc.robot.util.Transmitter;
 import frc.robot.util.Constants.AutoConstants;
@@ -47,8 +48,10 @@ public class RobotContainer {
   private final Joystick leftJoystick = new Joystick(IOConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(IOConstants.kRightJoystick);
 
-  // Create swerve subsystem
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(rightJoystick);
+  // Create subsystems
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(visionSubsystem);
   
   private final GrabberSubsystem grabberSubsystem =  new GrabberSubsystem();
   // Create Xbox controller
@@ -150,7 +153,6 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 1).onTrue(new GrabberOpen(grabberSubsystem));
     new JoystickButton(leftJoystick, 1).onTrue(new GrabberClose(grabberSubsystem));
     new JoystickButton(rightJoystick, 2).onTrue(new ResetPose(swerveSubsystem, new Pose2d()));
-    //new JoystickButton(rightJoystick, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
 
     // Rotate robot 90* using swerve rotator
     //new JoystickButton(leftJoystick, Constants.IOConstants.kRotatorButton).whenPressed(new SwerveRotator(swerveSubsystem, () -> 0.1, swerveSubsystem.getHeading()));
@@ -160,7 +162,7 @@ public class RobotContainer {
   //------------------------------------R-E-F-E-R-R-E-R-S------------------------------------//
 
     public void containerResetAllEncoders(){
-      DriverStation.reportWarning("Running containerResetAllEncoders() in RobotContainer", true);
+      //DriverStation.reportWarning("Running containerResetAllEncoders() in RobotContainer", true);
       swerveSubsystem.resetAllEncoders();
     }
 

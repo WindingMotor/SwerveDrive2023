@@ -2,7 +2,12 @@
 
 package frc.robot.util;
 import com.pathplanner.lib.PathConstraints;
+
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -44,7 +49,6 @@ public final class Constants {
                 new Translation2d(kWheelBase / 2, -kTrackWidth / 2), //bl
                 new Translation2d(-kWheelBase / 2, -kTrackWidth / 2)); //br
 
-
         /*
          * 
          * 
@@ -54,7 +58,6 @@ public final class Constants {
                 new Translation2d(kWheelBase / 2, kTrackWidth / 2)); //fl
 
          */
-
                                                                // Driving Motor Ports
         public static final int kFrontLeftDriveMotorPort = 1;  // Front Left 
         public static final int kFrontRightDriveMotorPort = 3; // Front Right
@@ -111,8 +114,6 @@ public final class Constants {
         
         public static final double kMaxDriveMotorTemp = 33.0;
 
-        
-
     }
 
     // Autonomous
@@ -160,6 +161,45 @@ public final class Constants {
         // The difference in height between the target's height and the height of the camera.
         public static final int deltaHeight = 0; 
         public static final int cameraAngle = 45;
+
+        public static final Transform3d kCameraToRobot =
+        new Transform3d(
+                new Translation3d(-0.25, 0, -.25), // in meters
+                new Rotation3d());
+
+
+    }
+
+    public static final class FieldConstants{
+
+
+    
+
+   // See
+    // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
+    // page 208
+    public static final double targetWidth =
+            Units.inchesToMeters(41.30) - Units.inchesToMeters(6.70); // meters
+
+    // See
+    // https://firstfrc.blob.core.windows.net/frc2020/PlayingField/2020FieldDrawing-SeasonSpecific.pdf
+    // page 197
+    public static final double targetHeight =
+            Units.inchesToMeters(98.19) - Units.inchesToMeters(81.19); // meters
+
+    // See https://firstfrc.blob.core.windows.net/frc2020/PlayingField/LayoutandMarkingDiagram.pdf
+    // pages 4 and 5
+    public static final double kFarTgtXPos = Units.feetToMeters(54);
+    public static final double kFarTgtYPos =
+            Units.feetToMeters(27 / 2) - Units.inchesToMeters(43.75) - Units.inchesToMeters(48.0 / 2.0);
+    public static final double kFarTgtZPos =
+            (Units.inchesToMeters(98.19) - targetHeight) / 2 + targetHeight;
+
+    public static final Pose3d kFarTargetPose =
+            new Pose3d(
+            new Translation3d(kFarTgtXPos, kFarTgtYPos, kFarTgtZPos),
+            new Rotation3d(0.0, 0.0, Units.degreesToRadians(180)));
+
 
     }
 

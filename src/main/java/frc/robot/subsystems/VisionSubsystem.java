@@ -6,6 +6,7 @@ import frc.robot.util.Constants.VisionConstants;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Transform3d;
@@ -21,8 +22,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public class VisionSubsystem extends SubsystemBase{
     
     private PhotonCamera camera;
-    private PhotonTrackedTarget target;
-    private boolean hasTargets = false;
+    public PhotonTrackedTarget target;
+    public boolean hasTargets = false;
+    public PhotonPipelineResult result;
 
     // Subsystem Constructor
     public VisionSubsystem(){
@@ -34,7 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public void periodic(){
 
       // A container holding data of the photon camera result
-      var result = camera.getLatestResult();
+      result = camera.getLatestResult();
 
       // Check if camera has targets, must be called!
       hasTargets = result.hasTargets();
@@ -48,7 +50,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
       SmartDashboard.putNumber("Target Distance", getTargetDistance());
       
     }
-
 
     public int getTargetID(){
       if(hasTargets){
@@ -80,7 +81,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
     public double getTargetPitch(){return target.getPitch();}
 
     public double getTargetSkew(){return target.getSkew();}
-    
+
     public double getTargetArea(){return target.getArea();}
 
 }

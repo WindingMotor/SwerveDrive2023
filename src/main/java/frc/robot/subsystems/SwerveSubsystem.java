@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.DriveConstants;
+import frc.robot.util.Constants.FieldConstants;
+import frc.robot.util.Constants.VisionConstants;
 
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -65,8 +67,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Create the navX using roboRIO expansion port
   private AHRS gyro = new AHRS(SPI.Port.kMXP);
-  
 
+  private VisionSubsystem visionSubsystem;
+
+  private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+
+  
   public SwerveModulePosition[] getModulePositions(){
     return( new SwerveModulePosition[]{
       frontLeft.getPosition(), 
@@ -80,20 +86,12 @@ public class SwerveSubsystem extends SubsystemBase {
   /*private SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
   new Rotation2d(0), getModulePositions());*/
 
-  // Create empty right joystick for live speed control: BORKED!
-  Joystick rightJoystick;
-
-  private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
-
   // Swerve subsystem constructor
-  public SwerveSubsystem(Joystick rightJoystick) {
-
-    //gyro.setAngleAdjustment(90);
-
-    // Assign right joystick
-    this.rightJoystick = rightJoystick;
+  public SwerveSubsystem(VisionSubsystem visionSubsystem) {
 
     resetAllEncoders();
+
+    this.visionSubsystem = visionSubsystem;
 
     // Reset navX heading on new thread when robot starts
     new Thread(() -> {
@@ -178,7 +176,21 @@ public class SwerveSubsystem extends SubsystemBase {
     backRight.setDesiredAngleDegrees(degrees[3]);
   }
 
+  private void updatePose(){
 
+    swerveDrivePoseEstimator.update(gyro.getRotation2d(), getModulePositions());
+
+    if(visionSubsystem.hasTargets){
+
+      var captureTime = visionSubsystem.result.getTimestampSeconds();
+      var cameraToTargetTransform = visionSubsystem.result.getBestTarget().getBestCameraToTarget();
+      var cameraPose = FieldConstants.kFarTargetPose.transformBy(cameraToTargetTransform.inverse());
+
+      swerveDrivePoseEstimator.addVisionMeasurement(getPose(), getHeading());
+      swerveDrivePoseEstimator.addVisionMeasurement(
+      cameraPose.transformBy(VisionConstants.kCameraToRobot).toPose2d(), captureTime);
+    }
+  }
 
 
   // Periodic looooooop
@@ -187,8 +199,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Periodicly update odometer for it to caculate position
     //odometer.update(getRotation2d(), getModulePositions());
-    swerveDrivePoseEstimator.update(gyro.getRotation2d(), getModulePositions());
-    
+    updatePose();
 
     // Odometry
     SmartDashboard.putNumber("Robot Heading", getHeading());
