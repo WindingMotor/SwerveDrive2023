@@ -8,7 +8,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.commands.ResetOdometry;
+import frc.robot.commands.ResetPose;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.Constants.DriveConstants;
 
@@ -32,7 +32,7 @@ public class TrajectoryRunner extends SequentialCommandGroup{
         addCommands(
             // Commands to run sequentially
             new SequentialCommandGroup(
-                new ResetOdometry(swerveSubsystem, trajectory.getInitialPose()),  // Reset robot odometry before movement 
+                new ResetPose(swerveSubsystem, trajectory.getInitialPose()),  // Reset robot odometry before movement 
                 swerveControllerCommand, // Move robot with trajectory and module states
                 //sendData, // Tell driver station that command is running
                 new InstantCommand(() -> swerveSubsystem.stopModules()) // Stop all modules

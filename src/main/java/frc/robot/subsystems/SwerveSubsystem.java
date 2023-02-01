@@ -2,8 +2,9 @@
 
 package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -12,9 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.DriveConstants;
 
@@ -78,20 +77,13 @@ public class SwerveSubsystem extends SubsystemBase {
   // Create a robot monitor
   //private final Monitor monitor = new Monitor();
 
-  // BROKEN FOR 2023
-  // Create odometer for error correction
-  private SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
-  new Rotation2d(0), getModulePositions());
-  // BROKEN FOR 2023
-
-  /*
-   * 
-   * 
-   *   
-   */
+  /*private SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
+  new Rotation2d(0), getModulePositions());*/
 
   // Create empty right joystick for live speed control: BORKED!
   Joystick rightJoystick;
+
+  private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
   // Swerve subsystem constructor
   public SwerveSubsystem(Joystick rightJoystick) {
@@ -111,6 +103,9 @@ public class SwerveSubsystem extends SubsystemBase {
         } catch (Exception e) {
         }
     }).start();
+
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, gyro.getRotation2d(), getModulePositions(), getPose());
+
   }
 
   // Reset gyro heading 
@@ -149,13 +144,15 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Return robot position caculated buy odometer
   public Pose2d getPose(){
-    return odometer.getPoseMeters();
+    //return odometry.getPoseMeters();
+    return swerveDrivePoseEstimator.getEstimatedPosition();
   }
 
   // Reset odometer to new location
   public void resetOdometry(Pose2d pose){
    // odometer.resetPosition(pose, getRotation2d());
-   odometer.resetPosition(getRotation2d(),getModulePositions(), pose);
+   //odometer.resetPosition(getRotation2d(),getModulePositions(), pose);
+   swerveDrivePoseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), pose);
   }
 
   // Reset all swerve module encoders
@@ -178,12 +175,12 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic(){
 
     // Periodicly update odometer for it to caculate position
-    odometer.update(getRotation2d(), getModulePositions());
-
+    //odometer.update(getRotation2d(), getModulePositions());
+    swerveDrivePoseEstimator.update(gyro.getRotation2d(), getModulePositions());
     
 
     // Odometry
-    SmartDashboard.putNumber("Heading", getHeading());
+    SmartDashboard.putNumber("Robot Heading", getHeading());
     SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
     
     // Update robot monitor
