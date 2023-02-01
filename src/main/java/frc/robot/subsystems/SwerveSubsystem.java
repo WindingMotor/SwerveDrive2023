@@ -2,8 +2,9 @@
 
 package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -12,11 +13,11 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.DriveConstants;
+import frc.robot.util.Constants.FieldConstants;
+import frc.robot.util.Constants.VisionConstants;
 
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -66,8 +67,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Create the navX using roboRIO expansion port
   private AHRS gyro = new AHRS(SPI.Port.kMXP);
-  
 
+  private VisionSubsystem visionSubsystem;
+
+  private SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+
+  
   public SwerveModulePosition[] getModulePositions(){
     return( new SwerveModulePosition[]{
       frontLeft.getPosition(), 
@@ -78,30 +83,15 @@ public class SwerveSubsystem extends SubsystemBase {
   // Create a robot monitor
   //private final Monitor monitor = new Monitor();
 
-  // BROKEN FOR 2023
-  // Create odometer for error correction
-  private SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
-  new Rotation2d(0), getModulePositions());
-  // BROKEN FOR 2023
-
-  /*
-   * 
-   * 
-   *   
-   */
-
-  // Create empty right joystick for live speed control: BORKED!
-  Joystick rightJoystick;
+  /*private SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
+  new Rotation2d(0), getModulePositions());*/
 
   // Swerve subsystem constructor
-  public SwerveSubsystem(Joystick rightJoystick) {
-
-    //gyro.setAngleAdjustment(90);
-
-    // Assign right joystick
-    this.rightJoystick = rightJoystick;
+  public SwerveSubsystem(VisionSubsystem visionSubsystem) {
 
     resetAllEncoders();
+
+    this.visionSubsystem = visionSubsystem;
 
     // Reset navX heading on new thread when robot starts
     new Thread(() -> {
@@ -111,6 +101,9 @@ public class SwerveSubsystem extends SubsystemBase {
         } catch (Exception e) {
         }
     }).start();
+
+    swerveDrivePoseEstimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics, gyro.getRotation2d(), getModulePositions(), getPose());
+
   }
 
   // Reset gyro heading 
@@ -136,26 +129,17 @@ public class SwerveSubsystem extends SubsystemBase {
     backRight.stop();
   } 
 
-  public void setModuleStates(SwerveModuleState[] desiredStates) {
-
-    // Make sure robot rotation is all ways possible by changing other module roation speeds
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-    
-    frontLeft.setDesiredState(desiredStates[0]);
-    frontRight.setDesiredState(desiredStates[1]);
-    backLeft.setDesiredState(desiredStates[2]);
-    backRight.setDesiredState(desiredStates[3]);
-}
-
   // Return robot position caculated buy odometer
   public Pose2d getPose(){
-    return odometer.getPoseMeters();
+    //return odometry.getPoseMeters();
+    return swerveDrivePoseEstimator.getEstimatedPosition();
   }
 
   // Reset odometer to new location
   public void resetOdometry(Pose2d pose){
    // odometer.resetPosition(pose, getRotation2d());
-   odometer.resetPosition(getRotation2d(),getModulePositions(), pose);
+   //odometer.resetPosition(getRotation2d(),getModulePositions(), pose);
+   swerveDrivePoseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), pose);
   }
 
   // Reset all swerve module encoders
@@ -173,17 +157,52 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveModule getBackLeft(){return(backLeft);}
   public SwerveModule getBackRight(){return(backRight);}
   
+
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+
+    // Make sure robot rotation is all ways possible by changing other module roation speeds
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+    
+    frontLeft.setDesiredState(desiredStates[0]);
+    frontRight.setDesiredState(desiredStates[1]);
+    backLeft.setDesiredState(desiredStates[2]);
+    backRight.setDesiredState(desiredStates[3]);
+  }
+
+  public void setModuleAngles(double[] degrees){
+    frontLeft.setDesiredAngleDegrees(degrees[0]);
+    frontRight.setDesiredAngleDegrees(degrees[1]);
+    backLeft.setDesiredAngleDegrees(degrees[2]);
+    backRight.setDesiredAngleDegrees(degrees[3]);
+  }
+
+  private void updatePose(){
+
+    swerveDrivePoseEstimator.update(gyro.getRotation2d(), getModulePositions());
+
+    if(visionSubsystem.hasTargets){
+
+      var captureTime = visionSubsystem.result.getTimestampSeconds();
+      var cameraToTargetTransform = visionSubsystem.result.getBestTarget().getBestCameraToTarget();
+      var cameraPose = FieldConstants.kFarTargetPose.transformBy(cameraToTargetTransform.inverse());
+
+      swerveDrivePoseEstimator.addVisionMeasurement(getPose(), getHeading());
+      swerveDrivePoseEstimator.addVisionMeasurement(
+      cameraPose.transformBy(VisionConstants.kCameraToRobot).toPose2d(), captureTime);
+    }
+  }
+
+
   // Periodic looooooop
   @Override
   public void periodic(){
 
     // Periodicly update odometer for it to caculate position
-    odometer.update(getRotation2d(), getModulePositions());
-
-    
+    //odometer.update(getRotation2d(), getModulePositions());
+    updatePose();
 
     // Odometry
-    SmartDashboard.putNumber("Heading", getHeading());
+    SmartDashboard.putNumber("Robot Heading", getHeading());
     SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
     
     // Update robot monitor

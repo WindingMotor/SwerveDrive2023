@@ -5,14 +5,14 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 
-public class ResetOdometry extends CommandBase {
+public class ResetPose extends CommandBase {
 
   // Unassigned private instance variables
   private Pose2d pose;
   private SwerveSubsystem swerveSubsystem;
 
   // Command constructor
-  public ResetOdometry(SwerveSubsystem swerveSubsystem, Pose2d pose){
+  public ResetPose(SwerveSubsystem swerveSubsystem, Pose2d pose){
     this.swerveSubsystem = swerveSubsystem;
     this.pose = pose;
   }

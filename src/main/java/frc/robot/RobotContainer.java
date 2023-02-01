@@ -7,6 +7,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -18,12 +19,14 @@ import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.GrabberClose;
 import frc.robot.commands.GrabberOpen;
-import frc.robot.commands.ResetOdometry;
+import frc.robot.commands.ResetPose;
 import frc.robot.commands.SwerveJoystick;
 import frc.robot.commands.SwerveRotator;
 import frc.robot.commands.SwerveThrottledJoystick;
+import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
 import frc.robot.util.Transmitter;
 import frc.robot.util.Constants.AutoConstants;
@@ -45,10 +48,12 @@ public class RobotContainer {
   private final Joystick leftJoystick = new Joystick(IOConstants.kLeftJoystick);
   private final Joystick rightJoystick = new Joystick(IOConstants.kRightJoystick);
 
-  // Create swerve subsystem
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(rightJoystick);
+  // Create subsystems
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(visionSubsystem);
   
-  private final LimelightSubsystem limelightSubsystem =  new LimelightSubsystem();
+  private final GrabberSubsystem grabberSubsystem =  new GrabberSubsystem();
   // Create Xbox controller
   private final XboxController xboxController = new XboxController(IOConstants.kXboxController);
 
@@ -87,20 +92,22 @@ public class RobotContainer {
     () -> trueFunct(),
     () -> swerveSubsystem.getHeading())); 
 
-/* 
-swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
-() -> xbox.getRawAxis(4), // X-Axis
-() -> xbox.getRawAxis(5), // Y-Axis
-() -> xbox.getRawAxis(0), // R-Axis
-() -> trueFunct(),
-() -> swerveSubsystem.getHeading())); 
-*/
-    // DEBUG SETUP -> ZERO MOVEMENT
-/*     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
+    /* 
+    swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
+    () -> xbox.getRawAxis(4), // X-Axis
+    () -> xbox.getRawAxis(5), // Y-Axis
+    () -> xbox.getRawAxis(0), // R-Axis
+    () -> trueFunct(),
+    () -> swerveSubsystem.getHeading())); 
+    */
+
+    /* DEBUG SETUP -> ZERO MOVEMENT
+    swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> zeroFunct(), // X-Axis
     () -> rightJoystick.getRawAxis(2), // Y-Axis
     () -> zeroFunct(), // R-Axis
-    () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); */
+    () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton)));
+    */
     
   //>--------------T-R-A-N-S-----------------//
     /* 
@@ -143,13 +150,9 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     //new JoystickButton(leftJoystick, 0).onTrue() ->swerveSubsystem.zeroHeading()
     */
 
-    new JoystickButton(rightJoystick, 1).onTrue(new GrabberOpen(limelightSubsystem));
-    new JoystickButton(leftJoystick, 1).onTrue(new GrabberClose(limelightSubsystem));
-    //new JoystickButton(rightJoystick, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
-
-  // DEPRECATED 2023
-  //new JoystickButton(rightJoystick,Constants.IOConstants.kZeroHeadingButton).whenPressed(() -> swerveSubsystem.zeroHeading());
-  // DEPRECATED 2023
+    new JoystickButton(rightJoystick, 1).onTrue(new GrabberOpen(grabberSubsystem));
+    new JoystickButton(leftJoystick, 1).onTrue(new GrabberClose(grabberSubsystem));
+    new JoystickButton(rightJoystick, 2).onTrue(new ResetPose(swerveSubsystem, new Pose2d()));
 
     // Rotate robot 90* using swerve rotator
     //new JoystickButton(leftJoystick, Constants.IOConstants.kRotatorButton).whenPressed(new SwerveRotator(swerveSubsystem, () -> 0.1, swerveSubsystem.getHeading()));
@@ -159,7 +162,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   //------------------------------------R-E-F-E-R-R-E-R-S------------------------------------//
 
     public void containerResetAllEncoders(){
-      DriverStation.reportWarning("Running containerResetAllEncoders() in RobotContainer", true);
+      //DriverStation.reportWarning("Running containerResetAllEncoders() in RobotContainer", true);
       swerveSubsystem.resetAllEncoders();
     }
 
