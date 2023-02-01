@@ -16,6 +16,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.DriveConstants;
 import frc.robot.util.Constants.ModuleConstants;
@@ -234,6 +235,7 @@ public class SwerveModule extends SubsystemBase {
     return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
   }
 
+
   public void setDesiredState(SwerveModuleState state){
 
     // Check if new command has high driving power 
@@ -259,6 +261,18 @@ public class SwerveModule extends SubsystemBase {
     simTurn2.setAngle(absoluteEncoder.getAbsolutePosition()); // +90
     simDirection2.setAngle(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond >0 ? 0:180);
     SmartDashboard.putString("Swerve["+moduleName+"] state", state.toString());
+
+  }
+
+
+  public void setDesiredAngleDegrees(double degrees){
+    // Set motor angle with PID setpoint. Takes in values current rotation in radians and the setpoint in radians
+    turningMotor.set(turningPidController.calculate(getTurningPosition(), Units.degreesToRadians(degrees)));
+  }
+
+  public void setDesiredAngleRadians(double radians){
+    // Set motor angle with PID setpoint. Takes in values current rotation in radians and the setpoint in radians
+    turningMotor.set(turningPidController.calculate(getTurningPosition(), radians));
 
   }
 

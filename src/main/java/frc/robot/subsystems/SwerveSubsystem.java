@@ -131,17 +131,6 @@ public class SwerveSubsystem extends SubsystemBase {
     backRight.stop();
   } 
 
-  public void setModuleStates(SwerveModuleState[] desiredStates) {
-
-    // Make sure robot rotation is all ways possible by changing other module roation speeds
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-    
-    frontLeft.setDesiredState(desiredStates[0]);
-    frontRight.setDesiredState(desiredStates[1]);
-    backLeft.setDesiredState(desiredStates[2]);
-    backRight.setDesiredState(desiredStates[3]);
-}
-
   // Return robot position caculated buy odometer
   public Pose2d getPose(){
     //return odometry.getPoseMeters();
@@ -170,6 +159,28 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveModule getBackLeft(){return(backLeft);}
   public SwerveModule getBackRight(){return(backRight);}
   
+
+  public void setModuleStates(SwerveModuleState[] desiredStates) {
+
+    // Make sure robot rotation is all ways possible by changing other module roation speeds
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+    
+    frontLeft.setDesiredState(desiredStates[0]);
+    frontRight.setDesiredState(desiredStates[1]);
+    backLeft.setDesiredState(desiredStates[2]);
+    backRight.setDesiredState(desiredStates[3]);
+  }
+
+  public void setModuleAngles(double[] degrees){
+    frontLeft.setDesiredAngleDegrees(degrees[0]);
+    frontRight.setDesiredAngleDegrees(degrees[1]);
+    backLeft.setDesiredAngleDegrees(degrees[2]);
+    backRight.setDesiredAngleDegrees(degrees[3]);
+  }
+
+
+
+
   // Periodic looooooop
   @Override
   public void periodic(){

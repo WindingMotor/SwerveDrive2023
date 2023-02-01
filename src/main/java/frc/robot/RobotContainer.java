@@ -152,10 +152,6 @@ public class RobotContainer {
     new JoystickButton(rightJoystick, 2).onTrue(new ResetPose(swerveSubsystem, new Pose2d()));
     //new JoystickButton(rightJoystick, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
 
-  // DEPRECATED 2023
-  //new JoystickButton(rightJoystick,Constants.IOConstants.kZeroHeadingButton).whenPressed(() -> swerveSubsystem.zeroHeading());
-  // DEPRECATED 2023
-
     // Rotate robot 90* using swerve rotator
     //new JoystickButton(leftJoystick, Constants.IOConstants.kRotatorButton).whenPressed(new SwerveRotator(swerveSubsystem, () -> 0.1, swerveSubsystem.getHeading()));
 
