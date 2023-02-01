@@ -90,16 +90,14 @@ public class SwerveSubsystem extends SubsystemBase {
    *   
    */
 
-  // Create empty right joystick for live speed control: BORKED!
-  Joystick rightJoystick;
+
 
   // Swerve subsystem constructor
-  public SwerveSubsystem(Joystick rightJoystick) {
+  public SwerveSubsystem() {
 
     //gyro.setAngleAdjustment(90);
 
-    // Assign right joystick
-    this.rightJoystick = rightJoystick;
+
 
     resetAllEncoders();
 

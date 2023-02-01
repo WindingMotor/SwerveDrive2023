@@ -46,7 +46,7 @@ public class RobotContainer {
   private final Joystick rightJoystick = new Joystick(IOConstants.kRightJoystick);
 
   // Create swerve subsystem
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem(rightJoystick);
+  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   
   private final LimelightSubsystem limelightSubsystem =  new LimelightSubsystem();
   // Create Xbox controller
