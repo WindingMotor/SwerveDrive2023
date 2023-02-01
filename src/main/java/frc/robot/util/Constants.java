@@ -107,10 +107,9 @@ public final class Constants {
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 1.75;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 2;
 
-        public static final double kPThetaController = 0.01;
+        public static final double kPThetaController = 0.001;
         public static final double kIThetaController = 0.0;
-        public static final double kDThetaController = 0.0;
-        public static final double kPIDDeadband = 1;
+        public static final double kDThetaController = 0.00;
         
         public static final double kMaxDriveMotorTemp = 33.0;
 
@@ -144,7 +143,7 @@ public final class Constants {
     // Input and Output 
     public static final class IOConstants {
 
-        public static final double kDeadband = 0.1;
+        public static final double kDeadband = 0.05;
 
         public static final int kLeftJoystick = 0;
         public static final int kRightJoystick = 1;
