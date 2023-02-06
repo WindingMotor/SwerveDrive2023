@@ -1,6 +1,6 @@
 # SwerveDrive2023 - FRC Team 2106
-A swerve drive based off SRX Mag Encoders, Neos, and Spark Maxes. Recently updated for 2023 WPILIB.
-This codebase is currently in development.
+A swerve drive base code using SDS MK4 Modules, Neos, and SRX Mag Encoders.
+Fully working and updated for 2023.
 
 ## This part of the code is working:
 #### Teleop control with Joysticks or an FPV Transmitter
