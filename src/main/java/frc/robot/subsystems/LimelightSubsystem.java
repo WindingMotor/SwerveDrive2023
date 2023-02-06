@@ -6,6 +6,8 @@ import frc.robot.util.Constants.VisionConstants;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 // Ignore unused variable warnings
@@ -15,7 +17,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 public class LimelightSubsystem extends SubsystemBase{
 
-    private Spark grab = new Spark(0);
+    //private Spark grab = new Spark(0);
     
     // Create private instance variables  
     NetworkTable table;
@@ -30,12 +32,16 @@ public class LimelightSubsystem extends SubsystemBase{
     private double y;
     private double a;
 
+
+  // private  DoubleSolenoid solenod = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 1, 0);
+   //private DoubleSolenoid s = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
     // Subsystem Constructor
     public LimelightSubsystem(){
 
     // Get limelight from network tables
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
+   
     // Set variables from limelight network tables
     // tx and ty are offsets to target in degrees and ta is total target area
     NetworkTableEntry tx = table.getEntry("tx");
@@ -93,13 +99,6 @@ public class LimelightSubsystem extends SubsystemBase{
     @Override
     public void periodic(){}
 
-    public void close(double s){
-        grab.set(s);
-      }
-    
-      public void open(double s){
-        grab.set(-s);
-      }
     
 
 

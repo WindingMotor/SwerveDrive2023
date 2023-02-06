@@ -2,17 +2,19 @@
 
 package frc.robot.commands;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /** An example command that uses an example subsystem. */
-public class GrabberClose extends CommandBase {
+public class GrabberToggle extends CommandBase {
 
-  private LimelightSubsystem subsystem;
+  private GrabberSubsystem subsystem;
 
-  public GrabberClose(LimelightSubsystem subsystem) {
+  public GrabberToggle(GrabberSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     addRequirements(subsystem);
@@ -21,7 +23,8 @@ public class GrabberClose extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //subsystem.close(0.25);
+    DriverStation.reportError("TOGGLED!", true);
+    subsystem.toggle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

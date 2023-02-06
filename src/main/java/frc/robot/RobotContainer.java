@@ -7,8 +7,10 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.auto.commands.TrajectoryRunner;
@@ -18,12 +20,15 @@ import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.GrabberClose;
 import frc.robot.commands.GrabberOpen;
+import frc.robot.commands.GrabberToggle;
 import frc.robot.commands.ResetOdometry;
 import frc.robot.commands.SwerveJoystick;
 import frc.robot.commands.SwerveRotator;
 import frc.robot.commands.SwerveThrottledJoystick;
+import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
 import frc.robot.util.Transmitter;
 import frc.robot.util.Constants.AutoConstants;
@@ -48,7 +53,10 @@ public class RobotContainer {
   // Create swerve subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   
-  private final LimelightSubsystem limelightSubsystem =  new LimelightSubsystem();
+ // private final LimelightSubsystem limelightSubsystem =  new LimelightSubsystem();
+   private final GrabberSubsystem grabberSubsystem = new GrabberSubsystem();
+
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
   // Create Xbox controller
   private final XboxController xboxController = new XboxController(IOConstants.kXboxController);
 
@@ -66,7 +74,12 @@ public class RobotContainer {
 
   private final XboxController xbox = new XboxController(4);
 
+
+  private final Joystick tx16s = new Joystick(4);
+
   PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
+
+ // private  DoubleSolenoid solenod = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 
 
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
@@ -80,12 +93,14 @@ public class RobotContainer {
 
   //>-------------N-O-R-M-A-L----------------<//
    
+  /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> rightJoystick.getRawAxis(0), // X-Axis
     () -> rightJoystick.getRawAxis(1), // Y-Axis
     () -> leftJoystick.getRawAxis(0), // R-Axis
     () -> trueFunct(),
     () -> swerveSubsystem.getHeading())); 
+    */
 
 /* 
 swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
@@ -103,14 +118,14 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); */
     
   //>--------------T-R-A-N-S-----------------//
-    /* 
+    
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
-    () -> transmitter.getRoll(), // X-Axis
-    () -> -transmitter.getPitch(), // Y-Axis
-    () -> transmitter.getYaw(), // R-Axis
-    () -> transmitter.getSwitchVeryRight(),
-    () -> swerveSubsystem.getHeading() )); 
-    */
+    () -> tx16s.getRawAxis(0), // X-Axis
+    () -> -tx16s.getRawAxis(1), // Y-Axis
+    () -> tx16s.getRawAxis(3), // R-Axis
+    () -> tx16s.getRawButton(0),
+    () -> swerveSubsystem.getHeading())); 
+    
   //>----------T-H-R-T-L----------<// // No clue if working...
     /*
     swerveSubsystem.setDefaultCommand(new SwerveThrottledJoystick(swerveSubsystem,
@@ -143,8 +158,11 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     //new JoystickButton(leftJoystick, 0).onTrue() ->swerveSubsystem.zeroHeading()
     */
 
-    new JoystickButton(rightJoystick, 1).onTrue(new GrabberOpen(limelightSubsystem));
-    new JoystickButton(leftJoystick, 1).onTrue(new GrabberClose(limelightSubsystem));
+    new JoystickButton(tx16s, 2).onTrue(new GrabberToggle(grabberSubsystem));
+    new JoystickButton(tx16s, 2).onFalse(new GrabberToggle(grabberSubsystem));
+   // new JoystickButton(tx16s, 1).onTrue(new GrabberToggle(grabberSubsystem));
+    
+    //new JoystickButton(tx16s, 2).onFalse(new GrabberClose(limelightSubsystem));
     //new JoystickButton(rightJoystick, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
 
   // DEPRECATED 2023
