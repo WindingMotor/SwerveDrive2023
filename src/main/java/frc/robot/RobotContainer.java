@@ -49,8 +49,11 @@ public class RobotContainer {
   // Create swerve subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   
-  // Grabber subsystem
-   private final LiftSubsystem grabberSubsystem = new LiftSubsystem();
+  // Create lift subsystem
+  private final LiftSubsystem grabberSubsystem = new LiftSubsystem();
+
+  // Create vision subsystem
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
   // Create PID controllers for trajectory tracking
   public final PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
@@ -69,10 +72,8 @@ public class RobotContainer {
   // Create transmitter
   private final Joystick tx16s = new Joystick(4);
 
-  PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
-
- // private  DoubleSolenoid solenod = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
-
+  // Create pathOne for auto
+  private final PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
 
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 

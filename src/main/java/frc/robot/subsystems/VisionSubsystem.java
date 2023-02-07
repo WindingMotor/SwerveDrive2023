@@ -6,13 +6,11 @@ import frc.robot.util.Constants.VisionConstants;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Ignore unused variable warnings
@@ -21,40 +19,72 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class VisionSubsystem extends SubsystemBase{
     
-    //PhotonCamera camera = new PhotonCamera("photonvision");
+    // Create a vision photon camera
+    PhotonCamera visionCamera;
 
-   //  public Boolean hasTargets = false;
-   //  public PhotonPipelineResult result;
-   // public PhotonTrackedTarget bestTarget;
+    // Camera result for vision camera
+    private PhotonPipelineResult cameraResult;
 
     // Subsystem Constructor
     public VisionSubsystem(){
         
-}
+        // Port forward photon vision so we can access it with an ethernet cable
+        PortForwarder.add(5800, "photonvision.local", 5800);
 
-    // Update vision variables once per scheduler run
-    @Override
-    public void periodic(){
+        // Set object values to camera
+        visionCamera = new PhotonCamera("camera name goes here");
 
-    // Query the latest result from PhotonVision
-    // var result = camera.getLatestResult();
-
-    // Check if the latest result has any targets.
-
-    //boolean hasTargets = result.hasTargets();
-
-    // Get the current best target.
-    //PhotonTrackedTarget target = result.getBestTarget();
-
-    //int targetID = target.getFiducialId();
-
-   //     SmartDashboard.putNumber("Target ID", targetID);
-       // SmartDashboard.putBoolean("Target?", hasTargets);
-
+        // Update camera results before periodic
+        updateCameraResults();
     }
 
-   // public int getTargetID(){
-   //    return(bestTarget.getFiducialId());
-    //}
+    // Update the camera results
+    private void updateCameraResults(){
+        cameraResult = visionCamera.getLatestResult();
+    }
+
+    // Checks if camera sees targets, must use to stop null exeptions!
+    private Boolean hasTargets(){
+        return(cameraResult.hasTargets());
+    }
+
+    // Returns the best target from the camera
+    private PhotonTrackedTarget getBestTarget(){
+        return(cameraResult.getBestTarget());
+    }
+
+    // Returns a percentage of how much area a target takes up, 0 - 100 percent
+    private double getTargetArea(){
+        return(getBestTarget().getArea());
+    }
+
+    // Returns the april tag ID number
+    private int getTargetID(){
+        return(getBestTarget().getFiducialId());
+    }
+
+
+    // Update the smart dashboard
+    private void updateSmartDashboard(){
+        // Put targets? value
+        SmartDashboard.putBoolean("Targets?", hasTargets());
+        // Check if targets are found before putting values to prevent null!
+        if(hasTargets()){
+            SmartDashboard.putString("Target ID", getTargetID() + "");
+            SmartDashboard.putString("Target Area", getTargetArea() + "%");
+        }else{
+            SmartDashboard.putString("Target ID", "No ID Found!");
+            SmartDashboard.putString("Target Area", "0" + "%");
+        }
+        
+    }
+
+    // A periodic loop, updates smartdashboard and camera results
+    @Override
+    public void periodic(){
+        updateCameraResults();
+        updateSmartDashboard();
+    }
+
 
 }

@@ -1,18 +1,15 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot.commands;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.util.Constants.DriveConstants;
-import java.util.function.Supplier;
-//import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-// The same thing as swerve joystick but with throttle control
-
 public class SwerveThrottledJoystick extends CommandBase {
+
+  //-----------------------------//
+  // TO BE DEPRECATED AND REWRITTEN!
+  //-----------------------------//
+
+  /*
 
   // Create empty variables for reassignment
   private final SwerveSubsystem swerveSubsystem;
@@ -34,11 +31,11 @@ public class SwerveThrottledJoystick extends CommandBase {
     this.throttleFunction = throttleFunction;
 
     // Slew rate limiter
-    /* 
+    
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.turningLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond);
-    */
+    
 
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem);
@@ -68,7 +65,7 @@ public class SwerveThrottledJoystick extends CommandBase {
     // Apply field oriented mode
     ChassisSpeeds chassisSpeeds;
 
-    /*
+    
     if(fieldOrientedFunction.get()){
       chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     }
@@ -76,7 +73,7 @@ public class SwerveThrottledJoystick extends CommandBase {
     else{
       chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
     }
-    */
+    
 
     chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
 
@@ -98,6 +95,10 @@ public class SwerveThrottledJoystick extends CommandBase {
   public boolean isFinished(){return false;}
 
 
+*/
 
-  
+  //-----------------------------//
+  // TO BE DEPRECATED AND REWRITTEN!
+  //-----------------------------//
+
 }

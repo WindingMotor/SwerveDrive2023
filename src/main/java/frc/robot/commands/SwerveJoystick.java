@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveJoystick extends CommandBase {
 
-  // Create empty variables for reassignment
+  // Create variables
   private final SwerveSubsystem swerveSubsystem;
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, headingFunction;
   private final Supplier<Boolean> fieldOrientedFunction;
@@ -22,12 +22,12 @@ public class SwerveJoystick extends CommandBase {
   private double initialHeading;
   private PIDController thetaController;
 
-  // Command constructor and requirements 
+  // Command constructor
   public SwerveJoystick(SwerveSubsystem swerveSubsystem,
   Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
   Supplier<Boolean> fieldOrientedFunction, Supplier<Double> headingFunction) {
 
-    // Assign empty variables values passed from constructor and requirements
+    // Assign values passed from constructor
     this.swerveSubsystem = swerveSubsystem;
     this.xSpdFunction = xSpdFunction;
     this.ySpdFunction = ySpdFunction;

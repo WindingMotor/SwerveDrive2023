@@ -2,20 +2,14 @@
 
 package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-/* 
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.util.Constants.DriveConstants;
-import java.util.function.Supplier;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-*/
 
 public class SwerveRotator extends CommandBase {
 
-// A VERY DEAD AND WIP CLASS
+  //-----------------------------//
+  // TO BE DEPRECATED AND REWRITTEN!
+  //-----------------------------//
 
-/*
+  /*
 
   // Create empty variables for reassignment
   private final SwerveSubsystem swerveSubsystem;
@@ -72,5 +66,9 @@ public class SwerveRotator extends CommandBase {
   public boolean isFinished(){return isDone;}
 
   */
+
+  //-----------------------------//
+  // TO BE DEPRECATED AND REWRITTEN!
+  //-----------------------------//
 
 }

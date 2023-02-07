@@ -49,10 +49,10 @@ public class LiftSubsystem extends SubsystemBase{
     public void periodic(){
 
         // Update the smartdashboard
-        updateSmartdashboard();
+        updateSmartDashboard();
     }
 
-    public void updateSmartdashboard(){
+    public void updateSmartDashboard(){
 
           // Put solenoid states on smartdashboard
           SmartDashboard.putBoolean("Intake Solenoid", intakeSolenoidState);
@@ -61,6 +61,7 @@ public class LiftSubsystem extends SubsystemBase{
     }
 
     public void toggleIntakeSolenoid(){
+        // Toggle the solenoid and update solenoid state variable
         intakeSolenoid.toggle();
         if(intakeSolenoidState){intakeSolenoidState = false;}
         else{intakeSolenoidState = true;}
