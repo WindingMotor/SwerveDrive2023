@@ -116,8 +116,9 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> tx16s.getRawAxis(0), // X-Axis
     () -> -tx16s.getRawAxis(1), // Y-Axis
     () -> tx16s.getRawAxis(3), // R-Axis
-    () -> tx16s.getRawButton(0),
-    () -> swerveSubsystem.getHeading())); 
+    () -> tx16s.getRawButton(0), // Field oriented -does nothing right now
+    () -> swerveSubsystem.getHeading(), // Navx heading
+    () -> tx16s.getRawButton(5))); // Flick offset button, should be toggle!
     
   //>----------T-H-R-T-L----------<// // No clue if working...
     /*

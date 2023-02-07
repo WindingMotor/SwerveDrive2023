@@ -19,13 +19,14 @@ public class SwerveJoystick extends CommandBase {
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, headingFunction;
   private final Supplier<Boolean> fieldOrientedFunction;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+  private final Supplier<Boolean> flickFunction;
   private double initialHeading;
   private PIDController thetaController;
 
   // Command constructor
   public SwerveJoystick(SwerveSubsystem swerveSubsystem,
   Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
-  Supplier<Boolean> fieldOrientedFunction, Supplier<Double> headingFunction) {
+  Supplier<Boolean> fieldOrientedFunction, Supplier<Double> headingFunction, Supplier<Boolean> flickFunction){
 
     // Assign values passed from constructor
     this.swerveSubsystem = swerveSubsystem;
@@ -34,6 +35,7 @@ public class SwerveJoystick extends CommandBase {
     this.turningSpdFunction = turningSpdFunction;
     this.fieldOrientedFunction = fieldOrientedFunction;
     this.headingFunction = headingFunction;
+    this.flickFunction = flickFunction;
 
     // Set the inital heading to the navx +||-inf heading. Should be zero on startup!
     this.initialHeading = headingFunction.get();
@@ -91,7 +93,15 @@ public class SwerveJoystick extends CommandBase {
     // Test heading control, throws away previous turning values
     initialHeading += turningSpeed;
 
-    turningSpeed = thetaController.calculate(headingFunction.get(), initialHeading) * 100;
+    // Get current navx heading
+    double newHeading = headingFunction.get();
+
+    // Offset navx heading to trick PID, makes us instantly rotate
+    if(flickFunction.get()){
+      newHeading += 90;
+    }
+
+    turningSpeed = thetaController.calculate(newHeading, initialHeading) * 100;
     //turningSpeed = (headingFunction.get() - initialHeading) * turningPValue;
     // Deadband
     turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;
