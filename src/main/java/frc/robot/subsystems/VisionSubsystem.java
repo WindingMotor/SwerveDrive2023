@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.VisionConstants;
 import org.photonvision.PhotonCamera;
+import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -11,6 +12,7 @@ import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 // Ignore unused variable warnings
@@ -18,6 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class VisionSubsystem extends SubsystemBase{
+    
+
     
     // Create a vision photon camera
     PhotonCamera visionCamera;
@@ -29,13 +33,16 @@ public class VisionSubsystem extends SubsystemBase{
     public VisionSubsystem(){
         
         // Port forward photon vision so we can access it with an ethernet cable
-        PortForwarder.add(5800, "photonvision.local", 5800);
+      //  PortForwarder.add(5800, "photonvision.local", 5800);
 
         // Set object values to camera
-        visionCamera = new PhotonCamera("camera name goes here");
+        visionCamera = new PhotonCamera("OV5647");
 
         // Update camera results before periodic
         updateCameraResults();
+
+        visionCamera.setLED(VisionLEDMode.kDefault);
+        
     }
 
     // Update the camera results
@@ -76,14 +83,24 @@ public class VisionSubsystem extends SubsystemBase{
             SmartDashboard.putString("Target ID", "No ID Found!");
             SmartDashboard.putString("Target Area", "0" + "%");
         }
+        SmartDashboard.putString("LED State", visionCamera.getLEDMode().toString());
         
+    }
+
+    public void setLEDOn(){
+        visionCamera.setLED(VisionLEDMode.kBlink);
+        DriverStation.reportWarning("CHANGE LED", true);
+
     }
 
     // A periodic loop, updates smartdashboard and camera results
     @Override
     public void periodic(){
+        SmartDashboard.putString("Camera", visionCamera.toString());
         updateCameraResults();
         updateSmartDashboard();
+
+        
     }
 
 
