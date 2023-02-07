@@ -3,10 +3,11 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.VisionConstants;
+import java.util.List;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -48,9 +49,24 @@ public class VisionSubsystem extends SubsystemBase{
         return(cameraResult.hasTargets());
     }
 
-    // Returns the best target from the camera
+    // Returns the single best target from the camera
     private PhotonTrackedTarget getBestTarget(){
         return(cameraResult.getBestTarget());
+    }
+
+    // Returns all targets from the camera in an array
+    private List<PhotonTrackedTarget> getTargetList(){
+        return(cameraResult.getTargets());
+    }
+
+    // Returns a picked target from the target list
+    private PhotonTrackedTarget getTargetFromList(int num){
+        return(cameraResult.getTargets().get(num));
+    }
+
+    // Returns the size of the target list
+    private int getListSize(){
+        return(cameraResult.getTargets().size());
     }
 
     // Returns a percentage of how much area a target takes up, 0 - 100 percent
@@ -58,11 +74,20 @@ public class VisionSubsystem extends SubsystemBase{
         return(getBestTarget().getArea());
     }
 
+    private double getTargetPitch(){
+        return(getBestTarget().getPitch());
+    }
+
     // Returns the april tag ID number
     private int getTargetID(){
         return(getBestTarget().getFiducialId());
     }
 
+    private double getTargetDistance(){
+        // Camera height M, Target height M, Camera pitch R, Target pitch R.
+         return(PhotonUtils.calculateDistanceToTargetMeters(0, 0,
+         0, getTargetPitch()));
+    }
 
     // Update the smart dashboard
     private void updateSmartDashboard(){
