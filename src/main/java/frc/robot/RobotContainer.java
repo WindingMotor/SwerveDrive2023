@@ -4,7 +4,6 @@ package frc.robot;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -18,15 +17,12 @@ import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.TestRoutine;
-import frc.robot.commands.GrabberClose;
-import frc.robot.commands.GrabberOpen;
 import frc.robot.commands.GrabberToggle;
 import frc.robot.commands.ResetOdometry;
 import frc.robot.commands.SwerveJoystick;
 import frc.robot.commands.SwerveRotator;
 import frc.robot.commands.SwerveThrottledJoystick;
-import frc.robot.subsystems.GrabberSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.LiftSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
@@ -53,18 +49,13 @@ public class RobotContainer {
   // Create swerve subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   
- // private final LimelightSubsystem limelightSubsystem =  new LimelightSubsystem();
-   private final GrabberSubsystem grabberSubsystem = new GrabberSubsystem();
-
-  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
-  // Create Xbox controller
-  private final XboxController xboxController = new XboxController(IOConstants.kXboxController);
+  // Grabber subsystem
+   private final LiftSubsystem grabberSubsystem = new LiftSubsystem();
 
   // Create PID controllers for trajectory tracking
   public final PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
   public final PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
   public final ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
-
 
   // Create a non profiled PID controller for path planner
   private final PIDController ppThetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
@@ -72,9 +63,10 @@ public class RobotContainer {
   // Create transmitter object
   private final Transmitter transmitter = new Transmitter(4);
 
+  // Create xbox controller
   private final XboxController xbox = new XboxController(4);
 
-
+  // Create transmitter
   private final Joystick tx16s = new Joystick(4);
 
   PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 

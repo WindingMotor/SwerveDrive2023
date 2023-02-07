@@ -82,22 +82,11 @@ public class SwerveSubsystem extends SubsystemBase {
   // Create odometer for error correction
   private SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
   new Rotation2d(0), getModulePositions());
-  // BROKEN FOR 2023
-
-  /*
-   * 
-   * 
-   *   
-   */
-
-
 
   // Swerve subsystem constructor
   public SwerveSubsystem() {
 
     //gyro.setAngleAdjustment(90);
-
-
 
     resetAllEncoders();
 
