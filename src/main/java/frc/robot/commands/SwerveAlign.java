@@ -4,12 +4,12 @@ package frc.robot.commands;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants.DriveConstants;
-
-import java.util.ArrayList;
 import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveAlign extends CommandBase {
@@ -45,17 +45,21 @@ public class SwerveAlign extends CommandBase {
     this.switchOverride = switchOverride;
 
     // Assign PID objects
-    xController = new PIDController(0.01, 0, 0);
-    yController = new PIDController(0.01, 0, 0);
+    xController = new PIDController(1.5, 0, 0);
+    yController = new PIDController(0.5, 0, 0);
+   
 
     vX = 0;
     vY = 0;
 
-    xSetpoint = 1;
+    xSetpoint = 0.5;
     ySetpoint = 0;
 
+    DriverStation.reportError("NEW MOVE FORWARD", true);
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem, visionSubsystem);
+
+
   }
 
   // Running
@@ -70,6 +74,7 @@ public class SwerveAlign extends CommandBase {
        // Caculate velocity with x and y distance from target
       vX = xController.calculate(visionSubsystem.getTargetTransform().getX(), xSetpoint);
       vY = yController.calculate(visionSubsystem.getTargetTransform().getY(), ySetpoint);
+      SmartDashboard.putNumber("vX", vX);
     }else{
       // Set velocity to 0 and end the command if no target is found 
       vX = 0;
@@ -78,10 +83,11 @@ public class SwerveAlign extends CommandBase {
     }
 
     // Stop command if switch goes to false
-    if(!switchOverride.get()){
-      vX = 0;
-      vY = 0;
-      finished = true;
+    if(switchOverride.get() == false){
+      DriverStation.reportError("SWITCH OVERRIDE", true);
+     vX = 0;
+     vY = 0;
+    finished = true;
     }
 
     // Deadband for motors

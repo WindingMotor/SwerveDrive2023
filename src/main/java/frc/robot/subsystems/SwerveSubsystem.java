@@ -143,6 +143,10 @@ public class SwerveSubsystem extends SubsystemBase {
    odometer.resetPosition(getRotation2d(),getModulePositions(), pose);
   }
 
+  public double getGyro2d(){
+    // odometer.resetPosition(pose, getRotation2d());
+    return gyro.getRotation2d().getDegrees();
+   }
   // Reset all swerve module encoders
   public void resetAllEncoders(){
     //DriverStation.reportError("RESET ALL ALL ENCODERS", true);
@@ -170,6 +174,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // Odometry
     SmartDashboard.putNumber("Heading", getHeading());
     SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
+    SmartDashboard.putNumber("R2D deg", gyro.getRotation2d().getDegrees());
     
     // Update robot monitor
     //monitor.update();
