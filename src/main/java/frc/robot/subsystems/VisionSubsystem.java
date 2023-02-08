@@ -9,7 +9,6 @@ import org.photonvision.PhotonUtils;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -56,7 +55,7 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     // Checks if camera sees targets, must use to stop null exeptions!
-    private Boolean hasTargets(){
+    public Boolean hasTargets(){
         return(cameraResult.hasTargets());
     }
 
@@ -90,7 +89,7 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     // Returns the april tag ID number
-    private int getTargetID(){
+    public int getTargetID(){
         return(getBestTarget().getFiducialId());
     }
 
@@ -104,7 +103,6 @@ public class VisionSubsystem extends SubsystemBase{
         // Camera height M, Target height M, Camera pitch R, Target pitch R.
          return(getBestTarget().getBestCameraToTarget());
     }
-
 
     // Update the smart dashboard
     private void updateSmartDashboard(){

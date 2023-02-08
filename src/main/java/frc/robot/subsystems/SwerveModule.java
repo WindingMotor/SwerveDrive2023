@@ -54,9 +54,6 @@ public class SwerveModule extends SubsystemBase {
   // Class constructor where we assign default values for variable
    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoLuteEncoderReversed, String name) {
 
-
-
-
     // Set offsets for absolute encoder in RADIANS!!!!!
     absoluteEncoderOffsetRad = absoluteEncoderOffset;
     //absoluteEncoderReversed = absoLuteEncoderReversed;
@@ -115,7 +112,6 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.setIdleMode(IdleMode.kBrake);
     turningMotor.setIdleMode(IdleMode.kBrake);
 
-
     driveMotor.setSmartCurrentLimit(40);
     turningMotor.setSmartCurrentLimit(20);
     // Call resetEncoders
@@ -145,22 +141,12 @@ public class SwerveModule extends SubsystemBase {
 
     //>-------------------------------<//
 
-   
   }
 
   public void update(){
 
-    // BUG WITH THESE 3 LINES, BREAKS SWERVE MODULE CODE
     SmartDashboard.putNumber(moduleName + "Absolute-Position", absoluteEncoder.getAbsolutePosition());
-    //SmartDashboard.putNumber(moduleName + "Radians-Raw" , absoluteEncoder.getAbsolutePosition() * 2.0 * Math.PI);
-    //SmartDashboard.putNumber(moduleName + "Radians", getAbsoluteEncoderRad());
-
-    //SmartDashboard.putNumber(moduleName + " Drive Position", getDrivePosition());
     SmartDashboard.putNumber(moduleName + " Turning Position", getTurningPosition());
-
-    //SmartDashboard.putNumber(moduleName + " Drive Velocity", getDriveVelocity());
-    //SmartDashboard.putNumber(moduleName + " Turning Velocity", getTurningVelocity());
-
   }
 
   // Helpful get methods

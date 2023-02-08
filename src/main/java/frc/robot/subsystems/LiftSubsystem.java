@@ -15,13 +15,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Ignore unused variable warnings
 @SuppressWarnings("unused")
 
-
 public class LiftSubsystem extends SubsystemBase{
 
     // Solenoids
     private DoubleSolenoid intakeSolenoid;
-   // private DoubleSolenoid leftSolenoid;
- //   private DoubleSolenoid rightSolenoid;
+    // private DoubleSolenoid leftSolenoid;
+    // private DoubleSolenoid rightSolenoid;
 
     private Boolean intakeSolenoidState;
     private Boolean liftSolenoidState;

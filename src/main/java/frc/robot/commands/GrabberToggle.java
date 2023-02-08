@@ -1,12 +1,8 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot.commands;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LiftSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /** An example command that uses an example subsystem. */
 public class GrabberToggle extends CommandBase {
