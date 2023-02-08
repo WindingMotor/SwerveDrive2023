@@ -5,13 +5,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.VisionConstants;
 import java.util.List;
 import org.photonvision.PhotonCamera;
-<<<<<<< HEAD
 import org.photonvision.PhotonUtils;
-=======
 import org.photonvision.common.hardware.VisionLEDMode;
->>>>>>> 8dbdab732608b68a35d497005099379cbd70490a
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -95,9 +96,15 @@ public class VisionSubsystem extends SubsystemBase{
 
     private double getTargetDistance(){
         // Camera height M, Target height M, Camera pitch R, Target pitch R.
-         return(PhotonUtils.calculateDistanceToTargetMeters(0, 0,
-         0, getTargetPitch()));
+         return(PhotonUtils.calculateDistanceToTargetMeters(0.774, 0.361,
+         0.0174, getTargetPitch()));
     }
+
+    public Transform3d getTargetTransform(){
+        // Camera height M, Target height M, Camera pitch R, Target pitch R.
+         return(getBestTarget().getBestCameraToTarget());
+    }
+
 
     // Update the smart dashboard
     private void updateSmartDashboard(){
@@ -106,10 +113,14 @@ public class VisionSubsystem extends SubsystemBase{
         // Check if targets are found before putting values to prevent null!
         if(hasTargets()){
             SmartDashboard.putString("Target ID", getTargetID() + "");
+            SmartDashboard.putString("Target Pitch", getTargetPitch() + "");
             SmartDashboard.putString("Target Area", getTargetArea() + "%");
+            SmartDashboard.putNumber("Target Distance X-Plane", getTargetTransform().getX());
         }else{
             SmartDashboard.putString("Target ID", "No ID Found!");
+            SmartDashboard.putString("Target Pitch", "-1");
             SmartDashboard.putString("Target Area", "0" + "%");
+            SmartDashboard.putNumber("Target Distance X-Plane", -1);
         }
         SmartDashboard.putString("LED State", visionCamera.getLEDMode().toString());
         
@@ -124,11 +135,10 @@ public class VisionSubsystem extends SubsystemBase{
     // A periodic loop, updates smartdashboard and camera results
     @Override
     public void periodic(){
-        SmartDashboard.putString("Camera", visionCamera.toString());
+        //SmartDashboard.putString("Camera", visionCamera.toString());
         updateCameraResults();
         updateSmartDashboard();
 
-        
     }
 
 

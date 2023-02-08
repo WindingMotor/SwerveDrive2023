@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -22,6 +23,9 @@ public class SwerveJoystick extends CommandBase {
   private final Supplier<Boolean> flickFunction;
   private double initialHeading;
   private PIDController thetaController;
+
+  private double added;
+  private int counter;
 
   // Command constructor
   public SwerveJoystick(SwerveSubsystem swerveSubsystem,
@@ -48,6 +52,8 @@ public class SwerveJoystick extends CommandBase {
     // Set default PID values for thetaPID
     thetaController = new PIDController(DriveConstants.kPThetaController, DriveConstants.kIThetaController, DriveConstants.kDThetaController);
 
+    added = 0;
+    counter = 0;
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem);
 
@@ -98,10 +104,16 @@ public class SwerveJoystick extends CommandBase {
 
     // Offset navx heading to trick PID, makes us instantly rotate
     if(flickFunction.get()){
-      newHeading += 90;
+      counter += 1;
+      if(counter > 6){
+        added += 90;
+        counter = 0;
+      }
+    }else{
+      counter = 0;
     }
 
-    turningSpeed = thetaController.calculate(newHeading, initialHeading) * 100;
+    turningSpeed = thetaController.calculate(newHeading - added, initialHeading) * 100;
     //turningSpeed = (headingFunction.get() - initialHeading) * turningPValue;
     // Deadband
     turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;

@@ -115,6 +115,9 @@ public class SwerveModule extends SubsystemBase {
     driveMotor.setIdleMode(IdleMode.kBrake);
     turningMotor.setIdleMode(IdleMode.kBrake);
 
+
+    driveMotor.setSmartCurrentLimit(40);
+    turningMotor.setSmartCurrentLimit(20);
     // Call resetEncoders
     resetEncoders();
 
@@ -142,6 +145,7 @@ public class SwerveModule extends SubsystemBase {
 
     //>-------------------------------<//
 
+   
   }
 
   public void update(){

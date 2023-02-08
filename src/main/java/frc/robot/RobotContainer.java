@@ -19,6 +19,7 @@ import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.GrabberToggle;
 import frc.robot.commands.ResetOdometry;
+import frc.robot.commands.SwerveAlign;
 import frc.robot.commands.SwerveJoystick;
 import frc.robot.commands.SwerveRotator;
 import frc.robot.commands.SwerveThrottledJoystick;
@@ -154,6 +155,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 
     new JoystickButton(tx16s, 2).onTrue(new GrabberToggle(grabberSubsystem));
     new JoystickButton(tx16s, 2).onFalse(new GrabberToggle(grabberSubsystem));
+    new JoystickButton(tx16s, 4).onTrue(new SwerveAlign(swerveSubsystem, visionSubsystem, () -> swerveSubsystem.getHeading(), () -> visionSubsystem.getTargetTransform()));
    // new JoystickButton(tx16s, 1).onTrue(new GrabberToggle(grabberSubsystem));
     
     //new JoystickButton(tx16s, 2).onFalse(new GrabberClose(limelightSubsystem));
