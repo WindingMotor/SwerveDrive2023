@@ -6,11 +6,8 @@ import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants.DriveConstants;
 import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveAlignBasic extends CommandBase {
@@ -51,6 +48,7 @@ public class SwerveAlignBasic extends CommandBase {
     vX = 0;
     vY = 0;
     vT = 0;
+
     finished = false;
   }
 

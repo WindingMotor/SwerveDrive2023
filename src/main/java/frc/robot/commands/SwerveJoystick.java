@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -22,7 +23,9 @@ public class SwerveJoystick extends CommandBase {
   private final Supplier<Boolean> flickFunction;
   private double initialHeading;
   private PIDController thetaController;
-
+  
+  private SendableChooser<Double> autoChooser = new SendableChooser<>();
+ 
   private double added;
   private int counter;
 
@@ -51,8 +54,10 @@ public class SwerveJoystick extends CommandBase {
     // Set default PID values for thetaPID
     thetaController = new PIDController(DriveConstants.kPThetaController, DriveConstants.kIThetaController, DriveConstants.kDThetaController);
 
+    // Counting system for flick function
     added = 0;
     counter = 0;
+
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem);
 
@@ -72,27 +77,10 @@ public class SwerveJoystick extends CommandBase {
     ySpeed = Math.abs(ySpeed) > IOConstants.kDeadband ? ySpeed : 0.0;
     turningSpeed = Math.abs(turningSpeed) > IOConstants.kDeadband ? turningSpeed : 0.0;
 
-    // Apply slew rate to joystick input to make robot input smoother
+    // Apply slew rate to joystick input to make robot input smoother and mulitply by max speed
     xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     //turningSpeed = turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-
-    // Changes the joystick +||-inf heading angle by adding or subtracting the turning speed
-    // Starts at 0 and goes between -inf and +inf depending on rotation
-    //initialHeading += turningSpeed;
-
-    /* Caculate the desired turning speed using the navx +||-inf heading 
-      and the turningspeed +||-inf heading */
-    //turningSpeed = thetaController.calculate(headingFunction.get(), initialHeading);
-
-    // Put initalHeading on smartdashboard
-  //  SmartDashboard.putNumber("Turning Speed", turningSpeed);
-    //SmartDashboard.putNumber("Inital Heading", initialHeading);
-    //SmartDashboard.putNumber("NavX Heading", headingFunction.get());
-    
-    // Apply a dead band for the motors
-    //turningSpeed = Math.abs(headingFunction.get() - initialHeading) > 0.1 ? turningSpeed : 0.0;
-
 
     // Test heading control, throws away previous turning values
     initialHeading += turningSpeed;
@@ -107,13 +95,12 @@ public class SwerveJoystick extends CommandBase {
         added += 90;
         counter = 0;
       }
-    }else{
-      counter = 0;
-    }
+    }else{counter = 0;}
 
     turningSpeed = thetaController.calculate(newHeading - added, initialHeading) * 100;
     //turningSpeed = (headingFunction.get() - initialHeading) * turningPValue;
-    // Deadband
+    
+    // Turning deadband 
     turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;
     turningSpeed *= -1;
 
@@ -136,7 +123,7 @@ public class SwerveJoystick extends CommandBase {
     //chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
 
     // Put field oriented value on smart dashboard
-    //SmartDashboard.putBoolean("Field Oriented: ", fieldOrientedFunction.get());
+    // SmartDashboard.putBoolean("Field Oriented: ", fieldOrientedFunction.get());
 
     // Create module states using array
     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
