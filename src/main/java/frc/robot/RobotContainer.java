@@ -6,12 +6,15 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.commands.TrajectoryRunner;
 import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
@@ -31,6 +34,7 @@ import frc.robot.util.Transmitter;
 import frc.robot.util.Constants.AutoConstants;
 import frc.robot.util.Constants.IOConstants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -73,8 +77,19 @@ public class RobotContainer {
   // Create transmitter
   private final Joystick tx16s = new Joystick(4);
 
-  // Create pathOne for auto
+
+  //-------------------------------------------------------------------------------------//
+
+ 
+  // Manual path 
   private final PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
+  private Command autoForward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
+
+  // Routine
+  private Command autoOne = new AutoOne(swerveSubsystem, xController, yController, ppThetaController);
+
+  private SendableChooser<Command> autoChooser = new SendableChooser<>();
+
 
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
@@ -131,6 +146,17 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); // Field Oriented
     */
 
+  //>----------S-E-N-D-E-R----------<//
+
+  // Add auto commands to selector
+    autoChooser.setDefaultOption("Forward", autoForward);
+    autoChooser.addOption("AutoOne", autoOne);
+
+  // Add auto chooser to smart dashboard
+    SmartDashboard.putData(autoChooser);
+  
+  //>------------------------------<//
+
     // Run button binding method
     configureButtonBindings();
   }
@@ -146,65 +172,34 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   // Create buttons bindings
   private void configureButtonBindings(){
 
-    /* 
-    new JoystickButton(xbox, 7).onTrue(new GrabberOpen(limelightSubsystem));
-   new JoystickButton(xbox, 8).onTrue(new GrabberClose(limelightSubsystem));
-   new JoystickButton(xbox, 1).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, false));
-    //new JoystickButton(leftJoystick, 0).onTrue() ->swerveSubsystem.zeroHeading()
-    */
-
+    // Open/Close grabber
     new JoystickButton(tx16s, 2).onTrue(new GrabberToggle(grabberSubsystem));
     new JoystickButton(tx16s, 2).onFalse(new GrabberToggle(grabberSubsystem));
-    new JoystickButton(tx16s, 3).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem, () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(3)));
-   // new JoystickButton(tx16s, 1).onTrue(new GrabberToggle(grabberSubsystem));
-    
-    //new JoystickButton(tx16s, 2).onFalse(new GrabberClose(limelightSubsystem));
+
+    // Auto april tag align
+    new JoystickButton(tx16s, 3).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
+      () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(3), () -> tx16s.getRawAxis(5)));
+
+    // Run autonmous command during teleop
     //new JoystickButton(tx16s, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
 
-  // DEPRECATED 2023
-  //new JoystickButton(rightJoystick,Constants.IOConstants.kZeroHeadingButton).whenPressed(() -> swerveSubsystem.zeroHeading());
-  // DEPRECATED 2023
-
-    // Rotate robot 90* using swerve rotator
-    //new JoystickButton(leftJoystick, Constants.IOConstants.kRotatorButton).whenPressed(new SwerveRotator(swerveSubsystem, () -> 0.1, swerveSubsystem.getHeading()));
-
- //   new JoystickButton(tx16s, 1).onTrue());
   }
 
   //------------------------------------R-E-F-E-R-R-E-R-S------------------------------------//
 
     public void containerResetAllEncoders(){
-      DriverStation.reportWarning("Running containerResetAllEncoders() in RobotContainer", true);
       swerveSubsystem.resetAllEncoders();
     }
 
   //------------------------------------A-U-T-O-N-O-M-O-U-S------------------------------------//
   
-
-  private Command autoOne = new AutoOne(swerveSubsystem, xController, yController, ppThetaController);
-  
-  private Command forward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
-
   // Return the command to run during auto
   public Command getAutonomousCommand(){
 
-  // Name of command to run for selector
-  String autoSelector = "forward2M";
-  // Command to run
-  Command autoCommand = null;
+    // Command to run
+    Command autoCommand = null;
 
-  //------------------------------------S-E-L-E-C-T-O-R------------------------------------//
-
-  /* 
-    // Selector if-statement
-    if(autoSelector == "forward2M"){
-      autoCommand = forward2M;
-    }
-    else if(autoSelector == "testRoutine"){
-      autoCommand = testRoutine;
-    }\
-    */
-
-    return forward;
+    return autoChooser.getSelected();
   }
+
 }

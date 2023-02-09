@@ -19,7 +19,7 @@ public class SwerveAlignBasic extends CommandBase {
   SwerveSubsystem swerveSubsystem;
   VisionSubsystem visionSubsystem;
   Supplier<Boolean> switchOverride;
-  Supplier<Double> headingFunction;
+  Supplier<Double> headingFunction, setpointFunction;
 
   private PIDController vXController, vYController;
   private PIDController thetaController;
@@ -32,7 +32,7 @@ public class SwerveAlignBasic extends CommandBase {
 
   // Command constructor
   public SwerveAlignBasic(SwerveSubsystem swerveSubsystem, VisionSubsystem visionSubsystem,
-   Supplier<Double> headingFunction, Supplier<Boolean> switchOverride){
+   Supplier<Double> headingFunction, Supplier<Boolean> switchOverride, Supplier<Double> setpointFunction){
 
     addRequirements(swerveSubsystem, visionSubsystem);
 
@@ -40,6 +40,8 @@ public class SwerveAlignBasic extends CommandBase {
     this.visionSubsystem = visionSubsystem;
     this.switchOverride = switchOverride;
     this.headingFunction = headingFunction;
+    this.setpointFunction = setpointFunction;
+
     initalHeading = headingFunction.get();
 
     vXController = new PIDController(0.8, 0, 0);
@@ -64,30 +66,31 @@ public class SwerveAlignBasic extends CommandBase {
     if(!visionSubsystem.hasTargets()){
       finished = true;
     }else{
+      // Facing left
       if(swerveSubsystem.getGyroDegrees() >= 0 && swerveSubsystem.getGyroDegrees() < 180){
 
-      vX = vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1);
-      vY = -vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0);
-      vT = thetaController.calculate(headingFunction.get(), initalHeading) * 100;
-      vT = -Math.abs(vT) > 0.05 ? vT : 0.0;
+      vX = vXController.calculate(visionSubsystem.getTargetTransform().getX(), setpointFunction.get()); // X-Axis PID
+      vY = -vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0); // Y-Axis PID
+      vT = thetaController.calculate(headingFunction.get(), initalHeading) * 100; // Rotation PID
+      vT = -Math.abs(vT) > 0.05 ? vT : 0.0; // Deadband
 
+      // Limit max rotation velocity
       if (vT > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
         vT = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-      }
-      else if (vT < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
+      }else if (vT < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
         vT = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
       }
+      // Facing right
     }else{
-      
-      vX = -vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1);
-      vY = vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0);
-      vT = thetaController.calculate(headingFunction.get(), initalHeading) * 100;
-      vT = -Math.abs(vT) > 0.05 ? vT : 0.0;
+      vX = -vXController.calculate(visionSubsystem.getTargetTransform().getX(), setpointFunction.get()); // X-Axis PID
+      vY = vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0); // Y-Axis PID
+      vT = thetaController.calculate(headingFunction.get(), initalHeading) * 100; // Rotation PID
+      vT = -Math.abs(vT) > 0.05 ? vT : 0.0; // Deadband
 
+      // Limit max rotation velocity
       if (vT > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
         vT = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-      }
-      else if (vT < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
+      }else if (vT < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
         vT = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
       }
     }
