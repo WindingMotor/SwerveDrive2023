@@ -111,8 +111,6 @@ public final class Constants {
         
         public static final double kMaxDriveMotorTemp = 33.0;
 
-        
-
     }
 
     // Autonomous
@@ -129,7 +127,6 @@ public final class Constants {
         public static final double kPThetaController = 0.01;
         public static final double kIThetaController = 0.0;
         public static final double kDThetaController = 0.005;
-
 
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = 
         new TrapezoidProfile.Constraints(
