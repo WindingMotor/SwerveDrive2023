@@ -19,7 +19,6 @@ import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.GrabberToggle;
 import frc.robot.commands.ResetOdometry;
-import frc.robot.commands.SwerveAlign;
 import frc.robot.commands.SwerveAlignBasic;
 import frc.robot.commands.SwerveJoystick;
 import frc.robot.commands.SwerveRotator;

@@ -50,16 +50,13 @@ public class SwerveAlignBasic extends CommandBase {
     vY = 0;
     vT = 0;
     finished = false;
-  
   }
 
   @Override
   public void initialize() {
     finished = false;
     initalHeading = headingFunction.get();
-
   }
-
 
   @Override
   public void execute(){
@@ -67,12 +64,13 @@ public class SwerveAlignBasic extends CommandBase {
     if(!visionSubsystem.hasTargets()){
       finished = true;
     }else{
+      if(swerveSubsystem.getGyroDegrees() >= 0 && swerveSubsystem.getGyroDegrees() < 180){
 
-      if(swerveSubsystem.getGyro2d() >= 0 && swerveSubsystem.getGyro2d() < 180){
       vX = vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1);
       vY = -vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0);
       vT = thetaController.calculate(headingFunction.get(), initalHeading) * 100;
       vT = -Math.abs(vT) > 0.05 ? vT : 0.0;
+
       if (vT > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
         vT = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
       }
@@ -80,10 +78,12 @@ public class SwerveAlignBasic extends CommandBase {
         vT = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
       }
     }else{
+      
       vX = -vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1);
       vY = vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0);
       vT = thetaController.calculate(headingFunction.get(), initalHeading) * 100;
       vT = -Math.abs(vT) > 0.05 ? vT : 0.0;
+
       if (vT > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
         vT = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
       }
@@ -91,12 +91,12 @@ public class SwerveAlignBasic extends CommandBase {
         vT = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
       }
     }
-
     }
 
     if(switchOverride.get() == false){
       finished = true;
     }
+
     // Create chassis speeds
     ChassisSpeeds chassisSpeeds;
 

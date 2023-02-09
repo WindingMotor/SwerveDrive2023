@@ -143,10 +143,11 @@ public class SwerveSubsystem extends SubsystemBase {
    odometer.resetPosition(getRotation2d(),getModulePositions(), pose);
   }
 
-  public double getGyro2d(){
+  public double getGyroDegrees(){
     // odometer.resetPosition(pose, getRotation2d());
-    return gyro.getRotation2d().getDegrees();
+    return Math.IEEEremainder(gyro.getRotation2d().getDegrees(), 360);
    }
+
   // Reset all swerve module encoders
   public void resetAllEncoders(){
     //DriverStation.reportError("RESET ALL ALL ENCODERS", true);
