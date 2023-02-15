@@ -111,6 +111,14 @@ public class RobotContainer {
     () -> swerveSubsystem.getHeading())); 
     */
 
+    swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
+    () -> leftJoystick.getRawAxis(0), // X-Axis
+    () -> leftJoystick.getRawAxis(1), // Y-Axis
+    () -> rightJoystick.getRawAxis(0), // R-Axis
+    () -> tx16s.getRawButton(0), // Field oriented -does nothing right now
+    () -> swerveSubsystem.getHeading(), // Navx heading
+    () -> leftJoystick.getRawButton(1))); // Flick offset button, should be toggle!
+
 /* 
 swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 () -> xbox.getRawAxis(4), // X-Axis
@@ -128,14 +136,16 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     
   //>--------------T-R-A-N-S-----------------//
     
+  /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> tx16s.getRawAxis(0), // X-Axis
     () -> -tx16s.getRawAxis(1), // Y-Axis
     () -> tx16s.getRawAxis(3), // R-Axis
     () -> tx16s.getRawButton(0), // Field oriented -does nothing right now
     () -> swerveSubsystem.getHeading(), // Navx heading
-    () -> tx16s.getRawButton(5))); // Flick offset button, should be toggle!
-    
+    () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
+    */
+
   //>----------T-H-R-T-L----------<// // No clue if working...
     /*
     swerveSubsystem.setDefaultCommand(new SwerveThrottledJoystick(swerveSubsystem,
@@ -177,9 +187,9 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     new JoystickButton(tx16s, 2).onFalse(new GrabberToggle(grabberSubsystem));
 
     // Auto april tag align
-    new JoystickButton(tx16s, 3).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
-      () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(3), () -> tx16s.getRawAxis(5)));
-
+    new JoystickButton(rightJoystick, 1).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
+      () -> swerveSubsystem.getHeading(), () -> rightJoystick.getRawButton(1), () -> tx16s.getRawAxis(5)));
+// button 8 on tx16s
     // Run autonmous command during teleop
     //new JoystickButton(tx16s, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
 

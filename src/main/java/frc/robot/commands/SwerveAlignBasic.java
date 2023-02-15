@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveAlignBasic extends CommandBase {
@@ -41,9 +42,9 @@ public class SwerveAlignBasic extends CommandBase {
 
     initalHeading = headingFunction.get();
 
-    vXController = new PIDController(0.8, 0, 0);
-    vYController = new PIDController(0.8, 0, 0);
-    thetaController = new PIDController(DriveConstants.kPThetaController, DriveConstants.kIThetaController, DriveConstants.kDThetaController);
+    vXController = new PIDController(0.8, 0.005, 0);
+    vYController = new PIDController(1.4, 0.005, 0);
+    thetaController = new PIDController(0.0009, 0, 0);
 
     vX = 0;
     vY = 0;
@@ -62,36 +63,17 @@ public class SwerveAlignBasic extends CommandBase {
   public void execute(){
 
     if(!visionSubsystem.hasTargets()){
-      finished = true;
+      //finished = true;
+      vX = vX * 0.5;
+      vY = vY * 0.5;
+      vT = vT * 0.5;
     }else{
-      // Facing left
-      if(swerveSubsystem.getGyroDegrees() >= 0 && swerveSubsystem.getGyroDegrees() < 180){
-
-      vX = vXController.calculate(visionSubsystem.getTargetTransform().getX(), setpointFunction.get()); // X-Axis PID
+      vX = vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1); // X-Axis PID
       vY = -vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0); // Y-Axis PID
-      vT = thetaController.calculate(headingFunction.get(), initalHeading) * 100; // Rotation PID
-      vT = -Math.abs(vT) > 0.05 ? vT : 0.0; // Deadband
-
-      // Limit max rotation velocity
-      if (vT > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
-        vT = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-      }else if (vT < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
-        vT = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-      }
-      // Facing right
-    }else{
-      vX = -vXController.calculate(visionSubsystem.getTargetTransform().getX(), setpointFunction.get()); // X-Axis PID
-      vY = vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0); // Y-Axis PID
-      vT = thetaController.calculate(headingFunction.get(), initalHeading) * 100; // Rotation PID
-      vT = -Math.abs(vT) > 0.05 ? vT : 0.0; // Deadband
-
-      // Limit max rotation velocity
-      if (vT > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
-        vT = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-      }else if (vT < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
-        vT = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-      }
-    }
+      vT = thetaController.calculate(swerveSubsystem.getGyroDegrees(), 90) * 300; // Rotation PID
+      //vT = -Math.abs(vT) > 0.05 ? vT : 0.0; // Deadband
+      SmartDashboard.putNumber("VT", vT);
+      
     }
 
     if(switchOverride.get() == false){
