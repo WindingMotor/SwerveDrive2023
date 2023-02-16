@@ -148,7 +148,23 @@ public final class Constants {
         public static final int kZeroHeadingButton = 2;
         public static final int kRotatorButton = 3;
         public static final double kTransmitterOffset = 1.429;
-           
+    }
+
+    public static final class ElevatorConstants{
+
+        public static final int kLiftMotorOnePort = 30;
+        public static final int kLiftMotorTwoPort = 30;
+        public static final int kGrabberMotorPort = 30;
+
+        public static final int kLeftSolenoidPort = 30;
+        public static final int kLeftSolenoidPortOFF = 30;
+
+        public static final int kRightSolenoidPort = 30;
+        public static final int kRightSolenoidPortOFF = 30;
+
+        public static final int kGrabberSolenoidPort = 30;
+        public static final int kGrabberSolenoidPortOFF = 30;
+
     }
 
     // Vision

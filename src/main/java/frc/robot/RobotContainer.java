@@ -26,7 +26,7 @@ import frc.robot.commands.SwerveAlignBasic;
 import frc.robot.commands.SwerveJoystick;
 import frc.robot.commands.SwerveRotator;
 import frc.robot.commands.SwerveThrottledJoystick;
-import frc.robot.subsystems.LiftSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
@@ -55,7 +55,7 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   
   // Create lift subsystem
-  private final LiftSubsystem grabberSubsystem = new LiftSubsystem();
+  private final ElevatorSubsystem grabberSubsystem = new ElevatorSubsystem();
 
   // Create vision subsystem
   private final VisionSubsystem visionSubsystem = new VisionSubsystem();

@@ -48,18 +48,26 @@ public class Monitor {
 
         // Check motor temp in celsius. Defualt: 33C is 91.4F
     
+        double averageDriveMotorTemp = 0;
+        double averageTurnMotorTemp = 0;
+        
         // Check drive motor temps
-        if(frontLeft.getMotorsTemp()[0] >= Constants.DriveConstants.kMaxDriveMotorTemp){DriverStation.reportError("FL DR TEMP!: " + frontLeft.getMotorsTemp()[0], true);}
-        if(frontRight.getMotorsTemp()[0] >= Constants.DriveConstants.kMaxDriveMotorTemp){DriverStation.reportError("FR DR TEMP!: " + frontRight.getMotorsTemp()[0], true);}
-        if(backLeft.getMotorsTemp()[0] >= Constants.DriveConstants.kMaxDriveMotorTemp){DriverStation.reportError("BL DR TEMP!: " + backLeft.getMotorsTemp()[0], true);}
-        if(backRight.getMotorsTemp()[0] >= Constants.DriveConstants.kMaxDriveMotorTemp){DriverStation.reportError("BR DR TEMP!: " + backRight.getMotorsTemp()[0], true);}
+        frontLeft.getMotorsTemp()[0] += averageDriveMotorTemp;
+        frontRight.getMotorsTemp()[0] += averageDriveMotorTemp;
+        backLeft.getMotorsTemp()[0]  += averageDriveMotorTemp;
+        backRight.getMotorsTemp()[0] += averageDriveMotorTemp;
 
         // Check turning motor temps
-        if(frontLeft.getMotorsTemp()[1] >= Constants.DriveConstants.kMaxDriveMotorTemp){DriverStation.reportError("FL TU TEMP!: " + frontLeft.getMotorsTemp()[1], true);}
-        if(frontRight.getMotorsTemp()[1] >= Constants.DriveConstants.kMaxDriveMotorTemp){DriverStation.reportError("FR TU TEMP!: " + frontRight.getMotorsTemp()[1], true);}
-        if(backLeft.getMotorsTemp()[1] >=  Constants.DriveConstants.kMaxDriveMotorTemp){DriverStation.reportError("BL TU TEMP!: " + backLeft.getMotorsTemp()[1], true);}
-        if(backRight.getMotorsTemp()[1] >= Constants.DriveConstants.kMaxDriveMotorTemp){DriverStation.reportError("BR TU TEMP!: " + backRight.getMotorsTemp()[1], true);}
+        frontLeft.getMotorsTemp()[1] += averageTurnMotorTemp;
+        frontRight.getMotorsTemp()[1] += averageTurnMotorTemp;
+        backLeft.getMotorsTemp()[1] += averageTurnMotorTemp;
+        backRight.getMotorsTemp()[1] += averageTurnMotorTemp;
 
+        averageDriveMotorTemp /= 4;
+        averageTurnMotorTemp /= 4;
+
+        SmartDashboard.putNumber("Drive Motor Average C*", averageDriveMotorTemp);
+        SmartDashboard.putNumber("Turn Motor Average C*", averageTurnMotorTemp);
 
 
     }
