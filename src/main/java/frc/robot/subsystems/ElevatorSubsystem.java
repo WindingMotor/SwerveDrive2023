@@ -95,13 +95,22 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public void setElevatorSetpoint(double x){
+        double[] report = {0,0};
         PIDOne.setReference(x, CANSparkMax.ControlType.kSmartMotion);
         PIDTwo.setReference(x, CANSparkMax.ControlType.kSmartMotion);
+        report[0] = MotorOneEncoder.getPosition();
+        report[1] = MotorTwoEncoder.getPosition();
+        SmartDashboard.putString("Report Position", "One:" + report[0] + " Two: " + report[1]);
+
     }
 
     public void setElevatorVelocity(double x){
+        double[] report = {0,0};
         PIDOne.setReference(x, CANSparkMax.ControlType.kVelocity);
         PIDTwo.setReference(x, CANSparkMax.ControlType.kVelocity);
+        report[0] = MotorOneEncoder.getPosition();
+        report[1] = MotorTwoEncoder.getPosition();
+        SmartDashboard.putString("Report Velocity", "One:" + report[0] + " Two: " + report[1]);
     }
 
 
