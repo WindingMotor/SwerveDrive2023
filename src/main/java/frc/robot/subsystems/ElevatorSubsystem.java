@@ -38,7 +38,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     private RelativeEncoder motorOneEncoder;
     private RelativeEncoder motorTwoEncoder;
 
-    private SparkMaxPIDController elevatorPID;
+    private SparkMaxPIDController motorPID;
 
     private boolean toggled;
 
@@ -75,15 +75,15 @@ public class ElevatorSubsystem extends SubsystemBase{
         // WARNING: WE MIGHT HAVE TO INVERT MOTOR 2 <--
 
         // Set PID to motor one
-        elevatorPID = motorOne.getPIDController();
+        motorPID = motorOne.getPIDController();
 
         // Set default PID values
-        setPIDValues(elevatorPID);
+        setMotorPID(motorPID);
 
         toggled = false;
 }
 
-    private void setPIDValues(SparkMaxPIDController pid){
+    private void setMotorPID(SparkMaxPIDController pid){
         // Set PID default values. ¡ I took these from the Smart Motion example !
         pid.setP(5e-5);
         pid.setI(1e-6);
@@ -93,9 +93,9 @@ public class ElevatorSubsystem extends SubsystemBase{
         pid.setOutputRange(-1, 1);
 
         // Set max and min Smart Motion values
-        pid.setSmartMotionMaxVelocity(800, 0); // RPM/s def 2000
+        pid.setSmartMotionMaxVelocity(2000, 0); // RPM/s def 2000
         pid.setSmartMotionMinOutputVelocity(0, 0); 
-        pid.setSmartMotionMaxAccel(500, 0); // RPM/s def 1500
+        pid.setSmartMotionMaxAccel(1500, 0); // RPM/s def 1500
         pid.setSmartMotionAllowedClosedLoopError(0,0);
     
     }
@@ -129,11 +129,11 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public void setElevatorSmartMotion(double x){
-        elevatorPID.setReference(x, CANSparkMax.ControlType.kSmartMotion);;
+        motorPID.setReference(x, CANSparkMax.ControlType.kSmartMotion);;
     }
 
     public void setElevatorVelocity(double x){
-        elevatorPID.setReference(x, CANSparkMax.ControlType.kVelocity);
+        motorPID.setReference(x, CANSparkMax.ControlType.kVelocity);
     }
 
     public void updateSmartDashboard(){
