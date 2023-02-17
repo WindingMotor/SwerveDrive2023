@@ -73,7 +73,6 @@ public class SwerveAlignBasic extends CommandBase {
       vT = thetaController.calculate(swerveSubsystem.getGyroDegrees(), 90) * 300; // Rotation PID
       //vT = -Math.abs(vT) > 0.05 ? vT : 0.0; // Deadband
       SmartDashboard.putNumber("VT", vT);
-      
     }
 
     if(switchOverride.get() == false){

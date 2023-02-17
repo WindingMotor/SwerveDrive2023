@@ -100,9 +100,13 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     public Transform3d getTargetTransform(){
-        // Camera height M, Target height M, Camera pitch R, Target pitch R.
          return(getBestTarget().getBestCameraToTarget());
     }
+
+    public Double getTargetTransformHeight(){
+        return(getBestTarget().getBestCameraToTarget().getZ());
+   }
+
 
     // Update the smart dashboard
     private void updateSmartDashboard(){

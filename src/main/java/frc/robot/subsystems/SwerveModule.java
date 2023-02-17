@@ -48,7 +48,6 @@ public class SwerveModule extends SubsystemBase {
   private MechanismLigament2d simTurn2;
   private MechanismLigament2d simDirection2;
 
-
   // Class constructor where we assign default values for variable
    public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed, int absoluteEncoderId, double absoluteEncoderOffset, boolean absoLuteEncoderReversed, String name) {
 

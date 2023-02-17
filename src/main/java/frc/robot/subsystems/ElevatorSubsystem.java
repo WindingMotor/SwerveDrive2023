@@ -36,8 +36,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     private RelativeEncoder MotorOneEncoder;
     private RelativeEncoder MotorTwoEncoder;
 
-    private SparkMaxPIDController PIDOne;
-    private SparkMaxPIDController PIDTwo;
+    private SparkMaxPIDController ElevatorPID;
 
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
@@ -52,20 +51,31 @@ public class ElevatorSubsystem extends SubsystemBase{
         leftSolenoid.set(Value.kForward);
         rightSolenoid.set(Value.kForward);
 
+        // Set motor object values take in CAN ID
         MotorOne = new CANSparkMax(ElevatorConstants.kLiftMotorOnePort, MotorType.kBrushless);
         MotorTwo = new CANSparkMax(ElevatorConstants.kLiftMotorTwoPort, MotorType.kBrushless);
 
+        // Make motor two follow motor one
+        MotorTwo.follow(MotorOne);
+
+        // Set motor encoder position factors to meters
+        MotorOneEncoder.setPositionConversionFactor(0.00378485654);
+        MotorTwoEncoder.setPositionConversionFactor(0.00378485654);
+
+        // Set default encoder values
         MotorOneEncoder = MotorOne.getEncoder();
         MotorTwoEncoder = MotorTwo.getEncoder();
 
-        PIDOne = MotorOne.getPIDController();
-        PIDTwo = MotorTwo.getPIDController();
+        // Set PID to motor one
+        ElevatorPID = MotorOne.getPIDController();
 
-        setPIDValues(PIDOne);
-        setPIDValues(PIDTwo);
+        // Set default PID values
+        setPIDValues(ElevatorPID);
+
 }
 
     private void setPIDValues(SparkMaxPIDController pid){
+        // Set PID default values. ¡ I took these from the Smart Motion example !
         pid.setP(5e-5);
         pid.setI(1e-6);
         pid.setD(0);
@@ -73,16 +83,16 @@ public class ElevatorSubsystem extends SubsystemBase{
         pid.setFF( 0.000156); 
         pid.setOutputRange(-1, 1);
 
-
-        pid.setSmartMotionMaxVelocity(2000, 0); // RPM
+        // Set max and min Smart Motion values
+        pid.setSmartMotionMaxVelocity(800, 0); // RPM/s def 2000
         pid.setSmartMotionMinOutputVelocity(0, 0); 
-        pid.setSmartMotionMaxAccel(1500, 0);
+        pid.setSmartMotionMaxAccel(500, 0); // RPM/s def 1500
         pid.setSmartMotionAllowedClosedLoopError(0,0);
     }
 
+    
     @Override
     public void periodic(){
-        
     }
 
     public void toggleGrabberSolenoid(){
@@ -95,22 +105,13 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public void setElevatorSetpoint(double x){
-        double[] report = {0,0};
-        PIDOne.setReference(x, CANSparkMax.ControlType.kSmartMotion);
-        PIDTwo.setReference(x, CANSparkMax.ControlType.kSmartMotion);
-        report[0] = MotorOneEncoder.getPosition();
-        report[1] = MotorTwoEncoder.getPosition();
-        SmartDashboard.putString("Report Position", "One:" + report[0] + " Two: " + report[1]);
-
+        ElevatorPID.setReference(x, CANSparkMax.ControlType.kSmartMotion);;
+        SmartDashboard.putNumber("Report Velocity", MotorOneEncoder.getPosition());
     }
 
     public void setElevatorVelocity(double x){
-        double[] report = {0,0};
-        PIDOne.setReference(x, CANSparkMax.ControlType.kVelocity);
-        PIDTwo.setReference(x, CANSparkMax.ControlType.kVelocity);
-        report[0] = MotorOneEncoder.getPosition();
-        report[1] = MotorTwoEncoder.getPosition();
-        SmartDashboard.putString("Report Velocity", "One:" + report[0] + " Two: " + report[1]);
+        ElevatorPID.setReference(x, CANSparkMax.ControlType.kVelocity);
+        SmartDashboard.putNumber("Report Velocity", MotorOneEncoder.getPosition());
     }
 
 
