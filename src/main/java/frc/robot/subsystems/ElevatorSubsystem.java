@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -30,13 +31,17 @@ public class ElevatorSubsystem extends SubsystemBase{
     private DoubleSolenoid rightSolenoid;
 
     // Motors
-    private CANSparkMax MotorOne;
-    private CANSparkMax MotorTwo;
+    private CANSparkMax motorOne;
+    private CANSparkMax motorTwo;
+    private CANSparkMax intakeMotor;
 
-    private RelativeEncoder MotorOneEncoder;
-    private RelativeEncoder MotorTwoEncoder;
+    private RelativeEncoder motorOneEncoder;
+    private RelativeEncoder motorTwoEncoder;
 
-    private SparkMaxPIDController ElevatorPID;
+    private SparkMaxPIDController elevatorPID;
+
+    private boolean toggled;
+
 
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
@@ -52,26 +57,30 @@ public class ElevatorSubsystem extends SubsystemBase{
         rightSolenoid.set(Value.kForward);
 
         // Set motor object values take in CAN ID
-        MotorOne = new CANSparkMax(ElevatorConstants.kLiftMotorOnePort, MotorType.kBrushless);
-        MotorTwo = new CANSparkMax(ElevatorConstants.kLiftMotorTwoPort, MotorType.kBrushless);
+        motorOne = new CANSparkMax(ElevatorConstants.kLiftMotorOnePort, MotorType.kBrushless);
+        motorTwo = new CANSparkMax(ElevatorConstants.kLiftMotorTwoPort, MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(ElevatorConstants.kIntakeMotorPort, MotorType.kBrushless);
 
         // Make motor two follow motor one
-        MotorTwo.follow(MotorOne);
+        motorTwo.follow(motorOne);
 
         // Set motor encoder position factors to meters
-        MotorOneEncoder.setPositionConversionFactor(0.00378485654);
-        MotorTwoEncoder.setPositionConversionFactor(0.00378485654);
+        motorOneEncoder.setPositionConversionFactor(0.00378485654);
+        motorTwoEncoder.setPositionConversionFactor(0.00378485654);
 
         // Set default encoder values
-        MotorOneEncoder = MotorOne.getEncoder();
-        MotorTwoEncoder = MotorTwo.getEncoder();
+        motorOneEncoder = motorOne.getEncoder();
+        motorTwoEncoder = motorTwo.getEncoder();
+
+        // WARNING: WE MIGHT HAVE TO INVERT MOTOR 2 <--
 
         // Set PID to motor one
-        ElevatorPID = MotorOne.getPIDController();
+        elevatorPID = motorOne.getPIDController();
 
         // Set default PID values
-        setPIDValues(ElevatorPID);
+        setPIDValues(elevatorPID);
 
+        toggled = false;
 }
 
     private void setPIDValues(SparkMaxPIDController pid){
@@ -88,15 +97,30 @@ public class ElevatorSubsystem extends SubsystemBase{
         pid.setSmartMotionMinOutputVelocity(0, 0); 
         pid.setSmartMotionMaxAccel(500, 0); // RPM/s def 1500
         pid.setSmartMotionAllowedClosedLoopError(0,0);
+    
     }
 
-    
     @Override
     public void periodic(){
+        updateSmartDashboard();
     }
 
     public void toggleGrabberSolenoid(){
         grabberSolenoid.toggle();
+    }
+
+    public void toggleIntake(){
+        if(toggled){
+            intakeMotor.set(0);
+            toggled = false;
+        }else{
+            intakeMotor.set(1);
+            toggled = true;
+        }
+    }
+
+    public void setIntake(double x){
+        intakeMotor.set(x);
     }
 
     public void toggleElevatorSolenoids(){
@@ -104,16 +128,17 @@ public class ElevatorSubsystem extends SubsystemBase{
         rightSolenoid.toggle();
     }
 
-    public void setElevatorSetpoint(double x){
-        ElevatorPID.setReference(x, CANSparkMax.ControlType.kSmartMotion);;
-        SmartDashboard.putNumber("Report Velocity", MotorOneEncoder.getPosition());
+    public void setElevatorSmartMotion(double x){
+        elevatorPID.setReference(x, CANSparkMax.ControlType.kSmartMotion);;
     }
 
     public void setElevatorVelocity(double x){
-        ElevatorPID.setReference(x, CANSparkMax.ControlType.kVelocity);
-        SmartDashboard.putNumber("Report Velocity", MotorOneEncoder.getPosition());
+        elevatorPID.setReference(x, CANSparkMax.ControlType.kVelocity);
     }
 
+    public void updateSmartDashboard(){
+        SmartDashboard.putNumber("Elevator Encoder:", motorOneEncoder.getPosition());
+    }
 
 
 }

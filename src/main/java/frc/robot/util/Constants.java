@@ -154,7 +154,7 @@ public final class Constants {
 
         public static final int kLiftMotorOnePort = 0;
         public static final int kLiftMotorTwoPort = 0;
-        public static final int kGrabberMotorPort = 0;
+        public static final int kIntakeMotorPort = 0;
 
         public static final int kLeftSolenoidPort = 0;
         public static final int kLeftSolenoidPortOFF = 0;

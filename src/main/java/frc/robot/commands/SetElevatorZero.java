@@ -19,7 +19,7 @@ public class SetElevatorZero extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subsystem.setElevatorSetpoint(0);
+    subsystem.setElevatorSmartMotion(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
