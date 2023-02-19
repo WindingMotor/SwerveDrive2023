@@ -112,6 +112,7 @@ public class SwerveJoystick extends CommandBase {
       turningSpeed = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
     }
     
+    // Smartdashboard update
     SmartDashboard.putNumber("Turning Speed", turningSpeed);
     SmartDashboard.putNumber("Inital Heading", initialHeading);
     SmartDashboard.putNumber("NavX Heading", headingFunction.get());

@@ -26,40 +26,30 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class ElevatorSubsystem extends SubsystemBase{
 
     // Solenoids
-    private DoubleSolenoid grabberSolenoid;
     private DoubleSolenoid leftSolenoid;
     private DoubleSolenoid rightSolenoid;
 
     // Motors
     private CANSparkMax motorOne;
     private CANSparkMax motorTwo;
-    private CANSparkMax intakeMotor;
 
     private RelativeEncoder motorOneEncoder;
     private RelativeEncoder motorTwoEncoder;
-
-    private SparkMaxPIDController motorPID;
-
-    private boolean toggled;
-
 
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
 
         // Set solenoid object values
-        grabberSolenoid = new DoubleSolenoid(55,PneumaticsModuleType.CTREPCM, ElevatorConstants.kGrabberSolenoidPort,  ElevatorConstants.kGrabberSolenoidPortOFF);
         leftSolenoid = new DoubleSolenoid(55,PneumaticsModuleType.CTREPCM, ElevatorConstants.kGrabberSolenoidPort,  ElevatorConstants.kGrabberSolenoidPortOFF);
         rightSolenoid = new DoubleSolenoid(55,PneumaticsModuleType.CTREPCM, ElevatorConstants.kGrabberSolenoidPort,  ElevatorConstants.kGrabberSolenoidPortOFF);
 
         // Set default state of solenoids
-        grabberSolenoid.set(Value.kForward);
         leftSolenoid.set(Value.kForward);
         rightSolenoid.set(Value.kForward);
 
         // Set motor object values take in CAN ID
         motorOne = new CANSparkMax(ElevatorConstants.kLiftMotorOnePort, MotorType.kBrushless);
         motorTwo = new CANSparkMax(ElevatorConstants.kLiftMotorTwoPort, MotorType.kBrushless);
-        intakeMotor = new CANSparkMax(ElevatorConstants.kIntakeMotorPort, MotorType.kBrushless);
 
         // Make motor two follow motor one
         motorTwo.follow(motorOne);
@@ -74,66 +64,17 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         // WARNING: WE MIGHT HAVE TO INVERT MOTOR 2 <--
 
-        // Set PID to motor one
-        motorPID = motorOne.getPIDController();
-
-        // Set default PID values
-        setMotorPID(motorPID);
-
-        toggled = false;
 }
 
-    private void setMotorPID(SparkMaxPIDController pid){
-        // Set PID default values. ¡ I took these from the Smart Motion example !
-        pid.setP(5e-5);
-        pid.setI(1e-6);
-        pid.setD(0);
-        pid.setIZone(0);
-        pid.setFF( 0.000156); 
-        pid.setOutputRange(-1, 1);
-
-        // Set max and min Smart Motion values
-        pid.setSmartMotionMaxVelocity(2000, 0); // RPM/s def 2000
-        pid.setSmartMotionMinOutputVelocity(0, 0); 
-        pid.setSmartMotionMaxAccel(1500, 0); // RPM/s def 1500
-        pid.setSmartMotionAllowedClosedLoopError(0,0);
-    
-    }
 
     @Override
     public void periodic(){
         updateSmartDashboard();
     }
 
-    public void toggleGrabberSolenoid(){
-        grabberSolenoid.toggle();
-    }
-
-    public void toggleIntake(){
-        if(toggled){
-            intakeMotor.set(0);
-            toggled = false;
-        }else{
-            intakeMotor.set(1);
-            toggled = true;
-        }
-    }
-
-    public void setIntake(double x){
-        intakeMotor.set(x);
-    }
-
     public void toggleElevatorSolenoids(){
         leftSolenoid.toggle();
         rightSolenoid.toggle();
-    }
-
-    public void setElevatorSmartMotion(double x){
-        motorPID.setReference(x, CANSparkMax.ControlType.kSmartMotion);;
-    }
-
-    public void setElevatorVelocity(double x){
-        motorPID.setReference(x, CANSparkMax.ControlType.kVelocity);
     }
 
     public void updateSmartDashboard(){

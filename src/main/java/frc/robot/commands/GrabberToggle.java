@@ -2,14 +2,15 @@
 
 package frc.robot.commands;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class GrabberToggle extends CommandBase {
 
-  private ElevatorSubsystem subsystem;
+  private GrabberSubsystem subsystem;
 
-  public GrabberToggle(ElevatorSubsystem subsystem) {
+  public GrabberToggle(GrabberSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     addRequirements(subsystem);
