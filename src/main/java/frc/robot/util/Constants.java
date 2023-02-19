@@ -165,6 +165,8 @@ public final class Constants {
         public static final int kGrabberSolenoidPort = 0;
         public static final int kGrabberSolenoidPortOFF = 0;
 
+        public static final double kP = 0.1;
+
     }
 
     // Vision

@@ -70,8 +70,13 @@ public class ElevatorSubsystem extends SubsystemBase{
         motorOneEncoder = motorOne.getEncoder();
         motorTwoEncoder = motorTwo.getEncoder();
 
+        // Get and set bottom limit switch
         bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
         bottomLimitSwitch.enableLimitSwitch(true);
+
+        // Set PID values from constants
+        elevatorPID = new PIDController(ElevatorConstants.kP, 0, 0);
+
 
 }
 

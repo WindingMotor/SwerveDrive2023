@@ -27,6 +27,7 @@ import frc.robot.commands.SwerveJoystick;
 import frc.robot.commands.SwerveRotator;
 import frc.robot.commands.SwerveThrottledJoystick;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
@@ -54,11 +55,15 @@ public class RobotContainer {
   // Create swerve subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   
-  // Create lift subsystem
-  private final ElevatorSubsystem grabberSubsystem = new ElevatorSubsystem();
-
   // Create vision subsystem
   private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+
+  // Create grabber subsystem
+  private final GrabberSubsystem grabberSubsystem = new GrabberSubsystem();
+
+  // Create elevator subsystem
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+
 
   // Create PID controllers for trajectory tracking
   public final PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
