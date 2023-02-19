@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -18,6 +19,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -62,6 +64,10 @@ public class ElevatorSubsystem extends SubsystemBase{
         // Make motor two follow motor one
         motorTwo.follow(motorOne);
 
+        // Set motor to brake mode
+        motorOne.setIdleMode(IdleMode.kBrake);
+        motorTwo.setIdleMode(IdleMode.kBrake);
+
         // Set motor encoder position factors to meters
         motorOneEncoder.setPositionConversionFactor(0.00378485654 * 2);
         motorTwoEncoder.setPositionConversionFactor(0.00378485654 * 2);
@@ -76,10 +82,7 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         // Set PID values from constants
         elevatorPID = new PIDController(ElevatorConstants.kP, 0, 0);
-
-
-}
-
+    }
 
     @Override
     public void periodic(){
@@ -96,7 +99,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         // Get motor position in meters
         double position = motorOneEncoder.getPosition();
 
-        // Takes in current elevator position in meters and setpoint in meters and outputs change needed
+        // Takes in current elevator position in meters and the setpoint in meters and outputs change needed
         double caculated = elevatorPID.calculate(position, setpoint);
         caculated /= 2;
 
@@ -109,9 +112,13 @@ public class ElevatorSubsystem extends SubsystemBase{
         motorTwo.set(x);
     }
 
-    /* Automatically home the elevator, bring the lift down until it its the limit switch
-    then bring it up for 0.5 seconds */ 
-    public void homeElevatorBottom(){ 
+    public void stopElevator(){
+        setElevatorMotors(0);
+    }
+
+    /* Automatically home the elevator, bring the elevator down until it its the limit switch
+    then bring it up for 0.5 seconds and then bring it back down slower for more precision */ 
+    public boolean homeElevatorBottom(){ 
         if(bottomLimitSwitch.isPressed() == false){
             setElevatorMotors(-0.25);
         }else{
@@ -120,10 +127,11 @@ public class ElevatorSubsystem extends SubsystemBase{
             if(bottomLimitSwitch.isPressed() == false){
                 setElevatorMotors(-0.1);
             }else{
-                return;
+                return true;
             }
         }
-    } 
+        return true;
+    }
 
     public void updateSmartDashboard(){
         SmartDashboard.putNumber("Elevator Encoder:", motorOneEncoder.getPosition());
