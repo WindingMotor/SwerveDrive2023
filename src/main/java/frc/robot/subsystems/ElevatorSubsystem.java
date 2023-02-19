@@ -7,15 +7,19 @@ import frc.robot.util.Constants.VisionConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,6 +39,10 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     private RelativeEncoder motorOneEncoder;
     private RelativeEncoder motorTwoEncoder;
+    private PIDController elevatorPID;
+
+    private SparkMaxLimitSwitch bottomLimitSwitch;
+
 
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
@@ -55,14 +63,15 @@ public class ElevatorSubsystem extends SubsystemBase{
         motorTwo.follow(motorOne);
 
         // Set motor encoder position factors to meters
-        motorOneEncoder.setPositionConversionFactor(0.00378485654);
-        motorTwoEncoder.setPositionConversionFactor(0.00378485654);
+        motorOneEncoder.setPositionConversionFactor(0.00378485654 * 2);
+        motorTwoEncoder.setPositionConversionFactor(0.00378485654 * 2);
 
         // Set default encoder values
         motorOneEncoder = motorOne.getEncoder();
         motorTwoEncoder = motorTwo.getEncoder();
 
-        // WARNING: WE MIGHT HAVE TO INVERT MOTOR 2 <--
+        bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
+        bottomLimitSwitch.enableLimitSwitch(true);
 
 }
 
@@ -77,8 +86,43 @@ public class ElevatorSubsystem extends SubsystemBase{
         rightSolenoid.toggle();
     }
 
+    public void setElevatorMeters(double setpoint){
+
+        // Get motor position in meters
+        double position = motorOneEncoder.getPosition();
+
+        // Takes in current elevator position in meters and setpoint in meters and outputs change needed
+        double caculated = elevatorPID.calculate(position, setpoint);
+        caculated /= 2;
+
+        motorOne.set(caculated);
+        motorTwo.set(caculated);
+    }
+
+    public void setElevatorMotors(double x){
+        motorOne.set(x);
+        motorTwo.set(x);
+    }
+
+    /* Automatically home the elevator, bring the lift down until it its the limit switch
+    then bring it up for 0.5 seconds */ 
+    public void homeElevatorBottom(){ 
+        if(bottomLimitSwitch.isPressed() == false){
+            setElevatorMotors(-0.25);
+        }else{
+            setElevatorMotors(0.15);
+            Timer.delay(0.5);
+            if(bottomLimitSwitch.isPressed() == false){
+                setElevatorMotors(-0.1);
+            }else{
+                return;
+            }
+        }
+    } 
+
     public void updateSmartDashboard(){
         SmartDashboard.putNumber("Elevator Encoder:", motorOneEncoder.getPosition());
+        SmartDashboard.putBoolean("Bottom Limit Switch", bottomLimitSwitch.isPressed());
     }
 
 

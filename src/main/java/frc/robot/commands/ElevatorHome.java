@@ -5,15 +5,13 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class SetElevator extends CommandBase {
+public class ElevatorHome extends CommandBase {
 
   private ElevatorSubsystem subsystem;
-  private double setpoint;
 
-  public SetElevator(ElevatorSubsystem subsystem, Double setpoint) {
+  public ElevatorHome(ElevatorSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
-    this.setpoint = setpoint;
 
     addRequirements(subsystem);
   }
@@ -21,7 +19,7 @@ public class SetElevator extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subsystem.setElevatorSmartMotion(setpoint);
+    subsystem.homeElevatorBottom();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
