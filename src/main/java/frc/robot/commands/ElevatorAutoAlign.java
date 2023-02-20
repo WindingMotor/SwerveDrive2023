@@ -8,12 +8,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ElevatorAutoAlign extends CommandBase {
 
   private ElevatorSubsystem subsystem;
-  private double meters;
+  private double targetHeight;
+  private double targetID;
 
-  public ElevatorAutoAlign(ElevatorSubsystem subsystem, Double meters) {
+  public ElevatorAutoAlign(ElevatorSubsystem subsystem, Double targetHeight, int targetID) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
-    this.meters = meters;
+    this.targetHeight = targetHeight;
+    this.targetID = targetID;
 
     addRequirements(subsystem);
   }
@@ -21,17 +23,19 @@ public class ElevatorAutoAlign extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subsystem.setElevatorMeters(meters);
+    subsystem.stopElevator();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    subsystem.stopElevator();
   }
 
   // Returns true when the command should end.

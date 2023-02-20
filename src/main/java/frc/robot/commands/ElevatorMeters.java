@@ -14,13 +14,13 @@ public class ElevatorMeters extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     this.meters = meters;
-
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Set the elevator to the desired meters
     subsystem.setElevatorMeters(meters);
   }
 
@@ -31,7 +31,7 @@ public class ElevatorMeters extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    subsystem.stopElevator();
   }
 
   // Returns true when the command should end.

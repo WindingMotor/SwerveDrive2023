@@ -103,15 +103,18 @@ public class ElevatorSubsystem extends SubsystemBase{
         double caculated = elevatorPID.calculate(position, setpoint);
         caculated /= 2;
 
+        // Set motors to caculated posi
         motorOne.set(caculated);
         motorTwo.set(caculated);
     }
 
+    // Set both elevator motors to input
     public void setElevatorMotors(double x){
         motorOne.set(x);
         motorTwo.set(x);
     }
 
+    // Set both elevator motors to zero
     public void stopElevator(){
         setElevatorMotors(0);
     }
