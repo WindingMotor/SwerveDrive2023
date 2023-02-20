@@ -146,7 +146,7 @@ public class ArduinoLED {
         special.set(false);
     }
 
-//-----------------------------------// Speical
+//-----------------------------------// Special
 
     public void setRainbow(){
         red.set(false);
