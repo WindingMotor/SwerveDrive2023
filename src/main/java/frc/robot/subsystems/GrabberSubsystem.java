@@ -49,9 +49,11 @@ public class GrabberSubsystem extends SubsystemBase{
         intakeMotor = new CANSparkMax(GrabberConstants.kIntakeMotorPort, MotorType.kBrushless);
         angleMotor = new CANSparkMax(GrabberConstants.kAngleMotorPort, MotorType.kBrushless);
 
-
         // Set angle encoder to angle motor 
         angleMotorEncoder = angleMotor.getEncoder();
+
+        // Set angle pid object
+        anglePID = angleMotor.getPIDController();
 
         // Set default PID values
         setMotorPID(anglePID);
