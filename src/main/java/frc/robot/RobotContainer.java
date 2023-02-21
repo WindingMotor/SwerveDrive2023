@@ -186,8 +186,8 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   private boolean trueFunct(){return true;}
 
   //------------------------------------B-U-T-T-O-N-S------------------------------------//
- 
-  // Create buttons bindings
+
+  // Create button bindings
   private void configureButtonBindings(){
 
     //--------------// Grabber Bindings
@@ -198,10 +198,10 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     //--------------// Elevator Bindings
 
     new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
-    new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem.getTargetTransformHeight()));
+    new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
     new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
 
-    //--------------// April Tag Bindings
+    //--------------// Auto Bindings
 
     new JoystickButton(rightJoystick, 1).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
       () -> swerveSubsystem.getHeading(), () -> rightJoystick.getRawButton(1), () -> tx16s.getRawAxis(5)));

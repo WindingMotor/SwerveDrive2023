@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -68,10 +69,16 @@ public class SwerveAlignBasic extends CommandBase {
       vY = vY * 0.5;
       vT = vT * 0.5;
     }else{
-      vX = vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1); // X-Axis PID
-      vY = -vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0); // Y-Axis PID
-      vT = thetaController.calculate(swerveSubsystem.getGyroDegrees(), 90) * 300; // Rotation PID
+      if(DriverStation.getAlliance() == DriverStation.Alliance.Red){
+        vX = vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1); // X-Axis PID
+        vY = -vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0); // Y-Axis PID
+        vT = thetaController.calculate(swerveSubsystem.getGyroDegrees(), 90) * 300; // Rotation PID
       //vT = -Math.abs(vT) > 0.05 ? vT : 0.0; // Deadband
+      }else if (DriverStation.getAlliance() == DriverStation.Alliance.Blue){
+        vX = -vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1); // X-Axis PID
+        vY = vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0); // Y-Axis PID
+        vT = thetaController.calculate(swerveSubsystem.getGyroDegrees(), 90) * 300; // Rotation PID
+      }
       SmartDashboard.putNumber("VT", vT);
     }
 
