@@ -5,13 +5,13 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorAutoAlign extends CommandBase {
+public class ElevatorApriltagSelect extends CommandBase {
 
   private ElevatorSubsystem subsystem;
   private double targetHeight;
   private double targetID;
 
-  public ElevatorAutoAlign(ElevatorSubsystem subsystem, Double targetHeight, int targetID) {
+  public ElevatorApriltagSelect(ElevatorSubsystem subsystem, Double targetHeight, int targetID) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     this.targetHeight = targetHeight;
