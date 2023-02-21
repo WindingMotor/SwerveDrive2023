@@ -45,7 +45,6 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     private SparkMaxLimitSwitch bottomLimitSwitch;
 
-
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
 
@@ -68,13 +67,13 @@ public class ElevatorSubsystem extends SubsystemBase{
         motorOne.setIdleMode(IdleMode.kBrake);
         motorTwo.setIdleMode(IdleMode.kBrake);
 
-        // Set motor encoder position factors to meters
-        motorOneEncoder.setPositionConversionFactor(0.00378485654 * 2);
-        motorTwoEncoder.setPositionConversionFactor(0.00378485654 * 2);
-
         // Set default encoder values
         motorOneEncoder = motorOne.getEncoder();
         motorTwoEncoder = motorTwo.getEncoder();
+
+        // Set motor encoder position factors to meters
+        motorOneEncoder.setPositionConversionFactor(0.00378485654 * 2);
+        motorTwoEncoder.setPositionConversionFactor(0.00378485654 * 2);
 
         // Get and set bottom limit switch
         bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
