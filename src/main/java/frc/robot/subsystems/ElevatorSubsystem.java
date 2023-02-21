@@ -31,9 +31,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ElevatorSubsystem extends SubsystemBase{
 
-    // Solenoids
-    private DoubleSolenoid leftSolenoid;
-    private DoubleSolenoid rightSolenoid;
+    // Solenoid
+    private DoubleSolenoid solenoid;
 
     // Motors
     private CANSparkMax motorOne;
@@ -49,16 +48,14 @@ public class ElevatorSubsystem extends SubsystemBase{
     public ElevatorSubsystem(){
 
         // Set solenoid object values
-        leftSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ElevatorConstants.kLeftSolenoidPort,  ElevatorConstants.kLeftSolenoidPortOFF);
-        rightSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ElevatorConstants.kRightSolenoidPort,  ElevatorConstants.kRightSolenoidPortOFF);
+        solenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ElevatorConstants.kSolenoidPort,  ElevatorConstants.kSolenoidPortOFF);
 
-        // Set default state of solenoids
-        leftSolenoid.set(Value.kForward);
-        rightSolenoid.set(Value.kForward);
+        // Set default state of solenoid
+        solenoid.set(Value.kForward);
 
         // Set motor object values take in CAN ID
-        motorOne = new CANSparkMax(ElevatorConstants.kLiftMotorOnePort, MotorType.kBrushless);
-        motorTwo = new CANSparkMax(ElevatorConstants.kLiftMotorTwoPort, MotorType.kBrushless);
+        motorOne = new CANSparkMax(ElevatorConstants.kElevatorMotorOnePort, MotorType.kBrushless);
+        motorTwo = new CANSparkMax(ElevatorConstants.kElevatorMotorTwoPort, MotorType.kBrushless);
 
         // Make motor two follow motor one
         motorTwo.follow(motorOne);
@@ -88,9 +85,8 @@ public class ElevatorSubsystem extends SubsystemBase{
         updateSmartDashboard();
     }
 
-    public void toggleElevatorSolenoids(){
-        leftSolenoid.toggle();
-        rightSolenoid.toggle();
+    public void toggleElevatorSolenoid(){
+        solenoid.toggle();
     }
 
     public void setElevatorMeters(double setpoint){

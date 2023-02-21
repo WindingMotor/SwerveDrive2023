@@ -152,14 +152,12 @@ public final class Constants {
 
     public static final class ElevatorConstants{
 
-        public static final int kLiftMotorOnePort = 9;
-        public static final int kLiftMotorTwoPort = 10;
+        public static final int kElevatorMotorOnePort = 9;
+        public static final int kElevatorMotorTwoPort = 10;
 
-        public static final int kLeftSolenoidPort = 8;
-        public static final int kLeftSolenoidPortOFF = 9;
+        public static final int kSolenoidPort = 8;
+        public static final int kSolenoidPortOFF = 9;
 
-        public static final int kRightSolenoidPort = 10; //remove
-        public static final int kRightSolenoidPortOFF = 11; //remove
         public static final double kP = 0.1;
     }
 
