@@ -67,7 +67,7 @@ public class GrabberSubsystem extends SubsystemBase{
     // Smart motion PID setting for angle motor
     private void setMotorPID(SparkMaxPIDController pid){
 
-        // Set PID default values. ¡ I took these from the Smart Motion example !
+        // Set PID default values, I took these from the Smart Motion example
         pid.setP(5e-5);
         pid.setI(1e-6);
         pid.setD(0);

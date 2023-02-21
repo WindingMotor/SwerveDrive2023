@@ -6,20 +6,22 @@ import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class GrabberToggle extends CommandBase {
+public class GrabberAngle extends CommandBase {
 
   private GrabberSubsystem subsystem;
+  private double degrees;
 
-  public GrabberToggle(GrabberSubsystem subsystem) {
+  public GrabberAngle(GrabberSubsystem subsystem, double degrees) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     addRequirements(subsystem);
+    this.degrees = degrees;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subsystem.toggleGrabberSolenoid();
+    subsystem.setAngleSmartMotionDegrees(degrees);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -20,7 +20,10 @@ import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.TestRoutine;
-import frc.robot.commands.GrabberToggle;
+import frc.robot.commands.ElevatorApriltag;
+import frc.robot.commands.ElevatorHome;
+import frc.robot.commands.ElevatorMeters;
+import frc.robot.commands.GrabberSolenoid;
 import frc.robot.commands.ResetOdometry;
 import frc.robot.commands.SwerveAlignBasic;
 import frc.robot.commands.SwerveJoystick;
@@ -74,10 +77,10 @@ public class RobotContainer {
   private final PIDController ppThetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
 
   // Create transmitter object
-  private final Transmitter transmitter = new Transmitter(4);
+  // private final Transmitter transmitter = new Transmitter(4);
 
   // Create xbox controller
-  private final XboxController xbox = new XboxController(4);
+  private final XboxController xbox = new XboxController(3);
 
   // Create transmitter
   private final Joystick tx16s = new Joystick(4);
@@ -187,16 +190,26 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   // Create buttons bindings
   private void configureButtonBindings(){
 
+    //--------------// Grabber Bindings
     // Open/Close grabber
-    new JoystickButton(tx16s, 2).onTrue(new GrabberToggle(grabberSubsystem));
-    new JoystickButton(tx16s, 2).onFalse(new GrabberToggle(grabberSubsystem));
+    new JoystickButton(tx16s, 2).onTrue(new GrabberSolenoid(grabberSubsystem));
+    new JoystickButton(tx16s, 2).onFalse(new GrabberSolenoid(grabberSubsystem));
 
-    // Auto april tag align
+    //--------------// Elevator Bindings
+
+    new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
+    new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem.getTargetTransformHeight()));
+    new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
+
+    //--------------// April Tag Bindings
+
     new JoystickButton(rightJoystick, 1).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
       () -> swerveSubsystem.getHeading(), () -> rightJoystick.getRawButton(1), () -> tx16s.getRawAxis(5)));
-// button 8 on tx16s
+    
     // Run autonmous command during teleop
     //new JoystickButton(tx16s, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
+
+    
 
   }
 
