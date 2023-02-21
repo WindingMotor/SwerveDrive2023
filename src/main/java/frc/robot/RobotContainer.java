@@ -53,8 +53,8 @@ public class RobotContainer {
   //------------------------------------O-B-J-E-C-T-S-----------------------------------//
 
   // Create joysticks
-  private final Joystick leftJoystick = new Joystick(IOConstants.kLeftJoystick);
-  private final Joystick rightJoystick = new Joystick(IOConstants.kRightJoystick);
+  //private final Joystick leftJoystick = new Joystick(IOConstants.kLeftJoystick);
+  //private final Joystick rightJoystick = new Joystick(IOConstants.kRightJoystick);
 
   // Create swerve subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
@@ -68,7 +68,6 @@ public class RobotContainer {
   // Create elevator subsystem
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
-
   // Create PID controllers for trajectory tracking
   public final PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
   public final PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
@@ -77,19 +76,14 @@ public class RobotContainer {
   // Create a non profiled PID controller for path planner
   private final PIDController ppThetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
 
-  // Create transmitter object
-  // private final Transmitter transmitter = new Transmitter(4);
-
   // Create xbox controller
   private final XboxController xbox = new XboxController(3);
 
-  // Create transmitter
+  // Create tx16s transmitter
   private final Joystick tx16s = new Joystick(4);
 
+  //--------------------------P-A-T-H-S----------------------------//
 
-  //-------------------------------------------------------------------------------------//
-
- 
   // Manual path 
   private final PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
   private Command autoForward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
@@ -107,48 +101,10 @@ public class RobotContainer {
     // Set swerve subsystem default command to swerve joystick with respective joystick inputs
     // Joystick Numbers 0 = LEFT : 1 = RIGHT
     // Joystick Axises: 0 = left/right : 1 = forward/backwards : 2 = dial
-    // Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
+    // OLD-> Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
 
-  //>-------------N-O-R-M-A-L----------------<//
-   
-  /* 
-    swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
-    () -> rightJoystick.getRawAxis(0), // X-Axis
-    () -> rightJoystick.getRawAxis(1), // Y-Axis
-    () -> leftJoystick.getRawAxis(0), // R-Axis
-    () -> trueFunct(),
-    () -> swerveSubsystem.getHeading())); 
-    */
-
-    swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
-    () -> leftJoystick.getRawAxis(0), // X-Axis
-    () -> leftJoystick.getRawAxis(1), // Y-Axis
-    () -> rightJoystick.getRawAxis(0), // R-Axis
-    () -> tx16s.getRawButton(0), // Field oriented -does nothing right now
-    () -> swerveSubsystem.getHeading(), // Navx heading
-    () -> leftJoystick.getRawButton(1))); // Flick offset button, should be toggle!
-
-    elevatorSubsystem.setDefaultCommand(new ElevatorManual(elevatorSubsystem,
-    () -> xbox.getRawAxis(0)));
-
-/* 
-swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
-() -> xbox.getRawAxis(4), // X-Axis
-() -> xbox.getRawAxis(5), // Y-Axis
-() -> xbox.getRawAxis(0), // R-Axis
-() -> trueFunct(),
-() -> swerveSubsystem.getHeading())); 
-*/
-    // DEBUG SETUP -> ZERO MOVEMENT
-/*     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
-    () -> zeroFunct(), // X-Axis
-    () -> rightJoystick.getRawAxis(2), // Y-Axis
-    () -> zeroFunct(), // R-Axis
-    () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); */
-    
   //>--------------T-R-A-N-S-----------------//
     
-  /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> tx16s.getRawAxis(0), // X-Axis
     () -> -tx16s.getRawAxis(1), // Y-Axis
@@ -156,17 +112,9 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> tx16s.getRawButton(0), // Field oriented -does nothing right now
     () -> swerveSubsystem.getHeading(), // Navx heading
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
-    */
-
-  //>----------T-H-R-T-L----------<// // No clue if working...
-    /*
-    swerveSubsystem.setDefaultCommand(new SwerveThrottledJoystick(swerveSubsystem,
-    () -> rightJoystick.getRawAxis(0), // X-Axis
-    () -> rightJoystick.getRawAxis(1), // Y-Axis
-    () -> leftJoystick.getRawAxis(0), // R-Axis
-    () -> leftJoystick.getRawAxis(1), // T-Axis
-    () -> !leftJoystick.getRawButton(Constants.IOConstants.kFieldOrientedButton))); // Field Oriented
-    */
+    
+    elevatorSubsystem.setDefaultCommand(new ElevatorManual(elevatorSubsystem,
+    () -> xbox.getRawAxis(5)));
 
   //>----------S-E-N-D-E-R----------<//
 
@@ -195,33 +143,35 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   private void configureButtonBindings(){
 
     //--------------// Grabber Bindings
-    // Open/Close grabber
+
+    // Open
     new JoystickButton(tx16s, 2).onTrue(new GrabberSolenoid(grabberSubsystem));
+    // Close
     new JoystickButton(tx16s, 2).onFalse(new GrabberSolenoid(grabberSubsystem));
 
     //--------------// Elevator Bindings
 
+    // Homing
     new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
+    // Apriltag
     new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
+    // Meters
     new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
 
     //--------------// Auto Bindings
 
-    new JoystickButton(rightJoystick, 1).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
-      () -> swerveSubsystem.getHeading(), () -> rightJoystick.getRawButton(1), () -> tx16s.getRawAxis(5)));
+    // Apriltag
+    new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
+      () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
     
     // Run autonmous command during teleop
     //new JoystickButton(tx16s, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
-
-    
 
   }
 
   //------------------------------------R-E-F-E-R-R-E-R-S------------------------------------//
 
-    public void containerResetAllEncoders(){
-      swerveSubsystem.resetAllEncoders();
-    }
+    public void containerResetAllEncoders(){ swerveSubsystem.resetAllEncoders();}
 
   //------------------------------------A-U-T-O-N-O-M-O-U-S------------------------------------//
   
