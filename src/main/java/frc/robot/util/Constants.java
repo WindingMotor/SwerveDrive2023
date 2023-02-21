@@ -155,13 +155,12 @@ public final class Constants {
         public static final int kLiftMotorOnePort = 9;
         public static final int kLiftMotorTwoPort = 10;
 
-        public static final int kLeftSolenoidPort = 0;
-        public static final int kLeftSolenoidPortOFF = 0;
+        public static final int kLeftSolenoidPort = 8;
+        public static final int kLeftSolenoidPortOFF = 9;
 
-        public static final int kRightSolenoidPort = 0;
-        public static final int kRightSolenoidPortOFF = 0;
+        public static final int kRightSolenoidPort = 10; //remove
+        public static final int kRightSolenoidPortOFF = 11;
         public static final double kP = 0.1;
-
     }
 
     public static final class GrabberConstants{
@@ -169,8 +168,8 @@ public final class Constants {
         public static final int kIntakeMotorPort = 11;
         public static final int kAngleMotorPort = 12;
 
-        public static final int kGrabberSolenoidPort = 0;
-        public static final int kGrabberSolenoidPortOFF = 0;
+        public static final int kGrabberSolenoidPort = 14;
+        public static final int kGrabberSolenoidPortOFF = 15;
 
         public static final double kP = 0.1;
 
