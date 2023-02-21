@@ -1,9 +1,9 @@
-package frc.robot.util;
 
+package frc.robot.util;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
-public class LightStrip {
+public class LightStrip{
     
     private AddressableLED leftStrip;
     private AddressableLED rightStrip;
@@ -11,19 +11,19 @@ public class LightStrip {
     private AddressableLEDBuffer stripBuffer;
     private int rainbowFirstPixelHue = 0;
 
-    public LightStrip(){
+    public LightStrip(int portOne, int portTwo, int stripLength){
 
         // Create LED strip object
-        leftStrip = new AddressableLED(5);
-        rightStrip = new AddressableLED(6);
+        leftStrip = new AddressableLED(portOne);
+        rightStrip = new AddressableLED(portTwo);
 
         // Create LED buffer object
-        stripBuffer = new AddressableLEDBuffer(60);
+        stripBuffer = new AddressableLEDBuffer(stripLength);
 
         // Set LED strip length to buffer
         leftStrip.setLength(stripBuffer.getLength());
         rightStrip.setLength(stripBuffer.getLength());
-
+        
     }
 
     // Abstraction method for setting entire strip color
