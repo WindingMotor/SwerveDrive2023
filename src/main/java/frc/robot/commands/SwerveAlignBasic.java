@@ -73,7 +73,7 @@ public class SwerveAlignBasic extends CommandBase {
         vX = vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1); // X-Axis PID
         vY = -vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0); // Y-Axis PID
         vT = thetaController.calculate(swerveSubsystem.getGyroDegrees(), 90) * 300; // Rotation PID
-      //vT = -Math.abs(vT) > 0.05 ? vT : 0.0; // Deadband
+        //vT = -Math.abs(vT) > 0.05 ? vT : 0.0; // Deadband
       }else if (DriverStation.getAlliance() == DriverStation.Alliance.Blue){
         vX = -vXController.calculate(visionSubsystem.getTargetTransform().getX(), 1); // X-Axis PID
         vY = vYController.calculate(visionSubsystem.getTargetTransform().getY(), 0); // Y-Axis PID

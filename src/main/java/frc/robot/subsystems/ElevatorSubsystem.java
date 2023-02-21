@@ -85,9 +85,7 @@ public class ElevatorSubsystem extends SubsystemBase{
         updateSmartDashboard();
     }
 
-    public void toggleElevatorSolenoid(){
-        solenoid.toggle();
-    }
+    public void toggleElevatorSolenoid(){ solenoid.toggle();}
 
     public void setElevatorMeters(double setpoint){
 
