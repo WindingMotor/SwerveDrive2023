@@ -152,8 +152,8 @@ public final class Constants {
 
     public static final class ElevatorConstants{
 
-        public static final int kLiftMotorOnePort = 0;
-        public static final int kLiftMotorTwoPort = 0;
+        public static final int kLiftMotorOnePort = 9;
+        public static final int kLiftMotorTwoPort = 10;
 
         public static final int kLeftSolenoidPort = 0;
         public static final int kLeftSolenoidPortOFF = 0;
@@ -166,8 +166,8 @@ public final class Constants {
 
     public static final class GrabberConstants{
 
-        public static final int kIntakeMotorPort = 0;
-        public static final int kAngleMotorPort = 0;
+        public static final int kIntakeMotorPort = 11;
+        public static final int kAngleMotorPort = 12;
 
         public static final int kGrabberSolenoidPort = 0;
         public static final int kGrabberSolenoidPortOFF = 0;
