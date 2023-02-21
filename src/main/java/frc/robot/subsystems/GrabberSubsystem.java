@@ -2,9 +2,8 @@
 
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.util.Constants.ElevatorConstants;
+import frc.robot.util.Constants.GrabberConstants;
 import frc.robot.util.Constants.VisionConstants;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -37,19 +36,19 @@ public class GrabberSubsystem extends SubsystemBase{
     // Grabber intake motor toggled state
     private boolean toggled;
 
-
     // Lift Subsystem Constructor
     public GrabberSubsystem(){
 
         // Set solenoid object values
-        grabberSolenoid = new DoubleSolenoid(55,PneumaticsModuleType.CTREPCM, ElevatorConstants.kGrabberSolenoidPort,  ElevatorConstants.kGrabberSolenoidPortOFF);
+        grabberSolenoid = new DoubleSolenoid(55,PneumaticsModuleType.CTREPCM, GrabberConstants.kGrabberSolenoidPort,  GrabberConstants.kGrabberSolenoidPortOFF);
 
         // Set default state of solenoid
         grabberSolenoid.set(Value.kForward);
 
         // Set motor object values takes in CAN ID
-        intakeMotor = new CANSparkMax(ElevatorConstants.kIntakeMotorPort, MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(GrabberConstants.kIntakeMotorPort, MotorType.kBrushless);
 
+        // Set angle encoder to angle motor 
         angleMotorEncoder = angleMotor.getEncoder();
 
         // Set default PID values
