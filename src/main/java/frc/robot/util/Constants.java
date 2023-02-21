@@ -3,7 +3,10 @@
 package frc.robot.util;
 import com.pathplanner.lib.PathConstraints;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -179,6 +182,14 @@ public final class Constants {
         // The difference in height between the target's height and the height of the camera.
         public static final int deltaHeight = 0; 
         public static final int cameraAngle = 45;
+
+         // Camera mounted facing forward, half a meter forward of center, half a meter up
+        public static final Transform3d robotToCam =
+        new Transform3d(
+                new Translation3d(0.5, 0.0, 0.5),
+                new Rotation3d(
+                        0, 0,
+                        0));
 
     }
 

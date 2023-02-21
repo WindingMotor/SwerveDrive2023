@@ -3,12 +3,21 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.VisionConstants;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -18,6 +27,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 // Ignore unused variable warnings
 @SuppressWarnings("unused")
@@ -33,6 +43,9 @@ public class VisionSubsystem extends SubsystemBase{
     // Camera result for vision camera
     private PhotonPipelineResult cameraResult;
 
+    // Pose estimator
+    private PhotonPoseEstimator poseEstimator;
+
     // Subsystem Constructor
     public VisionSubsystem(){
         
@@ -46,8 +59,21 @@ public class VisionSubsystem extends SubsystemBase{
         updateCameraResults();
 
         visionCamera.setLED(VisionLEDMode.kDefault);
-        
+
+        AprilTagFieldLayout fieldLayout = null;
+
+        poseEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP, visionCamera, VisionConstants.robotToCam);
+        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
     }
+
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+        if (poseEstimator == null) {
+            return Optional.empty();
+        }
+        poseEstimator.setReferencePose(prevEstimatedRobotPose);
+        return poseEstimator.update();
+    } 
 
     // Update the camera results
     private void updateCameraResults(){
@@ -105,8 +131,7 @@ public class VisionSubsystem extends SubsystemBase{
 
     public Double getTargetTransformHeight(){
         return(getBestTarget().getBestCameraToTarget().getZ());
-   }
-
+    }
 
     // Update the smart dashboard
     private void updateSmartDashboard(){
