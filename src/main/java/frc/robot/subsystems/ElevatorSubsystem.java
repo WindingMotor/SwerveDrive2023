@@ -50,8 +50,8 @@ public class ElevatorSubsystem extends SubsystemBase{
     public ElevatorSubsystem(){
 
         // Set solenoid object values
-        leftSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ElevatorConstants.kLeftSolenoidPort,  ElevatorConstants.kLeftSolenoidPortOFF);
-        rightSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ElevatorConstants.kRightSolenoidPort,  ElevatorConstants.kRightSolenoidPortOFF);
+        leftSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ElevatorConstants.kLeftSolenoidPort,  ElevatorConstants.kLeftSolenoidPortOFF);
+        rightSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ElevatorConstants.kRightSolenoidPort,  ElevatorConstants.kRightSolenoidPortOFF);
 
         // Set default state of solenoids
         leftSolenoid.set(Value.kForward);

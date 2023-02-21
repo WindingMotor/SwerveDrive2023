@@ -40,7 +40,7 @@ public class GrabberSubsystem extends SubsystemBase{
     public GrabberSubsystem(){
 
         // Set solenoid object values
-        grabberSolenoid = new DoubleSolenoid(55,PneumaticsModuleType.CTREPCM, GrabberConstants.kGrabberSolenoidPort,  GrabberConstants.kGrabberSolenoidPortOFF);
+        grabberSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, GrabberConstants.kGrabberSolenoidPort,  GrabberConstants.kGrabberSolenoidPortOFF);
 
         // Set default state of solenoid
         grabberSolenoid.set(Value.kForward);

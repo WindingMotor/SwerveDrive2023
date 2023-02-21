@@ -159,7 +159,7 @@ public final class Constants {
         public static final int kLeftSolenoidPortOFF = 9;
 
         public static final int kRightSolenoidPort = 10; //remove
-        public static final int kRightSolenoidPortOFF = 11;
+        public static final int kRightSolenoidPortOFF = 11; //remove
         public static final double kP = 0.1;
     }
 
