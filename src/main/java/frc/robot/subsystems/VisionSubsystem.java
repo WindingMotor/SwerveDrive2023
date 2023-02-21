@@ -104,10 +104,7 @@ public class VisionSubsystem extends SubsystemBase{
     }
 
     public Double getTargetTransformHeight(){
-        if(hasTargets()){
-            return(getBestTarget().getBestCameraToTarget().getZ());
-        }
-        return 0.0;
+        return(getBestTarget().getBestCameraToTarget().getZ());
    }
 
 

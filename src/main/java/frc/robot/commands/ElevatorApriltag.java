@@ -2,6 +2,7 @@
 
 package frc.robot.commands;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -9,35 +10,45 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ElevatorApriltag extends CommandBase {
 
   private ElevatorSubsystem subsystem;
+  private VisionSubsystem visionSubsystem;
+  
   private double targetHeight;
   private static final double cameraHeightMeters = 2;
+  private boolean finished = false;
 
-  public ElevatorApriltag(ElevatorSubsystem subsystem, Double targetHeight) {
+  public ElevatorApriltag(ElevatorSubsystem subsystem, VisionSubsystem visionSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     this.targetHeight = targetHeight;
-
+    this.visionSubsystem = visionSubsystem;
     addRequirements(subsystem);
+    finished = false;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     subsystem.stopElevator();
-    DriverStation.reportWarning("ELEV-APRIL STARTED: " + targetHeight, true);
+    DriverStation.reportWarning("ELEV-APRIL STARTED", true);
+    finished = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    DriverStation.reportWarning("ELEV-APRIL: " + targetHeight, true);
-    subsystem.setElevatorMeters(targetHeight);
+    if(visionSubsystem.hasTargets()){
+      DriverStation.reportWarning("ELEV-APRIL: " + visionSubsystem.getTargetTransformHeight(), true);
+      subsystem.setElevatorMeters(visionSubsystem.getTargetTransformHeight());
+    }else{
+      DriverStation.reportWarning("ELEV-APRIL NO-TARGETS", true);
+      finished = true;
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DriverStation.reportWarning("ELEV-APRIL STOPPED: " + targetHeight, true);
+    DriverStation.reportWarning("ELEV-APRIL STOPPED", true);
     subsystem.stopElevator();
     
   }
@@ -45,6 +56,6 @@ public class ElevatorApriltag extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finished;
   }
 }
