@@ -130,8 +130,8 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public void updateSmartDashboard(){
-        SmartDashboard.putNumber("Elevator Encoder:", motorOneEncoder.getPosition());
-        SmartDashboard.putBoolean("Bottom Limit Switch", bottomLimitSwitch.isPressed());
+       // SmartDashboard.putNumber("Elevator Encoder:", motorOneEncoder.getPosition());
+       // SmartDashboard.putBoolean("Bottom Limit Switch", bottomLimitSwitch.isPressed());
     }
 
 

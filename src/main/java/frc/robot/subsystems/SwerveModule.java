@@ -143,7 +143,7 @@ public class SwerveModule extends SubsystemBase {
   public void update(){
 
     SmartDashboard.putNumber(moduleName + "Absolute-Position", absoluteEncoder.getAbsolutePosition());
-    SmartDashboard.putNumber(moduleName + " Turning Position", getTurningPosition());
+   // SmartDashboard.putNumber(moduleName + " Turning Position", getTurningPosition());
   }
 
   // Helpful get methods
@@ -247,7 +247,8 @@ public class SwerveModule extends SubsystemBase {
 
     simTurn2.setAngle(absoluteEncoder.getAbsolutePosition()); // +90
     simDirection2.setAngle(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond >0 ? 0:180);
-    SmartDashboard.putString("Swerve["+moduleName+"] state", state.toString());
+    
+   // SmartDashboard.putString("Swerve["+moduleName+"] state", state.toString());
 
   }
 

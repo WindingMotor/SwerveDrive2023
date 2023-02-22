@@ -133,7 +133,7 @@ public class GrabberSubsystem extends SubsystemBase{
 //---------------------// Smartdashboard
 
     public void updateSmartDashboard(){
-        SmartDashboard.putNumber("Grabber Encoder:", angleMotorEncoder.getPosition());
+        //SmartDashboard.putNumber("Grabber Encoder:", angleMotorEncoder.getPosition());
     }
 
 

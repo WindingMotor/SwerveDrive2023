@@ -171,9 +171,9 @@ public class SwerveSubsystem extends SubsystemBase {
     odometer.update(getRotation2d(), getModulePositions());
 
     // Odometry
-    SmartDashboard.putNumber("Heading", getHeading());
-    SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
-    SmartDashboard.putNumber("R2D deg", getGyroDegrees());
+   // SmartDashboard.putNumber("Heading", getHeading());
+  //  SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
+   // SmartDashboard.putNumber("R2D deg", getGyroDegrees());
     
     // Update robot monitor
     //monitor.update();

@@ -83,10 +83,12 @@ public final class Constants {
         public static final boolean kFrontRightDriveEncoderReversed = true; //
         public static final boolean kBackRightDriveEncoderReversed = true;  //
 
+        // -------> ABE <-------- //
         public static final int kFrontLeftDriveAbsoluteEncoderPort = 0;
         public static final int kBackLeftDriveAbsoluteEncoderPort = 3;
         public static final int kFrontRightDriveAbsoluteEncoderPort = 1;
         public static final int kBackRightDriveAbsoluteEncoderPort = 2;
+        // -------> ABE <-------- //
 
         // Absolute encoders reversed
         public static final boolean kFrontLeftDriveAbsoluteEncoderReversed = false;
@@ -95,6 +97,7 @@ public final class Constants {
         public static final boolean kBackRightDriveAbsoluteEncoderReversed = false;
 
                                         // Need to update values for our specific magnetic fields
+                                        // NOT IN RADIANS!
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 1.658063;//0.98 * 2 * Math.PI;
         public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 1.04719;//(.25+0.0918)  * 2 * Math.PI - Math.PI / 36;
         public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 1.39626;//(0.0141+.25) * 2 * Math.PI;
