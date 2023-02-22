@@ -60,7 +60,7 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   
   // Create vision subsystem
-  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+  //private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
   // Create grabber subsystem
   private final GrabberSubsystem grabberSubsystem = new GrabberSubsystem();
@@ -155,15 +155,15 @@ public class RobotContainer {
     // Homing
     new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
     // Apriltag
-    new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
+    //new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
     // Meters
-    new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
+   // new JoystickButton(xbox, 3).onTruenew ElevatorMeters(elevatorSubsystem, 1.0));
 
     //--------------// Auto Bindings
 
     // Apriltag
-    new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
-      () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
+   // new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
+    //  () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
     
     // Run autonmous command during teleop
     //new JoystickButton(tx16s, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
