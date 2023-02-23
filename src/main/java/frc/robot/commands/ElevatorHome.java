@@ -25,7 +25,7 @@ public class ElevatorHome extends CommandBase {
     DriverStation.reportWarning("Homing elevator!", true);
     finished = false;
     // Home the elevator and return true when finished
-    finished = subsystem.homeElevatorBottom();
+   // finished = subsystem.homeElevatorBottom();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

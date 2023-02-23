@@ -6,23 +6,23 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 public class LightStrip{
     
     private AddressableLED leftStrip;
-    private AddressableLED rightStrip;
+   // private AddressableLED rightStrip;
 
     private AddressableLEDBuffer stripBuffer;
     private int rainbowFirstPixelHue = 0;
 
-    public LightStrip(int portOne, int portTwo, int stripLength){
+    public LightStrip(){
 
         // Create LED strip object
-        leftStrip = new AddressableLED(portOne);
-        rightStrip = new AddressableLED(portTwo);
+        leftStrip = new AddressableLED(0);
+       // rightStrip = new AddressableLED(portTwo);
 
         // Create LED buffer object
-        stripBuffer = new AddressableLEDBuffer(stripLength);
+        stripBuffer = new AddressableLEDBuffer(20);
 
         // Set LED strip length to buffer
         leftStrip.setLength(stripBuffer.getLength());
-        rightStrip.setLength(stripBuffer.getLength());
+       // rightStrip.setLength(stripBuffer.getLength());
         
     }
 
@@ -33,7 +33,7 @@ public class LightStrip{
         }
 
         leftStrip.setData(stripBuffer);
-        rightStrip.setData(stripBuffer);
+      //  rightStrip.setData(stripBuffer);
     }
 
     // Set entire strip to rainbow
@@ -52,7 +52,7 @@ public class LightStrip{
 
         // Set led strip to new buffer
         leftStrip.setData(stripBuffer);
-        rightStrip.setData(stripBuffer);
+        //rightStrip.setData(stripBuffer);
     }
 
     public void setRed(){ setStripColor(255, 0, 0);}

@@ -4,14 +4,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.ElevatorConstants;
 import frc.robot.util.Constants.VisionConstants;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -73,8 +71,8 @@ public class ElevatorSubsystem extends SubsystemBase{
         motorTwoEncoder.setPositionConversionFactor(0.00378485654 * 2);
 
         // Get and set bottom limit switch
-        bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyClosed);
-        bottomLimitSwitch.enableLimitSwitch(true);
+        bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
+        bottomLimitSwitch.enableLimitSwitch(false);
 
         // Set PID values from constants
         elevatorPID = new PIDController(ElevatorConstants.kP, 0, 0);
@@ -98,13 +96,11 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         // Set motors to caculated posi
         motorOne.set(caculated);
-        motorTwo.set(caculated);
     }
 
     // Set both elevator motors to input
     public void setElevatorMotors(double x){
         motorOne.set(x);
-        motorTwo.set(x);
     }
 
     // Set both elevator motors to zero
@@ -130,7 +126,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     }
 
     public void updateSmartDashboard(){
-       // SmartDashboard.putNumber("Elevator Encoder:", motorOneEncoder.getPosition());
+       SmartDashboard.putNumber("Elevator Encoder:", motorOneEncoder.getPosition());
        // SmartDashboard.putBoolean("Bottom Limit Switch", bottomLimitSwitch.isPressed());
     }
 

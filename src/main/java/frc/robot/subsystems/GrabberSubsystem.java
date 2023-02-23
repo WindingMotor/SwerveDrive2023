@@ -8,6 +8,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -49,6 +50,7 @@ public class GrabberSubsystem extends SubsystemBase{
         intakeMotor = new CANSparkMax(GrabberConstants.kIntakeMotorPort, MotorType.kBrushless);
         angleMotor = new CANSparkMax(GrabberConstants.kAngleMotorPort, MotorType.kBrushless);
 
+        
         // Set angle encoder to angle motor 
         angleMotorEncoder = angleMotor.getEncoder();
 
@@ -57,6 +59,8 @@ public class GrabberSubsystem extends SubsystemBase{
 
         // Set default PID values
         setMotorPID(anglePID);
+
+        intakeMotor.setIdleMode(IdleMode.kBrake);
 
         // Set intake motor default state to false
         toggled = false;
@@ -99,13 +103,10 @@ public class GrabberSubsystem extends SubsystemBase{
 
     // Sets intake motor speed with a toggle
     public void toggleIntake(){
-        if(toggled){
-            intakeMotor.set(0);
-            toggled = false;
-        }else{
-            intakeMotor.set(1);
-            toggled = true;
-        }
+        intakeMotor.set(1);
+    }
+    public void stopIntake(){
+        intakeMotor.set(0);
     }
 
     // Sets intake motor to a speed from 0 to 1

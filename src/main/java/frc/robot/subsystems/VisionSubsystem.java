@@ -59,11 +59,6 @@ public class VisionSubsystem extends SubsystemBase{
 
         visionCamera.setLED(VisionLEDMode.kDefault);
 
-        AprilTagFieldLayout fieldLayout = null;
-
-        poseEstimator = new PhotonPoseEstimator(fieldLayout, PoseStrategy.MULTI_TAG_PNP, visionCamera, VisionConstants.robotToCam);
-        poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-
     }
 
     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
