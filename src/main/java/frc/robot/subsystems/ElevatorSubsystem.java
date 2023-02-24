@@ -82,7 +82,9 @@ public class ElevatorSubsystem extends SubsystemBase{
         updateSmartDashboard();
     }
 
-    public void toggleElevatorSolenoid(){ solenoid.toggle();}
+    public void toggleElevatorSolenoid(){
+        solenoid.toggle();
+    }
 
     public void setElevatorMeters(double setpoint){
 
@@ -98,7 +100,7 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     // Set both elevator motors to input
     public void setElevatorMotors(double x){
-        motorOne.set(x);
+        motorOne.set(x); 
     }
 
     // Set both elevator motors to zero
