@@ -1,6 +1,6 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.commands;
+package frc.robot.commands.swerve;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveThrottledJoystick extends CommandBase {

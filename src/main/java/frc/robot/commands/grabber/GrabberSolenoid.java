@@ -1,48 +1,40 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.commands;
-import frc.robot.subsystems.ElevatorSubsystem;
-import edu.wpi.first.wpilibj.DriverStation;
+package frc.robot.commands.grabber;
+import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorHome extends CommandBase {
+public class GrabberSolenoid extends CommandBase {
 
-  private ElevatorSubsystem subsystem;
-  private boolean finished = false;
+  private GrabberSubsystem subsystem;
 
-  public ElevatorHome(ElevatorSubsystem subsystem) {
+  public GrabberSolenoid(GrabberSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
-
     addRequirements(subsystem);
-    finished = false;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    DriverStation.reportWarning("Homing elevator!", true);
-    finished = false;
-    // Home the elevator and return true when finished
-   // finished = subsystem.homeElevatorBottom();
+    subsystem.toggleGrabberSolenoid();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    subsystem.stopElevator();
-    DriverStation.reportWarning("Elevator homing finished!", true);
+    
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return true;
   }
 }

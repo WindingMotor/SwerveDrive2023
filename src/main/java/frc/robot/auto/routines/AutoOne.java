@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.TrajectoryWeaver;
-import frc.robot.commands.ReportString;
+import frc.robot.commands.util.ReportString;
 import frc.robot.subsystems.SwerveSubsystem;
 
 

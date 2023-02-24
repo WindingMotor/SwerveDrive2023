@@ -1,35 +1,36 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.commands;
+package frc.robot.commands.elevator;
 import frc.robot.subsystems.ElevatorSubsystem;
+
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorApriltagSelect extends CommandBase {
+public class ElevatorManual extends CommandBase {
 
   private ElevatorSubsystem subsystem;
-  private double targetHeight;
-  private double targetID;
+  private Supplier<Double> speed;
 
-  public ElevatorApriltagSelect(ElevatorSubsystem subsystem, Double targetHeight, int targetID) {
+  public ElevatorManual(ElevatorSubsystem subsystem, Supplier<Double> speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
-    this.targetHeight = targetHeight;
-    this.targetID = targetID;
-
+    this.speed = speed;
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    subsystem.stopElevator();
+    // Set the elevator to the desired meters
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    subsystem.setElevatorMotors(speed.get() * 0.5);
   }
 
   // Called once the command ends or is interrupted.
