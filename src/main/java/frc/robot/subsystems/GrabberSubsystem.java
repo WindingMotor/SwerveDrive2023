@@ -10,6 +10,8 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -25,17 +27,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class GrabberSubsystem extends SubsystemBase{
 
-    // Solenoids
+    // Solenoid
     private DoubleSolenoid grabberSolenoid;
+
+    // Intake motor
     private CANSparkMax intakeMotor;
+    private RelativeEncoder intakeMotorEncoder;
+
+    // Angle motor 
     private CANSparkMax angleMotor;
-
-    // Grabber angle motor
-    private SparkMaxPIDController anglePID;
     private RelativeEncoder angleMotorEncoder;
-
-    // Grabber intake motor toggled state
-    private boolean toggled;
+    private PIDController anglePID;
 
     // Lift Subsystem Constructor
     public GrabberSubsystem(){
@@ -50,41 +52,16 @@ public class GrabberSubsystem extends SubsystemBase{
         intakeMotor = new CANSparkMax(GrabberConstants.kIntakeMotorPort, MotorType.kBrushless);
         angleMotor = new CANSparkMax(GrabberConstants.kAngleMotorPort, MotorType.kBrushless);
 
-        
         // Set angle encoder to angle motor 
         angleMotorEncoder = angleMotor.getEncoder();
-
-        // Set angle pid object
-        anglePID = angleMotor.getPIDController();
-
-        // Set default PID values
-        setMotorPID(anglePID);
+        intakeMotorEncoder = intakeMotor.getEncoder();
+        
+        angleMotorEncoder.setPositionConversionFactor(360 / 71.5982);
 
         intakeMotor.setIdleMode(IdleMode.kBrake);
 
-        // Set intake motor default state to false
-        toggled = false;
+        anglePID = new PIDController(0.01, 0, 0);
 }
-
-//---------------------// PID
-
-    // Smart motion PID setting for angle motor
-    private void setMotorPID(SparkMaxPIDController pid){
-
-        // Set PID default values, I took these from the Smart Motion example
-        pid.setP(5e-5);
-        pid.setI(1e-6);
-        pid.setD(0);
-        pid.setIZone(0);
-        pid.setFF( 0.000156); 
-        pid.setOutputRange(-1, 1);
-
-        // Set min and max Smart Motion values
-        pid.setSmartMotionMaxVelocity(1000, 0); // RPM/s def 2000
-        pid.setSmartMotionMinOutputVelocity(0, 0); 
-        pid.setSmartMotionMaxAccel(500, 0); // RPM/s def 1500
-        pid.setSmartMotionAllowedClosedLoopError(0,0);
-    }
 
 //---------------------// Periodic loop
 
@@ -101,10 +78,11 @@ public class GrabberSubsystem extends SubsystemBase{
         grabberSolenoid.toggle();
     }
 
-    // Sets intake motor speed with a toggle
+    // Sets intake motor speed to 1
     public void toggleIntake(){
         intakeMotor.set(1);
     }
+
     public void stopIntake(){
         intakeMotor.set(0);
     }
@@ -114,27 +92,27 @@ public class GrabberSubsystem extends SubsystemBase{
         intakeMotor.set(x);
     }
 
-//---------------------// Angle motor
-
-    // Set angle motor position in degrees from 0 to 90
-    public void setAngleSmartMotionDegrees(double d){
-        anglePID.setReference(d * 90, CANSparkMax.ControlType.kSmartMotion);;
+    public void setAngleSpeed(double x){
+        angleMotor.set(x);
     }
 
-    // Sets angle motor position in a value from 0 to 1
-    public void setAngleSmartMotion(double x){
-        anglePID.setReference(x, CANSparkMax.ControlType.kSmartMotion);;
+    public void setAnglePID(double x){
+        if(x > 80){
+            x = 80;
+        }else if(x < 8){
+            x = 8;
+        }
+
+        double angle = anglePID.calculate(angleMotorEncoder.getPosition(), x);
+        angleMotor.set(angle);
     }
 
-    // Sets angle motor speed from a value 0 to 1
-    public void setAngleVelocity(double x){
-        anglePID.setReference(x, CANSparkMax.ControlType.kVelocity);
-    }
-
+   
 //---------------------// Smartdashboard
 
     public void updateSmartDashboard(){
-        //SmartDashboard.putNumber("Grabber Encoder:", angleMotorEncoder.getPosition());
+        SmartDashboard.putNumber("Grabber Encoder DEG:", angleMotorEncoder.getPosition());
+        SmartDashboard.putNumber("Intake Encoder:", intakeMotorEncoder.getPosition());
     }
 
 

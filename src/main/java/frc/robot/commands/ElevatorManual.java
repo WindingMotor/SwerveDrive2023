@@ -30,7 +30,7 @@ public class ElevatorManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.setElevatorMotors(-speed.get());
+    subsystem.setElevatorMotors(speed.get() * 0.5);
   }
 
   // Called once the command ends or is interrupted.

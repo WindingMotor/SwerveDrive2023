@@ -31,6 +31,7 @@ import frc.robot.commands.ElevatorStop;
 import frc.robot.commands.GrabberIntake;
 import frc.robot.commands.GrabberIntakeReverse;
 import frc.robot.commands.GrabberIntakeStop;
+import frc.robot.commands.GrabberManual;
 import frc.robot.commands.GrabberSolenoid;
 import frc.robot.commands.ResetOdometry;
 import frc.robot.commands.SwerveAlignBasic;
@@ -68,7 +69,7 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   
   // Create vision subsystem
-  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+  //private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
   // Create grabber subsystem
   private final GrabberSubsystem grabberSubsystem = new GrabberSubsystem();
@@ -103,7 +104,6 @@ public class RobotContainer {
 
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
   public RobotContainer(){
@@ -122,9 +122,12 @@ public class RobotContainer {
     () -> tx16s.getRawButton(0), // Field oriented -does nothing right now
     () -> swerveSubsystem.getHeading(), // Navx heading
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
-    
+
    elevatorSubsystem.setDefaultCommand(new ElevatorManual(elevatorSubsystem,
    () -> xbox.getRawAxis(1)));
+
+   grabberSubsystem.setDefaultCommand(new GrabberManual(grabberSubsystem,
+   () -> xbox.getRawAxis(3)));
 
   //>----------S-E-N-D-E-R----------<//
 
@@ -153,25 +156,18 @@ public class RobotContainer {
   // Create button bindings
   private void configureButtonBindings(){
 
-
-    // Open
     new JoystickButton(tx16s, 2).onTrue(new ElevatorSolenoid(elevatorSubsystem));
 
     new JoystickButton(xbox, 4).onTrue(new GrabberSolenoid(grabberSubsystem));
-   // new JoystickButton(xbox, 2).onTr(new GrabberIntake(grabberSubsystem))
+
     new JoystickButton(xbox, 2).onTrue(new GrabberIntake(grabberSubsystem));
-    new JoystickButton(xbox, 2).onFalse(new GrabberIntakeStop(grabberSubsystem));
+    new JoystickButton(xbox, 2).toggleOnFalse(new GrabberIntakeStop(grabberSubsystem));
 
     new JoystickButton(xbox, 1).onTrue(new GrabberIntakeReverse(grabberSubsystem));
-    new JoystickButton(xbox, 1).onFalse(new GrabberIntakeStop(grabberSubsystem));
-
-    //new JoystickButton(xbox, 1).onTrue(new GrabberIntakeStop(grabberSubsystem));
-
-
-   // new JoystickButton(tx16s, 2).onFalse(new ElevatorSolenoid(elevatorSubsystem));
+    new JoystickButton(xbox, 1).toggleOnFalse(new GrabberIntakeStop(grabberSubsystem));
 
     // Homing
-   // new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
+    //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
     // Apriltag
    // new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
     // Meters
@@ -180,8 +176,8 @@ public class RobotContainer {
     //--------------// Auto Bindings
 
     // Apriltag
-    new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
-      () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
+    // new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
+    //   () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
     
     // Run autonmous command during teleop
     //new JoystickButton(tx16s, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));

@@ -27,9 +27,9 @@ public class Transmitter {
         if(x > 0.000){return(x * Constants.IOConstants.kTransmitterOffset);}
         if(x <  0.000){return(x * Constants.IOConstants.kTransmitterOffset);}
         else{return(0.000);} 
-
     }
 
+    
     public double getRoll(){
         SmartDashboard.putNumber("Roll", calculateOffset(joystick.getRawAxis(0)));
         return(calculateOffset(joystick.getRawAxis(0)));
