@@ -38,6 +38,10 @@ public class GrabberSubsystem extends SubsystemBase{
     private CANSparkMax angleMotor;
     private RelativeEncoder angleMotorEncoder;
     private PIDController anglePID;
+    private double angleSetpoint;
+
+    // Solenoid state 
+    private boolean grabberOpen;
 
     // Lift Subsystem Constructor
     public GrabberSubsystem(){
@@ -52,15 +56,24 @@ public class GrabberSubsystem extends SubsystemBase{
         intakeMotor = new CANSparkMax(GrabberConstants.kIntakeMotorPort, MotorType.kBrushless);
         angleMotor = new CANSparkMax(GrabberConstants.kAngleMotorPort, MotorType.kBrushless);
 
+        // Set motors to brake mode
+        intakeMotor.setIdleMode(IdleMode.kBrake);
+        angleMotor.setIdleMode(IdleMode.kBrake);
+
         // Set angle encoder to angle motor 
         angleMotorEncoder = angleMotor.getEncoder();
         intakeMotorEncoder = intakeMotor.getEncoder();
         
+        // Encoder to degrees converison factor
         angleMotorEncoder.setPositionConversionFactor(360 / 71.5982);
 
-        intakeMotor.setIdleMode(IdleMode.kBrake);
-
+        // Set PID controller values
         anglePID = new PIDController(0.01, 0, 0);
+
+        // Set defualt angle setpoint
+        angleSetpoint = 8.0;
+
+        grabberOpen = true;
 }
 
 //---------------------// Periodic loop
@@ -69,13 +82,19 @@ public class GrabberSubsystem extends SubsystemBase{
     public void periodic(){
         // Update smartdashboard
         updateSmartDashboard();
+        setAnglePID(angleSetpoint);
     }
 
-//---------------------// Intake motor
+//---------------------// Intake
 
     // Open or close the intake soldenoid with a toggle
     public void toggleGrabberSolenoid(){
         grabberSolenoid.toggle();
+        grabberOpen = !grabberOpen;
+    }
+
+    public boolean isGrabberOpen(){
+        return(grabberOpen);
     }
 
     // Sets intake motor speed to 1
@@ -92,8 +111,14 @@ public class GrabberSubsystem extends SubsystemBase{
         intakeMotor.set(x);
     }
 
+//---------------------// Angle
+
     public void setAngleSpeed(double x){
         angleMotor.set(x);
+    }
+
+    public void setAngleSetpoint(double d){
+        angleSetpoint = d;
     }
 
     public void setAnglePID(double x){
@@ -102,12 +127,10 @@ public class GrabberSubsystem extends SubsystemBase{
         }else if(x < 8){
             x = 8;
         }
-
         double angle = anglePID.calculate(angleMotorEncoder.getPosition(), x);
         angleMotor.set(angle);
     }
 
-   
 //---------------------// Smartdashboard
 
     public void updateSmartDashboard(){

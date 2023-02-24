@@ -36,10 +36,11 @@ public class ElevatorSubsystem extends SubsystemBase{
     private CANSparkMax motorOne;
     private CANSparkMax motorTwo;
 
+    // Encoder and PIDf
     private RelativeEncoder motorOneEncoder;
-    private RelativeEncoder motorTwoEncoder;
     private PIDController elevatorPID;
 
+    // Limit switch
     private SparkMaxLimitSwitch bottomLimitSwitch;
 
     // Lift Subsystem Constructor
@@ -58,17 +59,15 @@ public class ElevatorSubsystem extends SubsystemBase{
         // Make motor two follow motor one
         motorTwo.follow(motorOne);
 
-        // Set motor to brake mode
+        // Set motors to brake mode
         motorOne.setIdleMode(IdleMode.kBrake);
         motorTwo.setIdleMode(IdleMode.kBrake);
 
         // Set default encoder values
         motorOneEncoder = motorOne.getEncoder();
-        motorTwoEncoder = motorTwo.getEncoder();
 
         // Set motor encoder position factors to meters
         motorOneEncoder.setPositionConversionFactor(0.00378485654 * 2);
-        motorTwoEncoder.setPositionConversionFactor(0.00378485654 * 2);
 
         // Get and set bottom limit switch
         bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
@@ -87,14 +86,13 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     public void setElevatorMeters(double setpoint){
 
-        // Get motor position in meters
-        double position = motorOneEncoder.getPosition();
-
         // Takes in current elevator position in meters and the setpoint in meters and outputs change needed
-        double caculated = elevatorPID.calculate(position, setpoint);
+        double caculated = elevatorPID.calculate(motorOneEncoder.getPosition(), setpoint);
+
+        // Half speed change
         caculated /= 2;
 
-        // Set motors to caculated posi
+        // Set motors to need speed change
         motorOne.set(caculated);
     }
 

@@ -2,22 +2,19 @@
 
 package frc.robot.commands.grabber;
 import frc.robot.subsystems.GrabberSubsystem;
-
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class GrabberManual extends CommandBase {
+public class GrabberDegrees extends CommandBase {
 
   private GrabberSubsystem subsystem;
-  private Supplier<Double> input;
+  private double degrees;
 
-  public GrabberManual(GrabberSubsystem subsystem, Supplier<Double> input) {
+  public GrabberDegrees(GrabberSubsystem subsystem, double degrees) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     addRequirements(subsystem);
-    this.input = input;
+    this.degrees = degrees;
   }
 
   // Called when the command is initially scheduled.
@@ -29,7 +26,7 @@ public class GrabberManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.setAnglePID(input.get() * 90 + 12);
+    subsystem.setAngleSetpoint(degrees);
   }
 
   // Called once the command ends or is interrupted.
@@ -41,6 +38,6 @@ public class GrabberManual extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

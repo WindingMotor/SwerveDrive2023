@@ -31,7 +31,7 @@ import frc.robot.commands.elevator.ElevatorStop;
 import frc.robot.commands.grabber.GrabberIntake;
 import frc.robot.commands.grabber.GrabberIntakeReverse;
 import frc.robot.commands.grabber.GrabberIntakeStop;
-import frc.robot.commands.grabber.GrabberManual;
+import frc.robot.commands.grabber.GrabberTrigger;
 import frc.robot.commands.grabber.GrabberSolenoid;
 import frc.robot.commands.swerve.SwerveAlignBasic;
 import frc.robot.commands.swerve.SwerveJoystick;
@@ -126,7 +126,7 @@ public class RobotContainer {
    elevatorSubsystem.setDefaultCommand(new ElevatorManual(elevatorSubsystem,
    () -> xbox.getRawAxis(1)));
 
-   grabberSubsystem.setDefaultCommand(new GrabberManual(grabberSubsystem,
+   grabberSubsystem.setDefaultCommand(new GrabberTrigger(grabberSubsystem,
    () -> xbox.getRawAxis(3)));
 
   //>----------S-E-N-D-E-R----------<//
