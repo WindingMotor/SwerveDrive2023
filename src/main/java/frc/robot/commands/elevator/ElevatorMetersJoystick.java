@@ -8,12 +8,12 @@ import java.util.function.Supplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorMeters extends CommandBase {
+public class ElevatorMetersJoystick extends CommandBase {
 
   private ElevatorSubsystem subsystem;
-  private Double meters;
+  private Supplier<Double> meters;
 
-  public ElevatorMeters(ElevatorSubsystem subsystem, Double meters) {
+  public ElevatorMetersJoystick(ElevatorSubsystem subsystem, Supplier<Double> meters) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     this.meters = meters;
@@ -30,7 +30,8 @@ public class ElevatorMeters extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.setElevatorMeters(meters);
+    //subsystem.setElevatorSetpoint(meters.get());
+    subsystem.setElevatorMeters(meters.get());
   }
 
   // Called once the command ends or is interrupted.

@@ -71,9 +71,9 @@ public class GrabberSubsystem extends SubsystemBase{
         anglePID = new PIDController(0.01, 0, 0);
 
         // Set defualt angle setpoint
-        angleSetpoint = 8.0;
+        angleSetpoint = 12.0;
 
-        grabberOpen = true;
+        grabberOpen = false;
 }
 
 //---------------------// Periodic loop

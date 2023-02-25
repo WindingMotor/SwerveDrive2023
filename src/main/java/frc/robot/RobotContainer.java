@@ -25,9 +25,10 @@ import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.elevator.ElevatorApriltag;
 import frc.robot.commands.elevator.ElevatorHome;
 import frc.robot.commands.elevator.ElevatorManual;
-import frc.robot.commands.elevator.ElevatorMeters;
+import frc.robot.commands.elevator.ElevatorMetersJoystick;
 import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorStop;
+import frc.robot.commands.grabber.GrabberDegrees;
 import frc.robot.commands.grabber.GrabberIntake;
 import frc.robot.commands.grabber.GrabberIntakeReverse;
 import frc.robot.commands.grabber.GrabberIntakeStop;
@@ -123,7 +124,7 @@ public class RobotContainer {
     () -> swerveSubsystem.getHeading(), // Navx heading
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 
-   elevatorSubsystem.setDefaultCommand(new ElevatorManual(elevatorSubsystem,
+   elevatorSubsystem.setDefaultCommand(new ElevatorMetersJoystick(elevatorSubsystem,
    () -> xbox.getRawAxis(1)));
 
    grabberSubsystem.setDefaultCommand(new GrabberTrigger(grabberSubsystem,
@@ -165,6 +166,8 @@ public class RobotContainer {
 
     new JoystickButton(xbox, 1).onTrue(new GrabberIntakeReverse(grabberSubsystem));
     new JoystickButton(xbox, 1).toggleOnFalse(new GrabberIntakeStop(grabberSubsystem));
+
+   // new JoystickButton(xbox, 9).onTrue(new ElevatorMeters(elevatorSubsystem, 0.5));
 
     // Homing
     //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));

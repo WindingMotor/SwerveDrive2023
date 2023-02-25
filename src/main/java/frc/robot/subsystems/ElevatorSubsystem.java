@@ -43,6 +43,9 @@ public class ElevatorSubsystem extends SubsystemBase{
     // Limit switch
     private SparkMaxLimitSwitch bottomLimitSwitch;
 
+    // setpoint
+    private double elevatorSetpoint;
+
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
 
@@ -67,32 +70,54 @@ public class ElevatorSubsystem extends SubsystemBase{
         motorOneEncoder = motorOne.getEncoder();
 
         // Set motor encoder position factors to meters
-        motorOneEncoder.setPositionConversionFactor(0.00378485654 * 2);
-
+        motorOneEncoder.setPositionConversionFactor(0.02367145);
+        //0.0066509 * 4
         // Get and set bottom limit switch
         bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         bottomLimitSwitch.enableLimitSwitch(false);
 
         // Set PID values from constants
-        elevatorPID = new PIDController(ElevatorConstants.kP, 0, 0);
+        elevatorPID = new PIDController(0.5, 0, 0);
+
+        elevatorSetpoint = 0;
     }
 
     @Override
     public void periodic(){
         updateSmartDashboard();
+        
     }
 
     public void toggleElevatorSolenoid(){
         solenoid.toggle();
     }
 
-    public void setElevatorMeters(double setpoint){
+    public void setElevatorSetpoint(double x){
+        elevatorSetpoint = x * 1.4;
+        /* 
+        if(x > 0){
+            elevatorSetpoint += 0.1;
+        }else if(x < 0){
+            elevatorSetpoint -= 0.1;
+        }
+
+        if(elevatorSetpoint > 1.4){
+            elevatorSetpoint = 1.4;
+        }else if(elevatorSetpoint < 0){
+            elevatorSetpoint = 0;
+        }
+        */
+        SmartDashboard.putNumber("Elevator Setpoint", elevatorSetpoint);
+    }
+
+    public void setElevatorMeters(double x){
+
+        setElevatorSetpoint(x);
 
         // Takes in current elevator position in meters and the setpoint in meters and outputs change needed
-        double caculated = elevatorPID.calculate(motorOneEncoder.getPosition(), setpoint);
+        double caculated = elevatorPID.calculate(motorOneEncoder.getPosition(), elevatorSetpoint);
 
-        // Half speed change
-        caculated /= 2;
+      //  System.out.println(elevatorSetpoint);
 
         // Set motors to need speed change
         motorOne.set(caculated);
