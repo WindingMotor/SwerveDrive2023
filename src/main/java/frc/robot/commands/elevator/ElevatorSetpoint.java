@@ -21,7 +21,7 @@ public class ElevatorSetpoint extends CommandBase {
   @Override
   public void initialize() {
     // Set the elevator to the desired meters
-    subsystem.updateElevatorSetpoint(meters);
+    subsystem.setElevatorSetpoint(meters);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
