@@ -124,7 +124,7 @@ public class SwerveModule extends SubsystemBase {
     // Add simTurn to the root, add direction to turn, then add it to smart dashboard
     simTurn = root.append(new MechanismLigament2d("Swerve Turn", 2, 1.75));
     simDirection = simTurn.append(new MechanismLigament2d("Wheel direction", 1, 0, 6, new Color8Bit(Color.kPurple)));
-    SmartDashboard.putData(moduleName+" commanded Turn", mod);
+    SmartDashboard.putData(moduleName + " commanded Turn", mod);
 
     //------------//
 

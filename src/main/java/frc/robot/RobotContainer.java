@@ -25,7 +25,7 @@ import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.elevator.ElevatorApriltag;
 import frc.robot.commands.elevator.ElevatorHome;
 import frc.robot.commands.elevator.ElevatorManual;
-import frc.robot.commands.elevator.ElevatorMetersJoystick;
+import frc.robot.commands.elevator.ElevatorJoystick;
 import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorStop;
 import frc.robot.commands.grabber.GrabberDegrees;
@@ -124,7 +124,7 @@ public class RobotContainer {
     () -> swerveSubsystem.getHeading(), // Navx heading
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 
-   elevatorSubsystem.setDefaultCommand(new ElevatorMetersJoystick(elevatorSubsystem,
+   elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
    () -> xbox.getRawAxis(1)));
 
    grabberSubsystem.setDefaultCommand(new GrabberTrigger(grabberSubsystem,

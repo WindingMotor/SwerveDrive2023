@@ -44,7 +44,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     private SparkMaxLimitSwitch bottomLimitSwitch;
 
     // setpoint
-    private double elevatorSetpoint;
+    private double elevatorSetpointMeters;
 
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
@@ -79,12 +79,13 @@ public class ElevatorSubsystem extends SubsystemBase{
         // Set PID values from constants
         elevatorPID = new PIDController(0.5, 0, 0);
 
-        elevatorSetpoint = 0;
+        elevatorSetpointMeters = 0;
     }
 
     @Override
     public void periodic(){
         updateSmartDashboard();
+        updateElevatorMeters();
         
     }
 
@@ -92,32 +93,15 @@ public class ElevatorSubsystem extends SubsystemBase{
         solenoid.toggle();
     }
 
-    public void setElevatorSetpoint(double x){
-        elevatorSetpoint = x * 1.4;
-        /* 
-        if(x > 0){
-            elevatorSetpoint += 0.1;
-        }else if(x < 0){
-            elevatorSetpoint -= 0.1;
-        }
-
-        if(elevatorSetpoint > 1.4){
-            elevatorSetpoint = 1.4;
-        }else if(elevatorSetpoint < 0){
-            elevatorSetpoint = 0;
-        }
-        */
-        SmartDashboard.putNumber("Elevator Setpoint", elevatorSetpoint);
+    public void updateElevatorSetpoint(double input){
+        // Update the elevator setpoint in meters with joystick input with -1 to +1
+        elevatorSetpointMeters += input * 1.4;
     }
 
-    public void setElevatorMeters(double x){
-
-        setElevatorSetpoint(x);
+    private void updateElevatorMeters(){
 
         // Takes in current elevator position in meters and the setpoint in meters and outputs change needed
-        double caculated = elevatorPID.calculate(motorOneEncoder.getPosition(), elevatorSetpoint);
-
-      //  System.out.println(elevatorSetpoint);
+        double caculated = elevatorPID.calculate(motorOneEncoder.getPosition(), elevatorSetpointMeters);
 
         // Set motors to need speed change
         motorOne.set(caculated);

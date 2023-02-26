@@ -38,7 +38,7 @@ public class ElevatorApriltag extends CommandBase {
   public void execute() {
     if(visionSubsystem.hasTargets()){
       DriverStation.reportWarning("ELEV-APRIL: " + visionSubsystem.getTargetTransformHeight(), true);
-      subsystem.setElevatorMeters(visionSubsystem.getTargetTransformHeight());
+      //subsystem.setElevatorMeters(visionSubsystem.getTargetTransformHeight());
     }else{
       DriverStation.reportWarning("ELEV-APRIL NO-TARGETS", true);
       finished = true;

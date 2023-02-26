@@ -2,9 +2,6 @@
 
 package frc.robot.commands.grabber;
 import frc.robot.subsystems.GrabberSubsystem;
-
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */

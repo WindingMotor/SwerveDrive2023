@@ -9,7 +9,7 @@ public class LightStrip{
    // private AddressableLED rightStrip;
 
     private AddressableLEDBuffer stripBuffer;
-    private int rainbowFirstPixelHue = 0;
+  //  private int rainbowFirstPixelHue = 0;
 
     public LightStrip(){
 
@@ -18,15 +18,19 @@ public class LightStrip{
        // rightStrip = new AddressableLED(portTwo);
 
         // Create LED buffer object
-        stripBuffer = new AddressableLEDBuffer(20);
+        stripBuffer = new AddressableLEDBuffer(45);
 
         // Set LED strip length to buffer
         leftStrip.setLength(stripBuffer.getLength());
        // rightStrip.setLength(stripBuffer.getLength());
         
+       stripBuffer.setRGB(2, 255, 0, 0);
+       leftStrip.setData(stripBuffer);
+
     }
 
-    // Abstraction method for setting entire strip color
+    /* 
+     // Abstraction method for setting entire strip color
     private void setStripColor(int r, int g, int b){
         for(var i = 0; i < stripBuffer.getLength(); i++){
             stripBuffer.setRGB(i, r, g, b);
@@ -65,5 +69,6 @@ public class LightStrip{
 
     public void setPurple(){ setStripColor(255, 0, 255);}
 
+*/
 
 }

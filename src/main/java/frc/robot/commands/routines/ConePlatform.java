@@ -2,8 +2,7 @@
 
 package frc.robot.commands.routines;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.elevator.ElevatorMeters;
-import frc.robot.commands.elevator.ElevatorMetersJoystick;
+import frc.robot.commands.elevator.ElevatorSetpoint;
 import frc.robot.commands.grabber.GrabberDegrees;
 import frc.robot.commands.grabber.GrabberIntake;
 import frc.robot.commands.grabber.GrabberSolenoid;
@@ -26,7 +25,7 @@ public class ConePlatform extends SequentialCommandGroup{
         // Turn on intake
         new GrabberIntake(grabberSubsystem),
         // Move the elevator UP to platform height
-        new ElevatorMeters(elevatorSubsystem, 3.0 /* Height of platform in meters */)
+        new ElevatorSetpoint(elevatorSubsystem, 0.952 /* Height of platform in meters */)
         );
     }
 }

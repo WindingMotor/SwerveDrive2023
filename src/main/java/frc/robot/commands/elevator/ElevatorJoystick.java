@@ -2,21 +2,19 @@
 
 package frc.robot.commands.elevator;
 import frc.robot.subsystems.ElevatorSubsystem;
-
 import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class ElevatorMetersJoystick extends CommandBase {
+public class ElevatorJoystick extends CommandBase {
 
   private ElevatorSubsystem subsystem;
-  private Supplier<Double> meters;
+  private Supplier<Double> input;
 
-  public ElevatorMetersJoystick(ElevatorSubsystem subsystem, Supplier<Double> meters) {
+  public ElevatorJoystick(ElevatorSubsystem subsystem, Supplier<Double> input) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
-    this.meters = meters;
+    this.input = input;
     addRequirements(subsystem);
   }
 
@@ -30,14 +28,13 @@ public class ElevatorMetersJoystick extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //subsystem.setElevatorSetpoint(meters.get());
-    subsystem.setElevatorMeters(meters.get());
+    subsystem.updateElevatorSetpoint(input.get());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //subsystem.stopElevator();
+    subsystem.stopElevator();
   }
 
   // Returns true when the command should end.
