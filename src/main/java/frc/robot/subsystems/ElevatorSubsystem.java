@@ -86,6 +86,7 @@ public class ElevatorSubsystem extends SubsystemBase{
     public void periodic(){
         updateSmartDashboard();
         updateElevatorMeters();
+        SmartDashboard.putNumber("Elevator Setpoint", elevatorSetpointMeters);
         
     }
 
@@ -95,7 +96,9 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     public void updateElevatorSetpoint(double input){
         // Update the elevator setpoint in meters with joystick input with -1 to +1
-        elevatorSetpointMeters += input * 1.4;
+       // input /= 2;
+       // input = Math.abs(input) > 0.05 ? input : 0.0;
+        elevatorSetpointMeters = input * 1.4;
     }
 
     public void setElevatorSetpoint(double input){

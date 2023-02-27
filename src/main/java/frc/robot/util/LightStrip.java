@@ -2,14 +2,17 @@
 package frc.robot.util;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class LightStrip{
+public class LightStrip  extends SubsystemBase{
     
     private AddressableLED leftStrip;
    // private AddressableLED rightStrip;
 
     private AddressableLEDBuffer stripBuffer;
-  //  private int rainbowFirstPixelHue = 0;
+    private int rainbowFirstPixelHue = 0;
 
     public LightStrip(){
 
@@ -23,13 +26,28 @@ public class LightStrip{
         // Set LED strip length to buffer
         leftStrip.setLength(stripBuffer.getLength());
        // rightStrip.setLength(stripBuffer.getLength());
-        
-       stripBuffer.setRGB(2, 255, 0, 0);
-       leftStrip.setData(stripBuffer);
+    
+        stripBuffer.setRGB(2, 255, 0, 0);
+        stripBuffer.setRGB(3, 0, 255, 0);
+        stripBuffer.setRGB(4, 0, 0, 255);
+
+        leftStrip.setData(stripBuffer);
+        setGreen();
+        startStrips();
 
     }
 
-    /* 
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+        //updateYellowPurple();
+        if(DriverStation.isEnabled()){
+            setGreen();
+        }else{
+            setRed();
+        }
+      }
+    
      // Abstraction method for setting entire strip color
     private void setStripColor(int r, int g, int b){
         for(var i = 0; i < stripBuffer.getLength(); i++){
@@ -59,6 +77,15 @@ public class LightStrip{
         //rightStrip.setData(stripBuffer);
     }
 
+    public void startStrips(){
+        leftStrip.start();
+    }
+
+    public void stopStrips(){
+        leftStrip.stop();
+    }
+    
+
     public void setRed(){ setStripColor(255, 0, 0);}
 
     public void setGreen(){ setStripColor(0, 255, 0);}
@@ -69,6 +96,18 @@ public class LightStrip{
 
     public void setPurple(){ setStripColor(255, 0, 255);}
 
-*/
+    public void updateYellowPurple(){
+        setYellow();
+        Timer.delay(2);
+        setPurple();
+        Timer.delay(2);
+    }
+
+    public void updateRedBlue(){
+        setRed();
+        Timer.delay(2);
+        setBlue();
+        Timer.delay(2);
+    }
 
 }

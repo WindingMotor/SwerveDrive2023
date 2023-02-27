@@ -6,12 +6,14 @@ import frc.robot.commands.elevator.ElevatorSetpoint;
 import frc.robot.commands.grabber.GrabberDegrees;
 import frc.robot.commands.grabber.GrabberIntake;
 import frc.robot.commands.grabber.GrabberSolenoid;
+import frc.robot.commands.util.ButtonFalse;
+import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 
 public class CubePlatform extends SequentialCommandGroup{
     
-    public CubePlatform(ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem){
+    public CubePlatform(ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, ButtonSubsystem buttonSubsystem){
 
         // If grabber is CLOSED open it for cube pickup
         boolean grabberOpen = grabberSubsystem.isGrabberOpen();
@@ -21,11 +23,13 @@ public class CubePlatform extends SequentialCommandGroup{
         
         addCommands(
         // Set grabber angle to horizontal
-        new GrabberDegrees(grabberSubsystem, 12.0),
+        new GrabberDegrees(grabberSubsystem, 38),
         // Turn on intake
         new GrabberIntake(grabberSubsystem),
         // Move the elevator UP to platform height
-        new ElevatorSetpoint(elevatorSubsystem, 0.952 /* Height of platform in meters */)
+        new ElevatorSetpoint(elevatorSubsystem, 0.952 /* Height of platform in meters */),
+
+        new ButtonFalse(buttonSubsystem)
         );
     }
 }

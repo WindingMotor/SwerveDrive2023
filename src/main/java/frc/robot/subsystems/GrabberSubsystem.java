@@ -71,7 +71,7 @@ public class GrabberSubsystem extends SubsystemBase{
         anglePID = new PIDController(0.01, 0, 0);
 
         // Set defualt angle setpoint
-        angleSetpoint = 12.0;
+        angleSetpoint = 38.0;
 
         grabberOpen = false;
 }
@@ -83,6 +83,7 @@ public class GrabberSubsystem extends SubsystemBase{
         // Update smartdashboard
         updateSmartDashboard();
         setAnglePID(angleSetpoint);
+        SmartDashboard.putBoolean("Grabber Open", grabberOpen);
     }
 
 //---------------------// Intake

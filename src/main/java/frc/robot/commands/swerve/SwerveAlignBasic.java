@@ -52,6 +52,7 @@ public class SwerveAlignBasic extends CommandBase {
     vT = 0;
 
     finished = false;
+
   }
 
   @Override

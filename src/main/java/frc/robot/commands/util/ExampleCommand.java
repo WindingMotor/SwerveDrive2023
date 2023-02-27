@@ -1,7 +1,7 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot.commands.util;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.ButtonSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -11,7 +11,7 @@ public class ExampleCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */ 
-  public ExampleCommand(ExampleSubsystem subsystem) {
+  public ExampleCommand(ButtonSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }

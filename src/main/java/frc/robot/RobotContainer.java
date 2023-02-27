@@ -6,6 +6,8 @@ import javax.xml.namespace.QName;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
@@ -33,12 +35,13 @@ import frc.robot.commands.grabber.GrabberIntake;
 import frc.robot.commands.grabber.GrabberIntakeReverse;
 import frc.robot.commands.grabber.GrabberIntakeStop;
 import frc.robot.commands.grabber.GrabberTrigger;
+import frc.robot.commands.routines.ConeFloor;
+import frc.robot.commands.routines.ConePlatform;
 import frc.robot.commands.grabber.GrabberSolenoid;
 import frc.robot.commands.swerve.SwerveAlignBasic;
 import frc.robot.commands.swerve.SwerveJoystick;
-import frc.robot.commands.swerve.SwerveRotator;
-import frc.robot.commands.swerve.SwerveThrottledJoystick;
 import frc.robot.commands.util.ResetOdometry;
+import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -92,7 +95,9 @@ public class RobotContainer {
   // Create tx16s transmitter
   private final Joystick tx16s = new Joystick(4);
 
- // private final LightStrip strips = new LightStrip();
+  private final LightStrip strips = new LightStrip();
+
+  private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
   //--------------------------P-A-T-H-S----------------------------//
 
@@ -109,6 +114,8 @@ public class RobotContainer {
 
   public RobotContainer(){
 
+    CameraServer.startAutomaticCapture();
+
     // Set swerve subsystem default command to swerve joystick with respective joystick inputs
     // Joystick Numbers 0 = LEFT : 1 = RIGHT
     // Joystick Axises: 0 = left/right : 1 = forward/backwards : 2 = dial
@@ -124,8 +131,8 @@ public class RobotContainer {
     () -> swerveSubsystem.getHeading(), // Navx heading
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 
-   elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
-   () -> xbox.getRawAxis(1)));
+  elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
+  () -> xbox.getRawAxis(1)));
 
    grabberSubsystem.setDefaultCommand(new GrabberTrigger(grabberSubsystem,
    () -> xbox.getRawAxis(3)));
@@ -167,7 +174,7 @@ public class RobotContainer {
     new JoystickButton(xbox, 1).onTrue(new GrabberIntakeReverse(grabberSubsystem));
     new JoystickButton(xbox, 1).toggleOnFalse(new GrabberIntakeStop(grabberSubsystem));
 
-   // new JoystickButton(xbox, 9).onTrue(new ElevatorMeters(elevatorSubsystem, 0.5));
+    new JoystickButton(xbox, 9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem, btn));
 
     // Homing
     //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));

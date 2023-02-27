@@ -27,7 +27,7 @@ public class GrabberTrigger extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.setAngleSetpoint(input.get() * 90 + 12);
+    subsystem.setAngleSetpoint(input.get() * 90 + 38);
   }
 
   // Called once the command ends or is interrupted.
