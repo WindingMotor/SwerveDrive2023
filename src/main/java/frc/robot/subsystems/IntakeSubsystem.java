@@ -25,55 +25,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 // Ignore unused variable warnings
 @SuppressWarnings("unused")
 
-public class GrabberSubsystem extends SubsystemBase{
+public class IntakeSubsystem extends SubsystemBase{
 
     // Solenoid
-    private DoubleSolenoid grabberSolenoid;
-
     // Intake motor
     private CANSparkMax intakeMotor;
     private RelativeEncoder intakeMotorEncoder;
 
-    // Angle motor 
-    private CANSparkMax angleMotor;
-    private RelativeEncoder angleMotorEncoder;
-    private PIDController anglePID;
-    private double angleSetpoint;
-
-    // Solenoid state 
-    private boolean grabberOpen;
-
     // Lift Subsystem Constructor
-    public GrabberSubsystem(){
-
-        // Set solenoid object values
-        grabberSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, GrabberConstants.kGrabberSolenoidPort,  GrabberConstants.kGrabberSolenoidPortOFF);
-
-        // Set default state of solenoid
-        grabberSolenoid.set(Value.kForward);
+    public IntakeSubsystem(){
 
         // Set motor object values takes in CAN ID
         intakeMotor = new CANSparkMax(GrabberConstants.kIntakeMotorPort, MotorType.kBrushless);
-        angleMotor = new CANSparkMax(GrabberConstants.kAngleMotorPort, MotorType.kBrushless);
 
         // Set motors to brake mode
-        intakeMotor.setIdleMode(IdleMode.kBrake);
-        angleMotor.setIdleMode(IdleMode.kBrake);
-
-        // Set angle encoder to angle motor 
-        angleMotorEncoder = angleMotor.getEncoder();
+        intakeMotor.setIdleMode(IdleMode.kCoast);
         intakeMotorEncoder = intakeMotor.getEncoder();
-        
-        // Encoder to degrees converison factor
-        angleMotorEncoder.setPositionConversionFactor(360 / 71.5982);
 
-        // Set PID controller values
-        anglePID = new PIDController(0.01, 0, 0);
 
-        // Set defualt angle setpoint
-        angleSetpoint = 42.0;
-
-        grabberOpen = false;
 }
 
 //---------------------// Periodic loop
@@ -82,21 +51,11 @@ public class GrabberSubsystem extends SubsystemBase{
     public void periodic(){
         // Update smartdashboard
         updateSmartDashboard();
-        setAnglePID(angleSetpoint);
-        SmartDashboard.putBoolean("Grabber Open", grabberOpen);
+
     }
 
 //---------------------// Intake
 
-    // Open or close the intake soldenoid with a toggle
-    public void toggleGrabberSolenoid(){
-        grabberSolenoid.toggle();
-        grabberOpen = !grabberOpen;
-    }
-
-    public boolean isGrabberOpen(){
-        return(grabberOpen);
-    }
 
     // Sets intake motor speed to 1
     public void toggleIntake(){
@@ -112,30 +71,10 @@ public class GrabberSubsystem extends SubsystemBase{
         intakeMotor.set(x);
     }
 
-//---------------------// Angle
-
-    public void setAngleSpeed(double x){
-        angleMotor.set(x);
-    }
-
-    public void setAngleSetpoint(double d){
-        angleSetpoint = d;
-    }
-
-    public void setAnglePID(double x){
-        if(x > 95){
-            x = 95;
-        }else if(x < 8){
-            x = 8;
-        }
-        double angle = anglePID.calculate(angleMotorEncoder.getPosition(), x);
-        angleMotor.set(angle);
-    }
 
 //---------------------// Smartdashboard
 
     public void updateSmartDashboard(){
-        SmartDashboard.putNumber("Grabber Encoder DEG:", angleMotorEncoder.getPosition());
         SmartDashboard.putNumber("Intake Encoder:", intakeMotorEncoder.getPosition());
     }
 

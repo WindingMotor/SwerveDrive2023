@@ -21,11 +21,11 @@ public class ConeFloor extends SequentialCommandGroup{
     
         addCommands(
         // Set grabber angle to horizontal
-        new GrabberDegrees(grabberSubsystem, 38),
+        new GrabberDegrees(grabberSubsystem, 75),
         // Turn on intake
         new GrabberIntake(grabberSubsystem),
         // Move the elevator DOWN to floor height
-        new ElevatorSetpoint(elevatorSubsystem, 0.952 /* Height of platform in meters */)
+        new ElevatorSetpoint(elevatorSubsystem, 0.0 /* Height of platform in meters */)
         );
     }
 }

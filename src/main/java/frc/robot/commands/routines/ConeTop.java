@@ -12,24 +12,16 @@ import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 
-public class ConePlatform extends SequentialCommandGroup{
+public class ConeTop extends SequentialCommandGroup{
     
-    public ConePlatform(ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem){
+    public ConeTop(ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem){
 
-        // If the grabber is OPEN close it for clone pickup
-        boolean grabberOpen = grabberSubsystem.isGrabberOpen();
-        if(grabberOpen){
-        addCommands(new GrabberSolenoid(grabberSubsystem));
-        }
-    
         addCommands(
         // Set grabber angle to horizontal
-        new GrabberDegrees(grabberSubsystem, 25),
+        new GrabberDegrees(grabberSubsystem, 100),
         // Turn on intake
-        new GrabberIntake(grabberSubsystem),
         // Move the elevator UP to platform height
-        new ElevatorSetpoint(elevatorSubsystem, -1.32 /* Height of platform in meters */)
+        new ElevatorSetpoint(elevatorSubsystem, -1.42 /* Height of platform in meters */)
         );
-
     }
 }

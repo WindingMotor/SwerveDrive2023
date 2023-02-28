@@ -1,9 +1,13 @@
 
 package frc.robot.util;
+import java.sql.Driver;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightStrip  extends SubsystemBase{
@@ -13,9 +17,10 @@ public class LightStrip  extends SubsystemBase{
 
     private AddressableLEDBuffer stripBuffer;
     private int rainbowFirstPixelHue = 0;
+    private Joystick tx16s;
 
-    public LightStrip(){
-
+    public LightStrip(Joystick tx16s){
+        this.tx16s = tx16s;
         // Create LED strip object
         leftStrip = new AddressableLED(0);
        // rightStrip = new AddressableLED(portTwo);
@@ -41,11 +46,23 @@ public class LightStrip  extends SubsystemBase{
     public void periodic() {
         // This method will be called once per scheduler run
         //updateYellowPurple();
+        //updateStripRainbow();
+        if(DriverStation.isEnabled()){
+        if(tx16s.getRawButton(3)){
+            setYellow();
+        }else{
+            setPurple();
+        }
+    }else{
+        updateStripRainbow();
+    }
+        /* 
         if(DriverStation.isEnabled()){
             setGreen();
         }else{
             setRed();
-        }
+        }*/
+        
       }
     
      // Abstraction method for setting entire strip color

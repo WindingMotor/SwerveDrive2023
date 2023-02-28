@@ -8,12 +8,12 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class ButtonFalse extends CommandBase {
 
-  private boolean finished = false;
-  private ButtonSubsystem btn;
+  private Boolean finished = false;
+  private XboxController xbox;
 
-  public ButtonFalse(ButtonSubsystem btn){
-    addRequirements(btn);
-    this.btn = btn;
+  public ButtonFalse(XboxController xbox){
+    this.xbox = xbox;
+    finished = false;
   }
 
   @Override
@@ -24,8 +24,10 @@ public class ButtonFalse extends CommandBase {
 
   @Override
   public void execute(){
-    if(btn.isButtonNinePressed()){
-      finished = false;
+    System.out.print(xbox.getRawButton(5));
+
+    if(xbox.getRawButton(5)){
+      finished = true;
     }
   }
 

@@ -1,35 +1,39 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.commands.grabber;
+package frc.robot.commands.elevator;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class GrabberIntakeReverse extends CommandBase {
+public class ElevatorZero extends CommandBase {
 
-  private GrabberSubsystem subsystem;
+  private ElevatorSubsystem subsystem;
+  private GrabberSubsystem grabber;
 
-  public GrabberIntakeReverse(GrabberSubsystem subsystem) {
+  public ElevatorZero(ElevatorSubsystem subsystem, GrabberSubsystem grabberSubsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
+    grabber = grabberSubsystem;
     addRequirements(subsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    // Set the elevator to the desired meters
+    subsystem.setElevatorSetpoint(0.0);
+    grabber.setAngleSetpoint(42);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    subsystem.setIntakeSpeed(-0.75);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    subsystem.stopElevator();
   }
 
   // Returns true when the command should end.

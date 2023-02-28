@@ -30,13 +30,17 @@ import frc.robot.commands.elevator.ElevatorManual;
 import frc.robot.commands.elevator.ElevatorJoystick;
 import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorStop;
+import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.GrabberDegrees;
 import frc.robot.commands.grabber.GrabberIntake;
-import frc.robot.commands.grabber.GrabberIntakeReverse;
+import frc.robot.commands.grabber.GrabberReverse;
 import frc.robot.commands.grabber.GrabberIntakeStop;
 import frc.robot.commands.grabber.GrabberTrigger;
+import frc.robot.commands.routines.ConeBottom;
 import frc.robot.commands.routines.ConeFloor;
 import frc.robot.commands.routines.ConePlatform;
+import frc.robot.commands.routines.ConeTop;
+import frc.robot.commands.routines.Platform;
 import frc.robot.commands.grabber.GrabberSolenoid;
 import frc.robot.commands.swerve.SwerveAlignBasic;
 import frc.robot.commands.swerve.SwerveJoystick;
@@ -95,7 +99,7 @@ public class RobotContainer {
   // Create tx16s transmitter
   private final Joystick tx16s = new Joystick(4);
 
-  private final LightStrip strips = new LightStrip();
+  private final LightStrip strips = new LightStrip(tx16s);
 
   private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
@@ -131,11 +135,11 @@ public class RobotContainer {
     () -> swerveSubsystem.getHeading(), // Navx heading
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 
-  elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
-  () -> xbox.getRawAxis(1)));
+  //elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
+  //() -> xbox.getRawAxis(1)));
 
-   grabberSubsystem.setDefaultCommand(new GrabberTrigger(grabberSubsystem,
-   () -> xbox.getRawAxis(3)));
+  //grabberSubsystem.setDefaultCommand(new GrabberTrigger(grabberSubsystem,
+  //  () -> xbox.getRawAxis(3)));
 
   //>----------S-E-N-D-E-R----------<//
 
@@ -164,24 +168,40 @@ public class RobotContainer {
   // Create button bindings
   private void configureButtonBindings(){
 
+    // ELEVATOR SOLENOID
     new JoystickButton(tx16s, 2).onTrue(new ElevatorSolenoid(elevatorSubsystem));
 
+    // 4 Y - Garbber Solenoid
     new JoystickButton(xbox, 4).onTrue(new GrabberSolenoid(grabberSubsystem));
 
-    new JoystickButton(xbox, 2).onTrue(new GrabberIntake(grabberSubsystem));
-    new JoystickButton(xbox, 2).toggleOnFalse(new GrabberIntakeStop(grabberSubsystem));
-
-    new JoystickButton(xbox, 1).onTrue(new GrabberIntakeReverse(grabberSubsystem));
+    // 1 A - Grabber Intake Forward
+    new JoystickButton(xbox, 1).onTrue(new GrabberIntake(grabberSubsystem));
     new JoystickButton(xbox, 1).toggleOnFalse(new GrabberIntakeStop(grabberSubsystem));
 
-    new JoystickButton(xbox, 9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem, btn));
+    // 2 B - Grabber Intake Reverse
+    new JoystickButton(xbox, 2).onTrue(new GrabberReverse(grabberSubsystem));
+    new JoystickButton(xbox, 2).toggleOnFalse(new GrabberIntakeStop(grabberSubsystem));
 
-    // Homing
+    // 3 X - Elevator Zero
+    new JoystickButton(xbox, 3).onTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
+
+    // 5 LB - Low Score
+    new JoystickButton(xbox, 5).onTrue(new ConeBottom(elevatorSubsystem, grabberSubsystem));
+
+    // 6 RB - High Score
+    new JoystickButton(xbox, 6).onTrue(new ConeTop(elevatorSubsystem, grabberSubsystem));
+
+    // Cone Loading
+    new JoystickButton(xbox, 9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
+    
+        // Homing
     //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
     // Apriltag
    // new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
     // Meters
    // new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
+    
+
 
     //--------------// Auto Bindings
 

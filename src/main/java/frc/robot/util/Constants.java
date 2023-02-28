@@ -176,6 +176,11 @@ public final class Constants {
         public static final int kGrabberSolenoidPortOFF = 15;
 
         public static final double kP = 0.1;
+    }
+
+    public static final class IntakeConstants{
+
+        public static final int kElevatorMotorPort = 13;
 
     }
 
