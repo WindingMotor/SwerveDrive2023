@@ -31,23 +31,27 @@ import frc.robot.commands.elevator.ElevatorJoystick;
 import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorStop;
 import frc.robot.commands.elevator.ElevatorZero;
-import frc.robot.commands.grabber.GrabberDegrees;
-import frc.robot.commands.grabber.GrabberIntake;
-import frc.robot.commands.grabber.GrabberReverse;
-import frc.robot.commands.grabber.GrabberIntakeStop;
-import frc.robot.commands.grabber.GrabberTrigger;
+import frc.robot.commands.grabber.intake.GrabberForward;
+import frc.robot.commands.grabber.intake.GrabberReverse;
+import frc.robot.commands.grabber.intake.GrabberStop;
+import frc.robot.commands.intake.IntakeForward;
+import frc.robot.commands.intake.IntakeReverse;
+import frc.robot.commands.intake.IntakeStop;
 import frc.robot.commands.routines.ConeBottom;
 import frc.robot.commands.routines.ConeFloor;
 import frc.robot.commands.routines.ConePlatform;
 import frc.robot.commands.routines.ConeTop;
 import frc.robot.commands.routines.Platform;
 import frc.robot.commands.grabber.GrabberSolenoid;
+import frc.robot.commands.grabber.angle.GrabberDegrees;
+import frc.robot.commands.grabber.angle.GrabberTrigger;
 import frc.robot.commands.swerve.SwerveAlignBasic;
 import frc.robot.commands.swerve.SwerveJoystick;
 import frc.robot.commands.util.ResetOdometry;
 import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
@@ -110,7 +114,7 @@ public class RobotContainer {
   private Command autoForward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
 
   // Routine
-  private Command autoOne = new AutoOne(swerveSubsystem, xController, yController, ppThetaController);
+  private Command autoOne = new AutoOne(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
 
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -175,12 +179,12 @@ public class RobotContainer {
     new JoystickButton(xbox, 4).onTrue(new GrabberSolenoid(grabberSubsystem));
 
     // 1 A - Grabber Intake Forward
-    new JoystickButton(xbox, 1).onTrue(new GrabberIntake(grabberSubsystem));
-    new JoystickButton(xbox, 1).toggleOnFalse(new GrabberIntakeStop(grabberSubsystem));
+    new JoystickButton(xbox, 1).onTrue(new GrabberForward(grabberSubsystem));
+    new JoystickButton(xbox, 1).toggleOnFalse(new GrabberStop(grabberSubsystem));
 
     // 2 B - Grabber Intake Reverse
     new JoystickButton(xbox, 2).onTrue(new GrabberReverse(grabberSubsystem));
-    new JoystickButton(xbox, 2).toggleOnFalse(new GrabberIntakeStop(grabberSubsystem));
+    new JoystickButton(xbox, 2).toggleOnFalse(new GrabberStop(grabberSubsystem));
 
     // 3 X - Elevator Zero
     new JoystickButton(xbox, 3).onTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
@@ -194,6 +198,11 @@ public class RobotContainer {
     // Cone Loading
     new JoystickButton(xbox, 9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
     
+     // 10 RT Xbox
+     //new JoystickButton(xbox, 10).onTrue(new IntakeForward(intakeSubsystem));
+     //new JoystickButton(xbox, 10).toggleOnFalse(new IntakeStop(intakeSubsystem));
+
+     // 3 X - Elevator Zero
         // Homing
     //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
     // Apriltag

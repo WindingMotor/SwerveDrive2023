@@ -3,9 +3,9 @@
 package frc.robot.commands.routines;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.elevator.ElevatorSetpoint;
-import frc.robot.commands.grabber.GrabberDegrees;
-import frc.robot.commands.grabber.GrabberIntake;
 import frc.robot.commands.grabber.GrabberSolenoid;
+import frc.robot.commands.grabber.angle.GrabberDegrees;
+import frc.robot.commands.grabber.intake.GrabberForward;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 
@@ -23,7 +23,7 @@ public class CubeFloor extends SequentialCommandGroup{
         // Set grabber angle to horizontal
         new GrabberDegrees(grabberSubsystem, 38),
         // Turn on intake
-        new GrabberIntake(grabberSubsystem),
+        new GrabberForward(grabberSubsystem),
         // Move the elevator DOWN to floor height
         new ElevatorSetpoint(elevatorSubsystem, 0.952 /* Height of platform in meters */)
         );

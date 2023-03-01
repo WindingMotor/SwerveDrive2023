@@ -1,20 +1,18 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.commands.grabber;
+package frc.robot.commands.grabber.intake;
 import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class GrabberIntakeManual extends CommandBase {
+public class GrabberForward extends CommandBase {
 
   private GrabberSubsystem subsystem;
-  private double speed;
 
-  public GrabberIntakeManual(GrabberSubsystem subsystem, double speed) {
+  public GrabberForward(GrabberSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     addRequirements(subsystem);
-    this.speed = speed;
   }
 
   // Called when the command is initially scheduled.
@@ -26,18 +24,17 @@ public class GrabberIntakeManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.setIntakeSpeed(speed);
+    subsystem.setIntakeSpeed(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

@@ -180,7 +180,7 @@ public final class Constants {
 
     public static final class IntakeConstants{
 
-        public static final int kElevatorMotorPort = 13;
+        public static final int kIntakeMotorPort = 13;
 
     }
 

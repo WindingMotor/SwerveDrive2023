@@ -3,6 +3,7 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.Constants.GrabberConstants;
+import frc.robot.util.Constants.IntakeConstants;
 import frc.robot.util.Constants.VisionConstants;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
@@ -10,7 +11,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -36,11 +36,11 @@ public class IntakeSubsystem extends SubsystemBase{
     public IntakeSubsystem(){
 
         // Set motor object values takes in CAN ID
-        intakeMotor = new CANSparkMax(GrabberConstants.kIntakeMotorPort, MotorType.kBrushless);
+        //intakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotorPort, MotorType.kBrushless);
 
         // Set motors to brake mode
-        intakeMotor.setIdleMode(IdleMode.kCoast);
-        intakeMotorEncoder = intakeMotor.getEncoder();
+       // intakeMotor.setIdleMode(IdleMode.kCoast);
+        //intakeMotorEncoder = intakeMotor.getEncoder();
 
 
 }

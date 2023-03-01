@@ -11,7 +11,11 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.TrajectoryWeaver;
+import frc.robot.commands.elevator.ElevatorSetpoint;
+import frc.robot.commands.routines.ConeBottom;
 import frc.robot.commands.util.ReportString;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 
@@ -24,7 +28,7 @@ public class AutoOne extends SequentialCommandGroup{
     // private final HashMap<String, Command> eventMap = new HashMap<>();
 
     // Routine command constructor
-    public AutoOne(SwerveSubsystem swerveSubsystem,PIDController xController,
+    public AutoOne(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController){
 
         // Add commands to event map markers
@@ -33,9 +37,10 @@ public class AutoOne extends SequentialCommandGroup{
         // Add commands to run
         addCommands(
         // Print out auto start
-        new ParallelRaceGroup( new ReportString("AutoOne: Started"), new WaitCommand(0.1)),
-        new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, pathOne, true),
-        new ParallelRaceGroup( new ReportString("AutoOne: Ended"), new WaitCommand(0.1))
+        //new ParallelRaceGroup( new ReportString("AutoOne: Started"), new WaitCommand(0.1)),
+        new ConeBottom(elevatorSubsystem, grabberSubsystem)
+       // new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, pathOne, true),
+      //  new ParallelRaceGroup( new ReportString("AutoOne: Ended"), new WaitCommand(0.1))
         );
     }
 
