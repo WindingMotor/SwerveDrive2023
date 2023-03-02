@@ -21,7 +21,7 @@ public class TrajectoryRunner extends SequentialCommandGroup{
     Trajectory trajectory, TrajectoryConfig trajectoryConfig){
 
         // Tell theta PID controller that its a circle
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        thetaController.enableContinuousInput(0, 360);
 
          // Create controller command, this outputs module states for the trajectory given
         SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, thetaController, swerveSubsystem::setModuleStates, swerveSubsystem);

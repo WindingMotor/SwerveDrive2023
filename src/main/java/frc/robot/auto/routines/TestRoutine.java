@@ -31,7 +31,7 @@ public class TestRoutine extends SequentialCommandGroup{
         addCommands(
 
         //new ReportWarning("Running TRAJ1", true),
-        new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, pathOne, true)
+        new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, pathOne, true, false)
        // new ReportWarning("Running TRAJ2", true),
         //new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, pathTwo, eventMap, false)
 

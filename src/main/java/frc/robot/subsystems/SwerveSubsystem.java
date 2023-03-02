@@ -102,6 +102,10 @@ public class SwerveSubsystem extends SubsystemBase {
     gyro.reset();
   }
 
+  public void resetYaw(){
+    gyro.zeroYaw();
+  }
+
   // Return heading in -180* to 180* format
   public double getHeading(){
     return gyro.getAngle();

@@ -24,7 +24,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoOne extends SequentialCommandGroup{
 
     // PPTrajectory and event map
-    private final PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(4, 2)); 
+    private final PathPlannerTrajectory back = PathPlanner.loadPath("backwards0.5M", new PathConstraints(4, 2)); 
     // private final HashMap<String, Command> eventMap = new HashMap<>();
 
     // Routine command constructor
@@ -36,11 +36,25 @@ public class AutoOne extends SequentialCommandGroup{
 
         // Add commands to run
         addCommands(
-        // Print out auto start
-        //new ParallelRaceGroup( new ReportString("AutoOne: Started"), new WaitCommand(0.1)),
-        new ConeBottom(elevatorSubsystem, grabberSubsystem)
-       // new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, pathOne, true),
-      //  new ParallelRaceGroup( new ReportString("AutoOne: Ended"), new WaitCommand(0.1))
+
+ // new ConeTop(elevatorSubsystem, grabberSubsystem),
+       // new WaitCommand(2.5),
+      //  new ElevatorSolenoid(elevatorSubsystem),
+     //   new WaitCommand(2),
+      //  new GrabberSolenoid(grabberSubsystem),
+      //  new WaitCommand(1),
+      //  new ElevatorSolenoid(elevatorSubsystem),
+      //  new WaitCommand(1.5),
+        new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, back, false, true)
+     //   new ElevatorZero(elevatorSubsystem, grabberSubsystem),
+     //   new WaitCommand(1),
+     //   new GrabberSolenoid(grabberSubsystem)
+        //new WaitCommand(2),
+        //new ResetOdometry(swerveSubsystem, new Pose2d(0.0,0.0,new Rotation2d().fromDegrees(0)))
+
+
+
+
         );
     }
 

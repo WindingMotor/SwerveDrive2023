@@ -110,18 +110,13 @@ public class RobotContainer {
   //--------------------------P-A-T-H-S----------------------------//
 
   // Manual path 
-  private final PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
-  private Command autoForward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
-
-  // Routine
-  private Command autoOne = new AutoOne(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
-
-  private SendableChooser<Command> autoChooser = new SendableChooser<>();
+  //private final PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
+//  private Command autoForward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
 
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
   public RobotContainer(){
-
+    
     CameraServer.startAutomaticCapture();
 
     // Set swerve subsystem default command to swerve joystick with respective joystick inputs
@@ -147,14 +142,6 @@ public class RobotContainer {
 
   //>----------S-E-N-D-E-R----------<//
 
-  // Add auto commands to selector
-    autoChooser.setDefaultOption("Forward", autoForward);
-    autoChooser.addOption("AutoOne", autoOne);
-
-  // Add auto chooser to smart dashboard
-    SmartDashboard.putData(autoChooser);
-  
-  //>------------------------------<//
 
     // Run button binding method
     configureButtonBindings();
@@ -234,9 +221,12 @@ public class RobotContainer {
   public Command getAutonomousCommand(){
 
     // Command to run
-    Command autoCommand = null;
+      // Routine
+   Command autoOne = new AutoOne(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
 
-    return autoChooser.getSelected();
+
+
+    return autoOne;
   }
 
 }

@@ -5,6 +5,9 @@ import java.util.function.Consumer;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -22,15 +25,17 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
     // Constructor that obtains required values
     public TrajectoryWeaver(SwerveSubsystem swerveSubsystem,PIDController xController,
     PIDController yController,  PIDController ppthetaController,
-    PathPlannerTrajectory pptrajectory, Boolean isFirstPath){
+    PathPlannerTrajectory pptrajectory, Boolean isFirstPath, Boolean autoBack){
       
         // Tell theta PID controller that its a circle
-        ppthetaController.enableContinuousInput(-Math.PI, Math.PI);
+        ppthetaController.enableContinuousInput(0, 360);
 
         // Check if first path
         if(isFirstPath){
            // Reset robot odometry before movement 
           addCommands(new ResetOdometry(swerveSubsystem, pptrajectory.getInitialPose()));
+        }else if(autoBack){
+            addCommands(new ResetOdometry(swerveSubsystem, pptrajectory.getInitialPose().plus(new Transform2d(new Pose2d(), new Pose2d(0.0,0.0, new Rotation2d().fromDegrees(270))))));
         }
 
         addCommands(
