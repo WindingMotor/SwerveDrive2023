@@ -11,6 +11,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -116,7 +117,7 @@ public class RobotContainer {
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
   public RobotContainer(){
-    
+
     CameraServer.startAutomaticCapture();
 
     // Set swerve subsystem default command to swerve joystick with respective joystick inputs
@@ -126,6 +127,7 @@ public class RobotContainer {
 
   //>--------------T-R-A-N-S-----------------//
     
+  /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> tx16s.getRawAxis(0), // X-Axis
     () -> -tx16s.getRawAxis(1), // Y-Axis
@@ -133,6 +135,17 @@ public class RobotContainer {
     () -> tx16s.getRawButton(0), // Field oriented -does nothing right now
     () -> swerveSubsystem.getHeading(), // Navx heading
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
+*/
+
+swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
+() -> -tx16s.getRawAxis(0), // X-Axis
+() -> tx16s.getRawAxis(1), // Y-Axis
+() -> tx16s.getRawAxis(3), // R-Axis
+() -> tx16s.getRawButton(0), // Field oriented -does nothing right now
+() -> swerveSubsystem.getHeading(), // Navx heading
+() -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
+
+
 
   //elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
   //() -> xbox.getRawAxis(1)));
@@ -184,7 +197,9 @@ public class RobotContainer {
 
     // Cone Loading
     new JoystickButton(xbox, 9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
-    
+ 
+    new JoystickButton(xbox, 10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
+    new JoystickButton(xbox, 10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
      // 10 RT Xbox
      //new JoystickButton(xbox, 10).onTrue(new IntakeForward(intakeSubsystem));
      //new JoystickButton(xbox, 10).toggleOnFalse(new IntakeStop(intakeSubsystem));
@@ -220,11 +235,12 @@ public class RobotContainer {
   // Return the command to run during auto
   public Command getAutonomousCommand(){
 
+  // PathPlannerTrajectory back = PathPlanner.loadPath("backwards0.5M", new PathConstraints(4, 2)); 
     // Command to run
       // Routine
    Command autoOne = new AutoOne(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
 
-
+  // Command auto = swerveSubsystem.auto(back, true);
 
     return autoOne;
   }

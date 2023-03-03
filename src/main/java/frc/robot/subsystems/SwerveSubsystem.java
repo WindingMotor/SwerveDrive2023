@@ -2,6 +2,11 @@
 
 package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -9,7 +14,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.Constants.AutoConstants;
 import frc.robot.util.Constants.DriveConstants;
 
 
@@ -77,9 +87,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // BROKEN FOR 2023
   // Create odometer for error correction
-  private SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
-  new Rotation2d(0), getModulePositions());
-
+  private SwerveDriveOdometry odometer;
   // Swerve subsystem constructor
   public SwerveSubsystem() {
 
@@ -95,6 +103,10 @@ public class SwerveSubsystem extends SubsystemBase {
         } catch (Exception e) {
         }
     }).start();
+
+    odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
+    new Rotation2d(0), getModulePositions());
+  
   }
 
   // Reset gyro heading 
@@ -174,8 +186,8 @@ public class SwerveSubsystem extends SubsystemBase {
     odometer.update(getRotation2d(), getModulePositions());
 
     // Odometry
-   // SmartDashboard.putNumber("Heading", getHeading());
-  //  SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
+    SmartDashboard.putNumber("Heading", getHeading());
+   SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
    // SmartDashboard.putNumber("R2D deg", getGyroDegrees());
     
     // Update robot monitor
@@ -189,6 +201,21 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
 
+  
+  public Command auto(PathPlannerTrajectory traj, boolean isFirstPath){
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> {
+        if(isFirstPath){
+          this.resetOdometry(traj.getInitialHolonomicPose());
+        }
+      }),
+
+      new PPSwerveControllerCommand(traj, this::getPose, DriveConstants.kDriveKinematics, new PIDController(AutoConstants.kPXController, 0, 0),
+      new PIDController(AutoConstants.kPYController, 0, 0), 
+      new PIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController), 
+      this::setModuleStates)
+    );
+  }
 
 
 }

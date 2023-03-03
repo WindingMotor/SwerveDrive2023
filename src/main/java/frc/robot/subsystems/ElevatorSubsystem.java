@@ -106,6 +106,16 @@ public class ElevatorSubsystem extends SubsystemBase{
         elevatorSetpointMeters = input;
     }
 
+    public void addElevatorSetpoint(double input){
+        // Update the elevator setpoint in meters with joystick input with -1 to +1
+        elevatorSetpointMeters += input;
+    }
+
+    public void subtractElevatorSetpoint(double input){
+        // Update the elevator setpoint in meters with joystick input with -1 to +1
+        elevatorSetpointMeters -= input;
+    }
+
     private void updateElevatorMeters(){
 
         // Takes in current elevator position in meters and the setpoint in meters and outputs change needed

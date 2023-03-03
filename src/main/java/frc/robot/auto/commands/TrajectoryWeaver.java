@@ -28,14 +28,14 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
     PathPlannerTrajectory pptrajectory, Boolean isFirstPath, Boolean autoBack){
       
         // Tell theta PID controller that its a circle
-        ppthetaController.enableContinuousInput(0, 360);
+        ppthetaController.enableContinuousInput(-180, 180);
 
         // Check if first path
         if(isFirstPath){
            // Reset robot odometry before movement 
-          addCommands(new ResetOdometry(swerveSubsystem, pptrajectory.getInitialPose()));
+          addCommands(new ResetOdometry(swerveSubsystem, pptrajectory.getInitialHolonomicPose()));
         }else if(autoBack){
-            addCommands(new ResetOdometry(swerveSubsystem, pptrajectory.getInitialPose().plus(new Transform2d(new Pose2d(), new Pose2d(0.0,0.0, new Rotation2d().fromDegrees(270))))));
+            //addCommands(new ResetOdometry(swerveSubsystem, pptrajectory.getInitialHolonomicPose().plus(new Transform2d(new Pose2d(), new Pose2d(0.0,0.0, new Rotation2d().fromDegrees(90))))));
         }
 
         addCommands(
