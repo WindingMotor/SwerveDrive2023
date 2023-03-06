@@ -63,6 +63,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -105,6 +106,7 @@ public class RobotContainer {
 
   // Create tx16s transmitter
   private final Joystick tx16s = new Joystick(4);
+  private final CommandJoystick tx16sCOMD = new CommandJoystick(4);
 
   private final LightStrip strips = new LightStrip(tx16s);
 
@@ -140,10 +142,10 @@ public class RobotContainer {
 */
 
 swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
-() -> -tx16s.getRawAxis(0), // X-Axis
-() -> tx16s.getRawAxis(1), // Y-Axis
-() -> tx16s.getRawAxis(3), // R-Axis
-() -> tx16s.getRawButton(0), // Field oriented -does nothing right now
+() -> tx16sCOMD.getRawAxis(0), // X-Axis
+() -> tx16sCOMD.getRawAxis(1), // Y-Axis
+() -> tx16sCOMD.getRawAxis(3), // R-Axis
+() -> tx16s.getRawButton(2), // Field oriented -does nothing right now
 () -> swerveSubsystem.getHeading(), // Navx heading
 () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 
@@ -211,6 +213,8 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     xbox.povUp().toggleOnTrue(new ElevatorUpSetpoint(elevatorSubsystem));
     xbox.povDown().toggleOnTrue(new ElevatorDownSetpoint(elevatorSubsystem));
 
+    tx16sCOMD.axisGreaterThan(1, 50.0).toggleOnTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
+    
     // Homing
     //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
     // Apriltag
