@@ -1,12 +1,9 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot;
-import javax.xml.namespace.QName;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -38,11 +35,11 @@ import frc.robot.commands.grabber.intake.GrabberStop;
 import frc.robot.commands.intake.IntakeForward;
 import frc.robot.commands.intake.IntakeReverse;
 import frc.robot.commands.intake.IntakeStop;
-import frc.robot.commands.routines.ConeBottom;
-import frc.robot.commands.routines.ConeFloor;
-import frc.robot.commands.routines.ConePlatform;
-import frc.robot.commands.routines.ConeTop;
-import frc.robot.commands.routines.Platform;
+import frc.robot.commands.routines.loading.ConeFloor;
+import frc.robot.commands.routines.loading.ConePlatform;
+import frc.robot.commands.routines.scoring.ConeBottom;
+import frc.robot.commands.routines.scoring.ConeTop;
+import frc.robot.commands.routines.util.ObjectLaunch;
 import frc.robot.commands.grabber.GrabberSolenoid;
 import frc.robot.commands.grabber.angle.GrabberDegrees;
 import frc.robot.commands.grabber.angle.GrabberTrigger;
@@ -63,6 +60,8 @@ import frc.robot.util.Constants.IOConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 // Ignore unused variable warnings
@@ -99,14 +98,15 @@ public class RobotContainer {
   private final PIDController ppThetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
 
   // Create xbox controller
-  private final XboxController xbox = new XboxController(3);
+  //private final XboxController xbox = new XboxController(3);
+  private final CommandXboxController xbox = new CommandXboxController(3);
 
   // Create tx16s transmitter
   private final Joystick tx16s = new Joystick(4);
 
   private final LightStrip strips = new LightStrip(tx16s);
 
-  private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
+  //private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
   //--------------------------P-A-T-H-S----------------------------//
 
@@ -176,33 +176,31 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     new JoystickButton(tx16s, 2).onTrue(new ElevatorSolenoid(elevatorSubsystem));
 
     // 4 Y - Garbber Solenoid
-    new JoystickButton(xbox, 4).onTrue(new GrabberSolenoid(grabberSubsystem));
+    xbox.y().onTrue(new GrabberSolenoid(grabberSubsystem));
 
     // 1 A - Grabber Intake Forward
-    new JoystickButton(xbox, 1).onTrue(new GrabberForward(grabberSubsystem));
-    new JoystickButton(xbox, 1).toggleOnFalse(new GrabberStop(grabberSubsystem));
+    xbox.a().onTrue(new GrabberForward(grabberSubsystem));
+    xbox.a().toggleOnFalse(new GrabberStop(grabberSubsystem));
 
     // 2 B - Grabber Intake Reverse
-    new JoystickButton(xbox, 2).onTrue(new GrabberReverse(grabberSubsystem));
-    new JoystickButton(xbox, 2).toggleOnFalse(new GrabberStop(grabberSubsystem));
+    xbox.b().onTrue(new GrabberReverse(grabberSubsystem));
+    xbox.b().toggleOnFalse(new GrabberStop(grabberSubsystem));
 
     // 3 X - Elevator Zero
-    new JoystickButton(xbox, 3).onTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
+    xbox.x().onTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
 
     // 5 LB - Low Score
-    new JoystickButton(xbox, 5).onTrue(new ConeBottom(elevatorSubsystem, grabberSubsystem));
+    xbox.leftBumper().onTrue(new ConeBottom(elevatorSubsystem, grabberSubsystem));
 
     // 6 RB - High Score
-    new JoystickButton(xbox, 6).onTrue(new ConeTop(elevatorSubsystem, grabberSubsystem));
+    xbox.rightBumper().onTrue(new ConeTop(elevatorSubsystem, grabberSubsystem));
 
-    // Cone Loading
-    new JoystickButton(xbox, 9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
- 
-    new JoystickButton(xbox, 10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
-    new JoystickButton(xbox, 10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
-     // 10 RT Xbox
-     //new JoystickButton(xbox, 10).onTrue(new IntakeForward(intakeSubsystem));
-     //new JoystickButton(xbox, 10).toggleOnFalse(new IntakeStop(intakeSubsystem));
+    // 9 LJ - Loading station
+    xbox.button(9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
+
+    // 10 RJ - Reset Odometry
+    xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
+    xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
 
      // 3 X - Elevator Zero
         // Homing

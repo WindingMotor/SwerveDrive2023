@@ -11,6 +11,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -43,8 +44,11 @@ public class ElevatorSubsystem extends SubsystemBase{
     // Limit switch
     private SparkMaxLimitSwitch bottomLimitSwitch;
 
-    // setpoint
+    // Elevator Setpoint
     private double elevatorSetpointMeters;
+
+    // Elevator Change of speed limiter
+    private SlewRateLimiter slewRateLimiter;
 
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
@@ -71,14 +75,20 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         // Set motor encoder position factors to meters
         motorOneEncoder.setPositionConversionFactor(0.02367145);
+        
         //0.0066509 * 4
         // Get and set bottom limit switch
         bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         bottomLimitSwitch.enableLimitSwitch(false);
 
-        // Set PID values from constants
-        elevatorPID = new PIDController(0.5, 0, 0);
+        // Set PID values for elevator
+        //elevatorPID = new PIDController(0.5, 0, 0);
+        elevatorPID = new PIDController(0.7, 0.05, 0);
 
+        // Set slew rate limiter max and min rates
+        slewRateLimiter = new SlewRateLimiter(5, 10, 0);
+        
+        // Set setpoint to zero
         elevatorSetpointMeters = 0;
     }
 
@@ -121,7 +131,10 @@ public class ElevatorSubsystem extends SubsystemBase{
         // Takes in current elevator position in meters and the setpoint in meters and outputs change needed
         double caculated = elevatorPID.calculate(motorOneEncoder.getPosition(), elevatorSetpointMeters);
 
-        // Set motors to need speed change
+        // Apply slew to caculated output
+        caculated = slewRateLimiter.calculate(caculated);
+
+        // Set motors to caculated value
         motorOne.set(caculated);
     }
 
