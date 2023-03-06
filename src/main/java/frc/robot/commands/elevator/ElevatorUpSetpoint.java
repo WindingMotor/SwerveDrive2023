@@ -11,12 +11,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ElevatorUpSetpoint extends CommandBase {
 
   private ElevatorSubsystem subsystem;
-  private Supplier<Double> input;
 
-  public ElevatorUpSetpoint(ElevatorSubsystem subsystem, Supplier<Double> input) {
+  public ElevatorUpSetpoint(ElevatorSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
-    this.input = input;
     addRequirements(subsystem);
 
   }
@@ -25,9 +23,7 @@ public class ElevatorUpSetpoint extends CommandBase {
   @Override
   public void initialize() {
     // Set the elevator to the desired meters
-    if(input.get() > 0.1){
       subsystem.addElevatorSetpoint(0.125);
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

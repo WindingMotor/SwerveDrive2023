@@ -23,11 +23,13 @@ import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.elevator.ElevatorApriltag;
+import frc.robot.commands.elevator.ElevatorDownSetpoint;
 import frc.robot.commands.elevator.ElevatorHome;
 import frc.robot.commands.elevator.ElevatorManual;
 import frc.robot.commands.elevator.ElevatorJoystick;
 import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorStop;
+import frc.robot.commands.elevator.ElevatorUpSetpoint;
 import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.intake.GrabberForward;
 import frc.robot.commands.grabber.intake.GrabberReverse;
@@ -202,13 +204,19 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
     xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
 
-     // 3 X - Elevator Zero
-        // Homing
+    // Manual grabber angle test code
+    xbox.axisGreaterThan(1, 5.0).onTrue(new GrabberTrigger(grabberSubsystem, () -> xbox.getRawAxis(1)));
+    
+    // D-Pad POV testing - elevator setpoint
+    xbox.povUp().toggleOnTrue(new ElevatorUpSetpoint(elevatorSubsystem));
+    xbox.povDown().toggleOnTrue(new ElevatorDownSetpoint(elevatorSubsystem));
+
+    // Homing
     //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
     // Apriltag
-   // new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
+    // new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
     // Meters
-   // new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
+    // new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
     
 
 
