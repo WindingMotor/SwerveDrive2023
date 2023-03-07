@@ -75,7 +75,7 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         // Set motor encoder position factors to meters
         motorOneEncoder.setPositionConversionFactor(0.02367145);
-        
+
         //0.0066509 * 4
         // Get and set bottom limit switch
         bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
@@ -136,6 +136,7 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         // Set motors to caculated value
         motorOne.set(caculated);
+
     }
 
     // Set both elevator motors to input

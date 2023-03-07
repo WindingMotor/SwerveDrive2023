@@ -149,8 +149,6 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 () -> swerveSubsystem.getHeading(), // Navx heading
 () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 
-
-
   //elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
   //() -> xbox.getRawAxis(1)));
 
@@ -158,7 +156,6 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   //  () -> xbox.getRawAxis(3)));
 
   //>----------S-E-N-D-E-R----------<//
-
 
     // Run button binding method
     configureButtonBindings();
@@ -214,15 +211,13 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     xbox.povDown().toggleOnTrue(new ElevatorDownSetpoint(elevatorSubsystem));
 
     tx16sCOMD.axisGreaterThan(1, 50.0).toggleOnTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
-    
+
     // Homing
     //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
     // Apriltag
     // new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
     // Meters
     // new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
-    
-
 
     //--------------// Auto Bindings
 
