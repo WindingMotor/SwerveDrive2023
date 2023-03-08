@@ -1,12 +1,9 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot;
-import javax.xml.namespace.QName;
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -26,11 +23,13 @@ import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.elevator.ElevatorApriltag;
+import frc.robot.commands.elevator.ElevatorDownSetpoint;
 import frc.robot.commands.elevator.ElevatorHome;
 import frc.robot.commands.elevator.ElevatorManual;
 import frc.robot.commands.elevator.ElevatorJoystick;
 import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorStop;
+import frc.robot.commands.elevator.ElevatorUpSetpoint;
 import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.intake.GrabberForward;
 import frc.robot.commands.grabber.intake.GrabberReverse;
@@ -38,11 +37,11 @@ import frc.robot.commands.grabber.intake.GrabberStop;
 import frc.robot.commands.intake.IntakeForward;
 import frc.robot.commands.intake.IntakeReverse;
 import frc.robot.commands.intake.IntakeStop;
-import frc.robot.commands.routines.ConeBottom;
-import frc.robot.commands.routines.ConeFloor;
-import frc.robot.commands.routines.ConePlatform;
-import frc.robot.commands.routines.ConeTop;
-import frc.robot.commands.routines.Platform;
+import frc.robot.commands.routines.loading.ConeFloor;
+import frc.robot.commands.routines.loading.ConePlatform;
+import frc.robot.commands.routines.scoring.ConeBottom;
+import frc.robot.commands.routines.scoring.ConeTop;
+import frc.robot.commands.routines.util.ObjectLaunch;
 import frc.robot.commands.grabber.GrabberSolenoid;
 import frc.robot.commands.grabber.angle.GrabberDegrees;
 import frc.robot.commands.grabber.angle.GrabberTrigger;
@@ -63,6 +62,9 @@ import frc.robot.util.Constants.IOConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 // Ignore unused variable warnings
@@ -99,14 +101,16 @@ public class RobotContainer {
   private final PIDController ppThetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
 
   // Create xbox controller
-  private final XboxController xbox = new XboxController(3);
+  //private final XboxController xbox = new XboxController(3);
+  private final CommandXboxController xbox = new CommandXboxController(3);
 
   // Create tx16s transmitter
   private final Joystick tx16s = new Joystick(4);
+  private final CommandJoystick tx16sCOMD = new CommandJoystick(4);
 
   private final LightStrip strips = new LightStrip(tx16s);
 
-  private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
+  //private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
   //--------------------------P-A-T-H-S----------------------------//
 
@@ -138,14 +142,12 @@ public class RobotContainer {
 */
 
 swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
-() -> -tx16s.getRawAxis(0), // X-Axis
-() -> tx16s.getRawAxis(1), // Y-Axis
-() -> tx16s.getRawAxis(3), // R-Axis
-() -> tx16s.getRawButton(0), // Field oriented -does nothing right now
+() -> tx16sCOMD.getRawAxis(0), // X-Axis
+() -> tx16sCOMD.getRawAxis(1), // Y-Axis
+() -> tx16sCOMD.getRawAxis(3), // R-Axis
+() -> tx16s.getRawButton(2), // Field oriented -does nothing right now
 () -> swerveSubsystem.getHeading(), // Navx heading
 () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
-
-
 
   //elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
   //() -> xbox.getRawAxis(1)));
@@ -154,7 +156,6 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   //  () -> xbox.getRawAxis(3)));
 
   //>----------S-E-N-D-E-R----------<//
-
 
     // Run button binding method
     configureButtonBindings();
@@ -176,43 +177,47 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     new JoystickButton(tx16s, 2).onTrue(new ElevatorSolenoid(elevatorSubsystem));
 
     // 4 Y - Garbber Solenoid
-    new JoystickButton(xbox, 4).onTrue(new GrabberSolenoid(grabberSubsystem));
+    xbox.y().onTrue(new GrabberSolenoid(grabberSubsystem));
 
     // 1 A - Grabber Intake Forward
-    new JoystickButton(xbox, 1).onTrue(new GrabberForward(grabberSubsystem));
-    new JoystickButton(xbox, 1).toggleOnFalse(new GrabberStop(grabberSubsystem));
+    xbox.a().onTrue(new GrabberForward(grabberSubsystem));
+    xbox.a().toggleOnFalse(new GrabberStop(grabberSubsystem));
 
     // 2 B - Grabber Intake Reverse
-    new JoystickButton(xbox, 2).onTrue(new GrabberReverse(grabberSubsystem));
-    new JoystickButton(xbox, 2).toggleOnFalse(new GrabberStop(grabberSubsystem));
+    xbox.b().onTrue(new GrabberReverse(grabberSubsystem));
+    xbox.b().toggleOnFalse(new GrabberStop(grabberSubsystem));
 
     // 3 X - Elevator Zero
-    new JoystickButton(xbox, 3).onTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
+    xbox.x().onTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
 
     // 5 LB - Low Score
-    new JoystickButton(xbox, 5).onTrue(new ConeBottom(elevatorSubsystem, grabberSubsystem));
+    xbox.leftBumper().onTrue(new ConeBottom(elevatorSubsystem, grabberSubsystem));
 
     // 6 RB - High Score
-    new JoystickButton(xbox, 6).onTrue(new ConeTop(elevatorSubsystem, grabberSubsystem));
+    xbox.rightBumper().onTrue(new ConeTop(elevatorSubsystem, grabberSubsystem));
 
-    // Cone Loading
-    new JoystickButton(xbox, 9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
- 
-    new JoystickButton(xbox, 10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
-    new JoystickButton(xbox, 10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
-     // 10 RT Xbox
-     //new JoystickButton(xbox, 10).onTrue(new IntakeForward(intakeSubsystem));
-     //new JoystickButton(xbox, 10).toggleOnFalse(new IntakeStop(intakeSubsystem));
+    // 9 LJ - Loading station
+    xbox.button(9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
 
-     // 3 X - Elevator Zero
-        // Homing
+    // 10 RJ - Reset Odometry
+    xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
+    xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
+
+    // Manual grabber angle test code
+    xbox.axisGreaterThan(1, 5.0).onTrue(new GrabberTrigger(grabberSubsystem, () -> xbox.getRawAxis(1)));
+    
+    // D-Pad POV testing - elevator setpoint
+    xbox.povUp().toggleOnTrue(new ElevatorUpSetpoint(elevatorSubsystem));
+    xbox.povDown().toggleOnTrue(new ElevatorDownSetpoint(elevatorSubsystem));
+
+    tx16sCOMD.axisGreaterThan(1, 50.0).toggleOnTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
+
+    // Homing
     //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
     // Apriltag
-   // new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
+    // new JoystickButton(xbox, 2).onTrue(new ElevatorApriltag(elevatorSubsystem, visionSubsystem));
     // Meters
-   // new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
-    
-
+    // new JoystickButton(xbox, 3).onTrue(new ElevatorMeters(elevatorSubsystem, 1.0));
 
     //--------------// Auto Bindings
 
