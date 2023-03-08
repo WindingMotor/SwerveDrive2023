@@ -11,6 +11,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -46,6 +47,8 @@ public class ElevatorSubsystem extends SubsystemBase{
     // setpoint
     private double elevatorSetpointMeters;
 
+   // private final SlewRateLimiter slew;
+
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
 
@@ -77,8 +80,10 @@ public class ElevatorSubsystem extends SubsystemBase{
         bottomLimitSwitch.enableLimitSwitch(false);
 
         // Set PID values from constants
-        elevatorPID = new PIDController(0.5, 0, 0);
+            elevatorPID = new PIDController(0.5, 0, 0);
+            //elevatorPID = new PIDController(0.6, 0.06, 0);
 
+        //slew = new SlewRateLimiter(10, 5, 0);
         elevatorSetpointMeters = 0;
     }
 
@@ -103,6 +108,14 @@ public class ElevatorSubsystem extends SubsystemBase{
 
     public void setElevatorSetpoint(double input){
         // Update the elevator setpoint in meters with joystick input with -1 to +1
+/*         if (elevatorSetpointMeters > input)
+        {
+            elevatorPID.setI(0);
+        }
+        else
+        {
+            elevatorPID.setI(.06);
+        } */
         elevatorSetpointMeters = input;
     }
 
@@ -120,9 +133,11 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         // Takes in current elevator position in meters and the setpoint in meters and outputs change needed
         double caculated = elevatorPID.calculate(motorOneEncoder.getPosition(), elevatorSetpointMeters);
-
+        // caculated = slew.calculate(caculated);
+        
         // Set motors to need speed change
         motorOne.set(caculated);
+    
     }
 
     // Set both elevator motors to input

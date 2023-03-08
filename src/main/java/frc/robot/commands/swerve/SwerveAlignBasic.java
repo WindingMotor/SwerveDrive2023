@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveAlignBasic extends CommandBase {
 
+  /*
   private boolean finished;
   SwerveSubsystem swerveSubsystem;
   VisionSubsystem visionSubsystem;
@@ -109,4 +110,31 @@ public class SwerveAlignBasic extends CommandBase {
   @Override
   public boolean isFinished(){return finished;}
 
+  */
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

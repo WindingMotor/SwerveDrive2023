@@ -50,9 +50,10 @@ public class LightStrip  extends SubsystemBase{
         if(DriverStation.isEnabled()){
         if(tx16s.getRawButton(3)){
             setYellow();
-        }else{
+        }else if(tx16s.getRawButton(3) == false){
             setPurple();
         }
+        
     }else{
         updateStripRainbow();
     }
@@ -127,4 +128,10 @@ public class LightStrip  extends SubsystemBase{
         Timer.delay(2);
     }
 
+    public void updateWhiteBlack(){
+        setStripColor(255, 255, 255);
+        Timer.delay(0.2);
+        setStripColor(0, 0, 0);
+        Timer.delay(0.2);
+    }
 }

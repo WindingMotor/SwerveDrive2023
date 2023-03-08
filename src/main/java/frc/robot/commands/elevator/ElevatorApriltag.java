@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /** An example command that uses an example subsystem. */
 public class ElevatorApriltag extends CommandBase {
 
+  /* 
   private ElevatorSubsystem subsystem;
   private VisionSubsystem visionSubsystem;
   
@@ -58,4 +59,5 @@ public class ElevatorApriltag extends CommandBase {
   public boolean isFinished() {
     return finished;
   }
+  */
 }

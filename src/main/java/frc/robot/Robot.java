@@ -1,6 +1,7 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,6 +24,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    PortForwarder.add(8888, "wpilibpi.local", 80);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
