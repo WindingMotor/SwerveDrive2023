@@ -47,12 +47,11 @@ public class ElevatorSubsystem extends SubsystemBase{
     // Elevator Setpoint
     private double elevatorSetpointMeters;
 
-<<<<<<< HEAD
    // private final SlewRateLimiter slew;
-=======
+
     // Elevator Change of speed limiter
     private SlewRateLimiter slewRateLimiter;
->>>>>>> fb88d719ac88f779b0df0e9b427bf4a1f2aefcbe
+
 
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
@@ -85,22 +84,22 @@ public class ElevatorSubsystem extends SubsystemBase{
         bottomLimitSwitch = motorOne.getForwardLimitSwitch(SparkMaxLimitSwitch.Type.kNormallyOpen);
         bottomLimitSwitch.enableLimitSwitch(false);
 
-<<<<<<< HEAD
+
         // Set PID values from constants
             elevatorPID = new PIDController(0.5, 0, 0);
             //elevatorPID = new PIDController(0.6, 0.06, 0);
 
         //slew = new SlewRateLimiter(10, 5, 0);
-=======
+
         // Set PID values for elevator
         //elevatorPID = new PIDController(0.5, 0, 0);
-        elevatorPID = new PIDController(0.7, 0.05, 0);
+        elevatorPID = new PIDController(0.85, 0.05, 0);
 
         // Set slew rate limiter max and min rates
-        slewRateLimiter = new SlewRateLimiter(5, 10, 0);
+        slewRateLimiter = new SlewRateLimiter(5, -10, 0);
         
         // Set setpoint to zero
->>>>>>> fb88d719ac88f779b0df0e9b427bf4a1f2aefcbe
+
         elevatorSetpointMeters = 0;
     }
 
@@ -150,13 +149,11 @@ public class ElevatorSubsystem extends SubsystemBase{
 
         // Takes in current elevator position in meters and the setpoint in meters and outputs change needed
         double caculated = elevatorPID.calculate(motorOneEncoder.getPosition(), elevatorSetpointMeters);
-<<<<<<< HEAD
+
         // caculated = slew.calculate(caculated);
         
         // Set motors to need speed change
         motorOne.set(caculated);
-    
-=======
 
         // Apply slew to caculated output
         caculated = slewRateLimiter.calculate(caculated);
@@ -164,7 +161,6 @@ public class ElevatorSubsystem extends SubsystemBase{
         // Set motors to caculated value
         motorOne.set(caculated);
 
->>>>>>> fb88d719ac88f779b0df0e9b427bf4a1f2aefcbe
     }
 
     // Set both elevator motors to input

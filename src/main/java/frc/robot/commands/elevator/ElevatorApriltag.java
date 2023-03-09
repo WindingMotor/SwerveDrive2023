@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 /** An example command that uses an example subsystem. */
 public class ElevatorApriltag extends CommandBase {
 
-  /* 
+  
   private ElevatorSubsystem subsystem;
   private VisionSubsystem visionSubsystem;
   
@@ -30,7 +30,7 @@ public class ElevatorApriltag extends CommandBase {
   @Override
   public void initialize() {
     subsystem.stopElevator();
-    DriverStation.reportWarning("ELEV-APRIL STARTED", true);
+    //DriverStation.reportWarning("ELEV-APRIL STARTED", true);
     finished = false;
   }
 
@@ -38,10 +38,10 @@ public class ElevatorApriltag extends CommandBase {
   @Override
   public void execute() {
     if(visionSubsystem.hasTargets()){
-      DriverStation.reportWarning("ELEV-APRIL: " + visionSubsystem.getTargetTransformHeight(), true);
+      //DriverStation.reportWarning("ELEV-APRIL: " + visionSubsystem.getTargetTransformHeight(), true);
       //subsystem.setElevatorMeters(visionSubsystem.getTargetTransformHeight());
     }else{
-      DriverStation.reportWarning("ELEV-APRIL NO-TARGETS", true);
+     // DriverStation.reportWarning("ELEV-APRIL NO-TARGETS", true);
       finished = true;
     }
   }
@@ -59,5 +59,5 @@ public class ElevatorApriltag extends CommandBase {
   public boolean isFinished() {
     return finished;
   }
-  */
+  
 }

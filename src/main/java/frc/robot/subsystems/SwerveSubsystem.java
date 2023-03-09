@@ -123,6 +123,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return gyro.getAngle();
   }
 
+  public Pose2d getOdometryMeters(){
+    return(odometer.getPoseMeters());
+  }
+
   // Return heading in Rotation2d format
   public Rotation2d getRotation2d(){
     return Rotation2d.fromDegrees(getHeading());

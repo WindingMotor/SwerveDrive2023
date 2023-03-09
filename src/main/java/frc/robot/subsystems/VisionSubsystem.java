@@ -6,16 +6,15 @@ import frc.robot.util.Constants.VisionConstants;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-/* 
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonUtils;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
-*/
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -37,7 +36,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class VisionSubsystem extends SubsystemBase{
     
 
-    /* 
+    
     // Create a vision photon camera
     PhotonCamera visionCamera;
 
@@ -163,6 +162,6 @@ public class VisionSubsystem extends SubsystemBase{
         updateSmartDashboard();
 
     }
-*/
+
 
 }

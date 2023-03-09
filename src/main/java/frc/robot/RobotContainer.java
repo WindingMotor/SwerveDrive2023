@@ -84,7 +84,7 @@ public class RobotContainer {
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
   
   // Create vision subsystem
-  //private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
 
   // Create grabber subsystem
   private final GrabberSubsystem grabberSubsystem = new GrabberSubsystem();
@@ -142,7 +142,7 @@ public class RobotContainer {
 */
 
 swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
-() -> tx16sCOMD.getRawAxis(0), // X-Axis
+() -> -tx16sCOMD.getRawAxis(0), // X-Axis
 () -> tx16sCOMD.getRawAxis(1), // Y-Axis
 () -> tx16sCOMD.getRawAxis(3), // R-Axis
 () -> tx16s.getRawButton(2), // Field oriented -does nothing right now
@@ -204,13 +204,13 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
 
     // Manual grabber angle test code
-    xbox.axisGreaterThan(1, 5.0).onTrue(new GrabberTrigger(grabberSubsystem, () -> xbox.getRawAxis(1)));
+   // xbox.axisGreaterThan(1, 0.55).onTrue(new GrabberTrigger(grabberSubsystem, () -> xbox.getRawAxis(1)));
     
     // D-Pad POV testing - elevator setpoint
-    xbox.povUp().toggleOnTrue(new ElevatorUpSetpoint(elevatorSubsystem));
-    xbox.povDown().toggleOnTrue(new ElevatorDownSetpoint(elevatorSubsystem));
+    //xbox.povUp().toggleOnTrue(new ElevatorUpSetpoint(elevatorSubsystem));
+    //xbox.povDown().toggleOnTrue(new ElevatorDownSetpoint(elevatorSubsystem));
 
-    tx16sCOMD.axisGreaterThan(1, 50.0).toggleOnTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
+    //tx16sCOMD.axisGreaterThan(1, 50.0).toggleOnTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
 
     // Homing
     //new JoystickButton(xbox, 1).onTrue(new ElevatorHome(elevatorSubsystem));
@@ -222,8 +222,8 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     //--------------// Auto Bindings
 
     // Apriltag
-    // new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
-    //   () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
+    new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
+       () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
     
     // Run autonmous command during teleop
     //new JoystickButton(tx16s, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
