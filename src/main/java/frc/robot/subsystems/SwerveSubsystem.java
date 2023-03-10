@@ -182,6 +182,15 @@ public class SwerveSubsystem extends SubsystemBase {
   public SwerveModule getBackLeft(){return(backLeft);}
   public SwerveModule getBackRight(){return(backRight);}
   
+  public double getRobotDegrees(){
+    double rawValue = gyro.getAngle() % 360.0;
+    if(rawValue < 0.0){
+      return(rawValue + 360.0);
+    }else{
+      return(rawValue);
+    }
+  }
+
   // Periodic looooooop
   @Override
   public void periodic(){
@@ -192,6 +201,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // Odometry
     SmartDashboard.putNumber("Heading", getHeading());
    SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
+   SmartDashboard.putNumber("ROBOT DEGREES NAVX", getRobotDegrees());
    // SmartDashboard.putNumber("R2D deg", getGyroDegrees());
     
     // Update robot monitor

@@ -127,6 +127,7 @@ public class VisionSubsystem extends SubsystemBase{
     public Double getTargetTransformHeight(){
         return(getBestTarget().getBestCameraToTarget().getZ());
     }
+    
 
     // Update the smart dashboard
     private void updateSmartDashboard(){

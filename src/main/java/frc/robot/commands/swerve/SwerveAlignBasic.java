@@ -4,6 +4,8 @@ package frc.robot.commands.swerve;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants.DriveConstants;
+
+import java.sql.Driver;
 import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -51,9 +53,10 @@ public class SwerveAlignBasic extends CommandBase {
 
     initalHeading = headingFunction.get();
 
-    vXController = new PIDController(0.5, 0.005, 0);
+    vXController = new PIDController(1.8, 0.005, 0);
     vYController = new PIDController(1.4, 0.005, 0);
-    thetaController = new PIDController(0.0009, 0, 0);
+    thetaController = new PIDController(0.1, 0, 0);
+    thetaController.enableContinuousInput(0, 360);
 
     vX = 0;
     vY = 0;
@@ -72,6 +75,7 @@ public class SwerveAlignBasic extends CommandBase {
 
     if(visionSubsystem.hasTargets()){
       visionTransform = visionSubsystem.getTargetTransform();
+      SmartDashboard.putString("Vision Start Transform", visionSubsystem.getTargetTransform().toString());
     }else{
       finished = true;
     }
@@ -84,19 +88,22 @@ public class SwerveAlignBasic extends CommandBase {
 //- 0.28575
     try
     {
-      double xError = ( -visionTransform.getX() + (swerveSubsystem.getOdometryMeters().getX() - startingPose.getX()));
-      double yError = ( visionTransform.getY() - (swerveSubsystem.getOdometryMeters().getY() - startingPose.getY()));
- 
+
+      double xError = ( visionTransform.getY() + (swerveSubsystem.getOdometryMeters().getX() - startingPose.getX()));
+      double yError = ( visionTransform.getX() + (swerveSubsystem.getOdometryMeters().getY() - startingPose.getY()));
+      //double tError = ( (-visionTransform.getRotation().getAngle() * 360) / (2*Math.PI) - (swerveSubsystem.getRobotDegrees())) + 180;
+ //0.28575
        
-         vY = vXController.calculate(visionSubsystem.getTargetTransform().getX(), 0.5); // Y-Axis PID
-         vX = vYController.calculate(visionSubsystem.getTargetTransform().getY(), -0.28575); // X-Axis PID
- 
-         //vT = -thetaController.calculate(swerveSubsystem.getGyroDegrees(), 90) * 300; // Rotation PID
-       SmartDashboard.putNumber("vX", vT);
-       SmartDashboard.putNumber("vY", vT);
+         vX = vXController.calculate(xError, -0.28575); // X-Axis PID
+         vY = vYController.calculate(yError, 1); // Y-Axis PID
+         vT = thetaController.calculate( Math.toRadians(swerveSubsystem.getRobotDegrees()), 0); // Rotation PID
+
+       SmartDashboard.putNumber("vX", vX);
+       SmartDashboard.putNumber("vY", vY);
      
        SmartDashboard.putNumber("X Error", xError);
        SmartDashboard.putNumber("Y Error", yError);
+
   
       if(switchOverride.get() == false){
         finished = true;
@@ -119,6 +126,7 @@ public class SwerveAlignBasic extends CommandBase {
     catch (Exception e)
     {
       e.printStackTrace();
+      DriverStation.reportError("E  xeption", true);
       finished = true;
     }
 
