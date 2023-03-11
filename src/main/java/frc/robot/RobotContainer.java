@@ -32,9 +32,11 @@ import frc.robot.commands.elevator.ElevatorStop;
 import frc.robot.commands.elevator.ElevatorUpSetpoint;
 import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.intake.GrabberForward;
+import frc.robot.commands.grabber.intake.GrabberHold;
 import frc.robot.commands.grabber.intake.GrabberReverse;
 import frc.robot.commands.grabber.intake.GrabberStop;
 import frc.robot.commands.intake.IntakeForward;
+import frc.robot.commands.intake.IntakeHold;
 import frc.robot.commands.intake.IntakeReverse;
 import frc.robot.commands.intake.IntakeStop;
 import frc.robot.commands.routines.loading.ConeFloor;
@@ -42,6 +44,8 @@ import frc.robot.commands.routines.loading.ConePlatform;
 import frc.robot.commands.routines.scoring.ConeBottom;
 import frc.robot.commands.routines.scoring.ConeTop;
 import frc.robot.commands.routines.util.ObjectLaunch;
+import frc.robot.commands.routines.util.SetLedPurple;
+import frc.robot.commands.routines.util.SetLedYellow;
 import frc.robot.commands.grabber.GrabberSolenoid;
 import frc.robot.commands.grabber.angle.GrabberDegrees;
 import frc.robot.commands.grabber.angle.GrabberTrigger;
@@ -149,6 +153,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 () -> swerveSubsystem.getHeading(), // Navx heading
 () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 
+
   //elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
   //() -> xbox.getRawAxis(1)));
 
@@ -181,11 +186,11 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 
     // 1 A - Grabber Intake Forward
     xbox.a().onTrue(new GrabberForward(grabberSubsystem));
-    xbox.a().toggleOnFalse(new GrabberStop(grabberSubsystem));
+    xbox.a().toggleOnFalse(new GrabberHold(grabberSubsystem));
 
     // 2 B - Grabber Intake Reverse
     xbox.b().onTrue(new GrabberReverse(grabberSubsystem));
-    xbox.b().toggleOnFalse(new GrabberStop(grabberSubsystem));
+    xbox.b().toggleOnFalse(new GrabberHold(grabberSubsystem));
 
     // 3 X - Elevator Zero
     xbox.x().onTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
@@ -200,15 +205,15 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     xbox.button(9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
 
     // 10 RJ - Reset Odometry
-    xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
-    xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
+   // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
+   // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
 
     // Manual grabber angle test code
    // xbox.axisGreaterThan(1, 0.55).onTrue(new GrabberTrigger(grabberSubsystem, () -> xbox.getRawAxis(1)));
     
     // D-Pad POV testing - elevator setpoint
-    //xbox.povUp().toggleOnTrue(new ElevatorUpSetpoint(elevatorSubsystem));
-    //xbox.povDown().toggleOnTrue(new ElevatorDownSetpoint(elevatorSubsystem));
+    xbox.povUp().toggleOnTrue(new SetLedYellow(strips));
+    xbox.povDown().toggleOnTrue(new SetLedPurple(strips));
 
     //tx16sCOMD.axisGreaterThan(1, 50.0).toggleOnTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
 

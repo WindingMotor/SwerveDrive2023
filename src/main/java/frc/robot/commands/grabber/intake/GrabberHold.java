@@ -5,11 +5,11 @@ import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class GrabberForward extends CommandBase {
+public class GrabberHold extends CommandBase {
 
   private GrabberSubsystem subsystem;
 
-  public GrabberForward(GrabberSubsystem subsystem) {
+  public GrabberHold(GrabberSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.subsystem = subsystem;
     addRequirements(subsystem);
@@ -24,7 +24,7 @@ public class GrabberForward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.setIntakeSpeed(1);
+    subsystem.setIntakeSpeed(0.1);
   }
 
   // Called once the command ends or is interrupted.

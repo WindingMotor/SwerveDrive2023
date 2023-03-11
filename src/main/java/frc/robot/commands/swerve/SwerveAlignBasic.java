@@ -95,7 +95,7 @@ public class SwerveAlignBasic extends CommandBase {
  //0.28575
        
          vX = vXController.calculate(xError, -0.28575); // X-Axis PID
-         vY = vYController.calculate(yError, 1); // Y-Axis PID
+         vY = vYController.calculate(yError, 0.5); // Y-Axis PID
          vT = thetaController.calculate( Math.toRadians(swerveSubsystem.getRobotDegrees()), 0); // Rotation PID
 
        SmartDashboard.putNumber("vX", vX);

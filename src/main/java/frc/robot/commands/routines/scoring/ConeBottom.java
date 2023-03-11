@@ -21,7 +21,7 @@ public class ConeBottom extends SequentialCommandGroup{
         new GrabberDegrees(grabberSubsystem, 90),
         // Turn on intake
         // Move the elevator UP to platform height
-        new ElevatorSetpoint(elevatorSubsystem, -1.1 /* Height of platform in meters */)
+        new ElevatorSetpoint(elevatorSubsystem, -0.9 /* Height of platform in meters */)
         );
     }
 }

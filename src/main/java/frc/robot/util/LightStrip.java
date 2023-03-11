@@ -47,16 +47,12 @@ public class LightStrip  extends SubsystemBase{
         // This method will be called once per scheduler run
         //updateYellowPurple();
         //updateStripRainbow();
-        if(DriverStation.isEnabled()){
-        if(tx16s.getRawButton(3)){
-            setYellow();
-        }else if(tx16s.getRawButton(3) == false){
-            setPurple();
-        }
-        
-    }else{
-        updateStripRainbow();
-    }
+
+      //  if(!DriverStation.isEnabled()){
+      //      updateStripRainbow();
+      //  }
+   
+
         /* 
         if(DriverStation.isEnabled()){
             setGreen();

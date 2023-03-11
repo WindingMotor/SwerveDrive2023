@@ -74,6 +74,8 @@ public class GrabberSubsystem extends SubsystemBase{
         angleSetpoint = 42.0;
 
         grabberOpen = false;
+
+        intakeMotor.setSmartCurrentLimit(5);
 }
 
 //---------------------// Periodic loop
