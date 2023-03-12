@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
@@ -87,7 +88,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // BROKEN FOR 2023
   // Create odometer for error correction
-  private SwerveDriveOdometry odometer;
+  private drivePoseEstimator;
   // Swerve subsystem constructor
   public SwerveSubsystem() {
 
@@ -104,9 +105,11 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }).start();
 
+    /*
     odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
     new Rotation2d(0), getModulePositions());
-  
+    */
+    drivePoseEstimator = new SwerveDrivePoseEstimator(kDriveKinematics, getHeading, getModulePositions, new Pose2d(0,0,Rotation2d.fromDegrees(getHeading())) );
   }
 
   // Reset gyro heading 
@@ -196,8 +199,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic(){
 
     // Periodicly update odometer for it to caculate position
-    odometer.update(getRotation2d(), getModulePositions());
-
+    //odometer.update(getRotation2d(), getModulePositions());
+    drivePoseEstimator.update()
     // Odometry
     SmartDashboard.putNumber("Heading", getHeading());
    SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
