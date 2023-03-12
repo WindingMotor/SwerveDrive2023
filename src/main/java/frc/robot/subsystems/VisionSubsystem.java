@@ -10,14 +10,17 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.PhotonUtils;
 import org.photonvision.common.hardware.VisionLEDMode;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.loadFromResource;  
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
@@ -46,6 +49,8 @@ public class VisionSubsystem extends SubsystemBase{
     // Pose estimator
     private PhotonPoseEstimator poseEstimator;
 
+    private Transform3d robotToCam; 
+
     // Subsystem Constructor
     public VisionSubsystem(){
         
@@ -59,6 +64,12 @@ public class VisionSubsystem extends SubsystemBase{
         updateCameraResults();
 
         visionCamera.setLED(VisionLEDMode.kDefault);
+
+        AprilTagFieldLayout aprilTagFieldLayout = new AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
+
+        robotToCam = new Transform3d(new Translation3d(/*distance forward of center*/0.216535,/* distance left of center*/0.28575 ,/*distance above floor*/0.3900163904 ), new Rotation3d(0,0,0));
+
+        poseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP , visionCamera, robotToCam);
 
     }
 
