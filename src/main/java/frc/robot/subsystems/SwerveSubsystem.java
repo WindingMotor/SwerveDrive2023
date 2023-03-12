@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -110,6 +111,9 @@ public class SwerveSubsystem extends SubsystemBase {
     new Rotation2d(0), getModulePositions());
     */
     drivePoseEstimator = new SwerveDrivePoseEstimator(kDriveKinematics, getHeading, getModulePositions, new Pose2d(0,0,Rotation2d.fromDegrees(getHeading())) );
+
+    private final field2d m_field = new field2d();
+    SmartDashboard.putData("Field",m_field);
   }
 
   // Reset gyro heading 
@@ -200,11 +204,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
     // Periodicly update odometer for it to caculate position
     //odometer.update(getRotation2d(), getModulePositions());
-    drivePoseEstimator.update()
+    drivePoseEstimator.update(Rotation2d.fromDegrees(gyro.getAngle()),getModulePositions())
     // Odometry
     SmartDashboard.putNumber("Heading", getHeading());
    SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
    SmartDashboard.putNumber("ROBOT DEGREES NAVX", getRobotDegrees());
+   
+
+   //update the odometry with the measurements from vision if there is a vision target and its close to the current estimated position TODO: make this only add the vision measurement if close to previous estimates
+   if(VisionSubsystem.hasTargets()){
+    drivePoseEstimator.addVisionMeasurement(VisionSubsystem.getEstimatedGlobalPose(), Timer.getFPGATimestamp() )}
    // SmartDashboard.putNumber("R2D deg", getGyroDegrees());
     
     // Update robot monitor
@@ -214,6 +223,9 @@ public class SwerveSubsystem extends SubsystemBase {
     frontRight.update();
     backLeft.update();
     backRight.update();
+
+    //put estimated robot pose on smartdashboard
+    m_field.setRobotPose(drivePoseEstimator.getPoseMeters());
 
   }
 
