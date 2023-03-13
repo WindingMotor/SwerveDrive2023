@@ -4,6 +4,8 @@ package frc.robot;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -21,6 +23,7 @@ import frc.robot.auto.commands.TrajectoryRunner;
 import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.AutoOne;
+import frc.robot.auto.routines.AutoTwo;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.elevator.ElevatorApriltag;
 import frc.robot.commands.elevator.ElevatorDownSetpoint;
@@ -127,7 +130,7 @@ public class RobotContainer {
   public RobotContainer(){
 
     CameraServer.startAutomaticCapture();
-
+    PathPlannerServer.startServer(5811);
     // Set swerve subsystem default command to swerve joystick with respective joystick inputs
     // Joystick Numbers 0 = LEFT : 1 = RIGHT
     // Joystick Axises: 0 = left/right : 1 = forward/backwards : 2 = dial
@@ -249,10 +252,11 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     // Command to run
       // Routine
    Command autoOne = new AutoOne(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
+   Command autoTwo = new AutoTwo(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
 
   // Command auto = swerveSubsystem.auto(back, true);
 
-    return autoOne;
+    return autoTwo;
   }
 
 }

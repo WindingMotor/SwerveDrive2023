@@ -30,14 +30,14 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 
 // Run multiple commands in a routine
-public class AutoOne extends SequentialCommandGroup{
+public class AutoTwo extends SequentialCommandGroup{
 
     // PPTrajectory and event map
-    private final PathPlannerTrajectory back = PathPlanner.loadPath("backwards0.5M", new PathConstraints(3.5, 4.5)); 
+    private final PathPlannerTrajectory back = PathPlanner.loadPath("backwardsOne", new PathConstraints(3.5, 4.5)); 
     // private final HashMap<String, Command> eventMap = new HashMap<>();
 
     // Routine command constructor
-    public AutoOne(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
+    public AutoTwo(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController){
 
         // Add commands to event map markers
@@ -45,22 +45,8 @@ public class AutoOne extends SequentialCommandGroup{
 
         // Add commands to run
         addCommands(
-
-        new ConeTop(elevatorSubsystem, grabberSubsystem),
-        new WaitCommand(2.5),
-        new ElevatorSolenoid(elevatorSubsystem),
-        new WaitCommand(2),
-        new GrabberSolenoid(grabberSubsystem),
-        new WaitCommand(1),
-        new ElevatorSolenoid(elevatorSubsystem),
-        new WaitCommand(1.5),
-        new ElevatorZero(elevatorSubsystem, grabberSubsystem),
-        new WaitCommand(1),
-        new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, back, true, false),
-        new GrabberSolenoid(grabberSubsystem),
-        new WaitCommand(2),
-        new ResetYaw(swerveSubsystem),
-        new ResetOdometryInverse(swerveSubsystem)
+        
+        new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, back, true, false)
 
         );
 

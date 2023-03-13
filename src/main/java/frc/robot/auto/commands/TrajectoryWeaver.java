@@ -28,7 +28,7 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
     PathPlannerTrajectory pptrajectory, Boolean isFirstPath, Boolean autoBack){
       
         // Tell theta PID controller that its a circle
-        ppthetaController.enableContinuousInput(-180, 180);
+        ppthetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Check if first path
         if(isFirstPath){
