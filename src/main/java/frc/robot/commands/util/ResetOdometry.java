@@ -2,6 +2,7 @@
 
 package frc.robot.commands.util;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -19,7 +20,9 @@ public class ResetOdometry extends CommandBase {
 
   // Reset robot position when command starts
   @Override
-  public void initialize() {swerveSubsystem.resetOdometry(pose);}
+  public void initialize() {
+    swerveSubsystem.resetOdometry(pose);
+    SmartDashboard.putString("POSE OUTPUT", pose.toString());}
 
   // Stop command once it starts 
   @Override

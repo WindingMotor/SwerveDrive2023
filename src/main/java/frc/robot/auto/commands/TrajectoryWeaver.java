@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.util.ResetOdometry;
@@ -28,19 +29,26 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
     PathPlannerTrajectory pptrajectory, Boolean isFirstPath, Boolean autoBack){
       
         // Tell theta PID controller that its a circle
-        ppthetaController.enableContinuousInput(-Math.PI, Math.PI);
+       // ppthetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Check if first path
-        if(isFirstPath){
+       // if(isFirstPath){
            // Reset robot odometry before movement 
-          addCommands(new ResetOdometry(swerveSubsystem, pptrajectory.getInitialHolonomicPose()));
-        }else if(autoBack){
-            //addCommands(new ResetOdometry(swerveSubsystem, pptrajectory.getInitialHolonomicPose().plus(new Transform2d(new Pose2d(), new Pose2d(0.0,0.0, new Rotation2d().fromDegrees(90))))));
-        }
+         // addCommands(new ResetOdometry(swerveSubsystem, pptrajectory.getInitialHolonomicPose()));
+
+      //   addCommands(new ResetOdometry(swerveSubsystem, PathPlannerTrajectory
+      //   .transformTrajectoryForAlliance(pptrajectory, DriverStation.getAlliance()).getInitialHolonomicPose()));
+      //  }
 
         addCommands(
+
+       // new ResetOdometry(swerveSubsystem, PathPlannerTrajectory
+       //  .transformTrajectoryForAlliance(pptrajectory, DriverStation.getAlliance()).getInitialHolonomicPose()),
+
+         //new ResetOdometry(swerveSubsystem, new Pose2d(pptrajectory.getInitialHolonomicPose().getTranslation(), pptrajectory.getInitialHolonomicPose().getRotation())),
+         new ResetOdometry(swerveSubsystem, new Pose2d(pptrajectory.getInitialHolonomicPose().getTranslation(), pptrajectory.getInitialHolonomicPose().getRotation())),
+         // 
             // Commands to run sequentially
-            
             new SequentialCommandGroup(
 
               //                                              .......
@@ -50,7 +58,7 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
               // Fixed it... Java was being weird
             
               // Use Path Planner to move the swerve modules by letting it call setModuleStates
-              new PPSwerveControllerCommand(pptrajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, ppthetaController, swerveSubsystem::setModuleStates, swerveSubsystem),
+              new PPSwerveControllerCommand(pptrajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, ppthetaController, swerveSubsystem::setModuleStates,true, swerveSubsystem),
               
               // Tell driver station that command is running
              // new ReportWarning("Trajectory weaver: " + pptrajectory.toString(), true),

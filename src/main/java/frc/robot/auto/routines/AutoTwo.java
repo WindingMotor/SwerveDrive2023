@@ -22,7 +22,6 @@ import frc.robot.commands.routines.scoring.ConeTop;
 import frc.robot.commands.util.ReportString;
 import frc.robot.commands.util.ResetOdometry;
 import frc.robot.commands.util.ResetOdometryInverse;
-import frc.robot.commands.util.ResetYaw;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;

@@ -105,8 +105,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }).start();
 
     odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
-    new Rotation2d(0), getModulePositions());
-  
+    getOdometryAngle(), getModulePositions());
+  // new Rotation2d(gyro.getYaw() * -1 / 180 * Math.PI), getModulePositions()
   }
 
   // Reset gyro heading 
@@ -159,7 +159,19 @@ public class SwerveSubsystem extends SubsystemBase {
   // Reset odometer to new location
   public void resetOdometry(Pose2d pose){
    // odometer.resetPosition(pose, getRotation2d());
-   odometer.resetPosition(getRotation2d(),getModulePositions(), pose);
+  // odometer.resetPosition(new Rotation2d(Math.toRadians(getRobotDegrees())), getModulePositions(), pose);
+   odometer.resetPosition(getOdometryAngle(), getModulePositions(), pose);
+// 
+  }
+
+  public Rotation2d getOdometryAngle(){
+    double angle = -gyro.getYaw() + 180;
+    if(angle > 180){
+      angle -= 360;
+    }else if(angle < -180){
+      angle += 360;
+    }
+    return Rotation2d.fromDegrees(angle);
   }
 
   public double getGyroDegrees(){
@@ -196,7 +208,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic(){
 
     // Periodicly update odometer for it to caculate position
-    odometer.update(getRotation2d(), getModulePositions());
+    odometer.update(getOdometryAngle(), getModulePositions());
 
     // Odometry
     SmartDashboard.putNumber("Heading", getHeading());
@@ -204,6 +216,9 @@ public class SwerveSubsystem extends SubsystemBase {
    SmartDashboard.putNumber("ROBOT DEGREES NAVX", getRobotDegrees());
    // SmartDashboard.putNumber("R2D deg", getGyroDegrees());
     
+   SmartDashboard.putString("ODOMETRY", odometer.getPoseMeters().toString());
+   SmartDashboard.putString("Raw R2d ROBOT DEG", getOdometryAngle().toString());
+   //SmartDashboard.putString("Function R2d", geto)
     // Update robot monitor
     //monitor.update();
 

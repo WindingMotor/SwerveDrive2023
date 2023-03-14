@@ -165,7 +165,8 @@ public class SwerveModule extends SubsystemBase {
     }
     
   public SwerveModulePosition getPosition(){
-    return( new SwerveModulePosition(getDrivePosition(), new Rotation2d(getTurningPosition())));
+    return( new SwerveModulePosition(
+      getDrivePosition(), new Rotation2d(getTurningPosition())));
   }
 
   /* Convert absolute value of the encoder to radians and then subtract the radian offset
