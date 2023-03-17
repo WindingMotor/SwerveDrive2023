@@ -3,6 +3,7 @@
 package frc.robot.auto.commands;
 import java.util.function.Consumer;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.util.ResetOdometry;
+import frc.robot.commands.util.ResetOdometryRotation;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.Constants.DriveConstants;
 
@@ -23,11 +25,13 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
     
     Consumer<ChassisSpeeds> chassisSpeeds;
 
+
     // Constructor that obtains required values
     public TrajectoryWeaver(SwerveSubsystem swerveSubsystem,PIDController xController,
     PIDController yController,  PIDController ppthetaController,
     PathPlannerTrajectory pptrajectory, Boolean isFirstPath, Boolean autoBack){
       
+    
         // Tell theta PID controller that its a circle
        // ppthetaController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -39,6 +43,7 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
       //   addCommands(new ResetOdometry(swerveSubsystem, PathPlannerTrajectory
       //   .transformTrajectoryForAlliance(pptrajectory, DriverStation.getAlliance()).getInitialHolonomicPose()));
       //  }
+      PathPlannerState initalState = pptrajectory.getInitialState();
 
         addCommands(
 
@@ -46,7 +51,9 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
        //  .transformTrajectoryForAlliance(pptrajectory, DriverStation.getAlliance()).getInitialHolonomicPose()),
 
          //new ResetOdometry(swerveSubsystem, new Pose2d(pptrajectory.getInitialHolonomicPose().getTranslation(), pptrajectory.getInitialHolonomicPose().getRotation())),
-         new ResetOdometry(swerveSubsystem, new Pose2d(pptrajectory.getInitialHolonomicPose().getTranslation(), pptrajectory.getInitialHolonomicPose().getRotation())),
+        //new ResetOdometry(swerveSubsystem, new Pose2d(pptrajectory.getInitialHolonomicPose().getTranslation(), pptrajectory.getInitialHolonomicPose().getRotation())),
+        new ResetOdometryRotation(swerveSubsystem, pptrajectory.getInitialHolonomicPose(), pptrajectory.getInitialState().holonomicRotation),
+       // new ResetOdometry(swerveSubsystem, new Pose2d(initalState.poseMeters.getTranslation(), initalState.holonomicRotation)),
          // 
             // Commands to run sequentially
             new SequentialCommandGroup(
@@ -58,7 +65,7 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
               // Fixed it... Java was being weird
             
               // Use Path Planner to move the swerve modules by letting it call setModuleStates
-              new PPSwerveControllerCommand(pptrajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, ppthetaController, swerveSubsystem::setModuleStates,true, swerveSubsystem),
+              new PPSwerveControllerCommand(pptrajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, ppthetaController, swerveSubsystem::setModuleStates, swerveSubsystem),
               
               // Tell driver station that command is running
              // new ReportWarning("Trajectory weaver: " + pptrajectory.toString(), true),
@@ -77,4 +84,6 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
     public TrajectoryWeaver(SwerveSubsystem swerveSubsystem, PIDController xController, PIDController yController,
         PIDController ppThetaController, Trajectory trajectory, TrajectoryConfig trajectoryConfig, boolean b) {
     }
+
+
 }

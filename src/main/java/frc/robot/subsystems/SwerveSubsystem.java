@@ -76,6 +76,7 @@ public class SwerveSubsystem extends SubsystemBase {
   
 
   public SwerveModulePosition[] getModulePositions(){
+
     return( new SwerveModulePosition[]{
       frontLeft.getPosition(), 
       frontRight.getPosition(), 
@@ -164,7 +165,16 @@ public class SwerveSubsystem extends SubsystemBase {
 // 
   }
 
+    // Reset odometer to new location
+    public void resetOdometry(Pose2d pose, Rotation2d rot){
+      // odometer.resetPosition(pose, getRotation2d());
+     // odometer.resetPosition(new Rotation2d(Math.toRadians(getRobotDegrees())), getModulePositions(), pose);
+      odometer.resetPosition(rot, getModulePositions(), pose);
+   // 
+     }
+
   public Rotation2d getOdometryAngle(){
+    /* 
     double angle = -gyro.getYaw() + 180;
     if(angle > 180){
       angle -= 360;
@@ -172,6 +182,8 @@ public class SwerveSubsystem extends SubsystemBase {
       angle += 360;
     }
     return Rotation2d.fromDegrees(angle);
+    */
+    return(Rotation2d.fromDegrees(gyro.getYaw()));
   }
 
   public double getGyroDegrees(){

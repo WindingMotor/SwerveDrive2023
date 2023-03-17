@@ -24,7 +24,7 @@ public class TestRoutine extends SequentialCommandGroup{
        // eventMap.put("marker1", new PrintCommand("TRAJ1: Passed Marker 1"));
 
         // Import the paths to use
-        PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.5, 0.5) /* velocity and acceleration */ ); 
+        PathPlannerTrajectory pathOne = PathPlanner.loadPath("backwardsOne", new PathConstraints(0.5, 0.5) /* velocity and acceleration */ ); 
         //PathPlannerTrajectory pathTwo = PathPlanner.loadPath("pathTwo", new PathConstraints(0.5, 0.5) /* velocity and acceleration */ ); 
 
         // Add commands to routine

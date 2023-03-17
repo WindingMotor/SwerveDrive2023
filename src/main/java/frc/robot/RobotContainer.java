@@ -105,7 +105,7 @@ public class RobotContainer {
   public final ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
 
   // Create a non profiled PID controller for path planner
-  private final PIDController ppThetaController = new PIDController(AutoConstants.kPThetaController, 0, 0);
+  private final PIDController ppThetaController = new PIDController( 0.01, 0, 0);
 
   // Create xbox controller
   //private final XboxController xbox = new XboxController(3);
@@ -253,10 +253,10 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
       // Routine
    Command autoOne = new AutoOne(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
    Command autoTwo = new AutoTwo(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
-
+   Command autoThree = new TestRoutine(swerveSubsystem, xController, yController, ppThetaController);
   // Command auto = swerveSubsystem.auto(back, true);
 
-    return autoTwo;
+    return autoThree;
   }
 
 }
