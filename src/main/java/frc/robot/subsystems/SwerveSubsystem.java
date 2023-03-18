@@ -6,7 +6,6 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -69,12 +68,9 @@ public class SwerveSubsystem extends SubsystemBase {
   // The end of this madness ^_^
 
   // Create the navX using roboRIO expansion port
-
-
-
   private AHRS gyro = new AHRS(SPI.Port.kMXP);
   
-
+  // Returns positions of the swerve modules for odometry
   public SwerveModulePosition[] getModulePositions(){
 
     return( new SwerveModulePosition[]{
@@ -83,20 +79,18 @@ public class SwerveSubsystem extends SubsystemBase {
       backLeft.getPosition(),
       backRight.getPosition()});
   }
-  // Create a robot monitor
-  //private final Monitor monitor = new Monitor();
 
-  // BROKEN FOR 2023
-  // Create odometer for error correction
+
+  // Create odometer for swerve drive
   private SwerveDriveOdometry odometer;
+
   // Swerve subsystem constructor
   public SwerveSubsystem() {
 
-    //gyro.setAngleAdjustment(90);
-
+    // Reset robot encoders on startup
     resetAllEncoders();
 
-    // Reset navX heading on new thread when robot starts
+    // Zero navX heading on new thread when robot starts
     new Thread(() -> {
         try {
             Thread.sleep(1000);
@@ -105,9 +99,11 @@ public class SwerveSubsystem extends SubsystemBase {
         }
     }).start();
 
+    // Set robot odometry object to current robot heading and swerve module positions
     odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
     getOdometryAngle(), getModulePositions());
-  // new Rotation2d(gyro.getYaw() * -1 / 180 * Math.PI), getModulePositions()
+    // new Rotation2d(gyro.getYaw() * -1 / 180 * Math.PI), getModulePositions()
+  
   }
 
   // Reset gyro heading 
@@ -115,15 +111,17 @@ public class SwerveSubsystem extends SubsystemBase {
     gyro.reset();
   }
 
+  // Reset gyro yaw
   public void resetYaw(){
     gyro.zeroYaw();
   }
 
-  // Return heading in -180* to 180* format
+  // Return gyro heading, make sure to read navx docs on this
   public double getHeading(){
     return gyro.getAngle();
   }
 
+  // Return the robot odometry in pose meters
   public Pose2d getOdometryMeters(){
     return(odometer.getPoseMeters());
   }
@@ -141,6 +139,7 @@ public class SwerveSubsystem extends SubsystemBase {
     backRight.stop();
   }
 
+  // Move the swerve modules to the desired SwerveModuleState
   public void setModuleStates(SwerveModuleState[] desiredStates) {
 
     // Make sure robot rotation is all ways possible by changing other module roation speeds
@@ -152,27 +151,23 @@ public class SwerveSubsystem extends SubsystemBase {
     backRight.setDesiredState(desiredStates[3]);
 }
 
-  // Return robot position caculated buy odometer
+  // Return robot position caculated by odometer
   public Pose2d getPose(){
     return odometer.getPoseMeters();
   }
 
-  // Reset odometer to new location
+  // Reset odometer to new Pose2d location
   public void resetOdometry(Pose2d pose){
-   // odometer.resetPosition(pose, getRotation2d());
-  // odometer.resetPosition(new Rotation2d(Math.toRadians(getRobotDegrees())), getModulePositions(), pose);
    odometer.resetPosition(getOdometryAngle(), getModulePositions(), pose);
-// 
   }
 
-    // Reset odometer to new location
-    public void resetOdometry(Pose2d pose, Rotation2d rot){
-      // odometer.resetPosition(pose, getRotation2d());
-     // odometer.resetPosition(new Rotation2d(Math.toRadians(getRobotDegrees())), getModulePositions(), pose);
-      odometer.resetPosition(rot, getModulePositions(), pose);
-   // 
-     }
+  // Reset odometer to new Pose2d location but with roation
+  public void resetOdometry(Pose2d pose, Rotation2d rot){
+    odometer.resetPosition(rot, getModulePositions(), pose);
+  }
 
+  // Return an angle from -180 to 180 for robot odometry
+  // The commented out method is for if the gyroscope is reversed direction
   public Rotation2d getOdometryAngle(){
     /* 
     double angle = -gyro.getYaw() + 180;
@@ -186,26 +181,7 @@ public class SwerveSubsystem extends SubsystemBase {
     return(Rotation2d.fromDegrees(gyro.getYaw()));
   }
 
-  public double getGyroDegrees(){
-    // odometer.resetPosition(pose, getRotation2d());
-    return Math.IEEEremainder(gyro.getRotation2d().getDegrees(), 360);
-   }
-
-  // Reset all swerve module encoders
-  public void resetAllEncoders(){
-    //DriverStation.reportError("RESET ALL ALL ENCODERS", true);
-      frontLeft.resetEncoders();
-      frontRight.resetEncoders();
-      backLeft.resetEncoders();
-      backRight.resetEncoders();
-  }
-
-  // Get each module reference for Monitor
-  public SwerveModule getFrontLeft(){return(frontLeft);}
-  public SwerveModule getFrontRight(){return(frontRight);}
-  public SwerveModule getBackLeft(){return(backLeft);}
-  public SwerveModule getBackRight(){return(backRight);}
-  
+  // Returns an angle from 0 to 360 that is continuous, meaning it loops 
   public double getRobotDegrees(){
     double rawValue = gyro.getAngle() % 360.0;
     if(rawValue < 0.0){
@@ -215,49 +191,35 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
+  // Reset all swerve module encoders
+  public void resetAllEncoders(){
+      frontLeft.resetEncoders();
+      frontRight.resetEncoders();
+      backLeft.resetEncoders();
+      backRight.resetEncoders();
+  }
+
   // Periodic looooooop
   @Override
   public void periodic(){
 
-    // Periodicly update odometer for it to caculate position
+    // Update odometer for it to caculate robot position
     odometer.update(getOdometryAngle(), getModulePositions());
 
-    // Odometry
-    SmartDashboard.putNumber("Heading", getHeading());
+   // Put odometry data on smartdashboard
+   SmartDashboard.putNumber("Heading", getHeading());
    SmartDashboard.putString("Field Location", getPose().getTranslation().toString());
    SmartDashboard.putNumber("ROBOT DEGREES NAVX", getRobotDegrees());
-   // SmartDashboard.putNumber("R2D deg", getGyroDegrees());
-    
    SmartDashboard.putString("ODOMETRY", odometer.getPoseMeters().toString());
    SmartDashboard.putString("Raw R2d ROBOT DEG", getOdometryAngle().toString());
-   //SmartDashboard.putString("Function R2d", geto)
-    // Update robot monitor
-    //monitor.update();
-
+  
+   // Update smartdashboard data for each swerve module object
     frontLeft.update();
     frontRight.update();
     backLeft.update();
     backRight.update();
 
   }
-
-
-  
-  public Command auto(PathPlannerTrajectory traj, boolean isFirstPath){
-    return new SequentialCommandGroup(
-      new InstantCommand(() -> {
-        if(isFirstPath){
-          this.resetOdometry(traj.getInitialHolonomicPose());
-        }
-      }),
-
-      new PPSwerveControllerCommand(traj, this::getPose, DriveConstants.kDriveKinematics, new PIDController(AutoConstants.kPXController, 0, 0),
-      new PIDController(AutoConstants.kPYController, 0, 0), 
-      new PIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController), 
-      this::setModuleStates)
-    );
-  }
-
 
 }
 
