@@ -67,6 +67,8 @@ public class SwerveJoystick extends CommandBase {
   public void initialize() {
     //swerveSubsystem.resetYaw();
     initialHeading = headingFunction.get();
+    added = 0;
+   // counter = 0;
 
   }
 
