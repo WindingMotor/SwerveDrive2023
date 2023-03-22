@@ -32,6 +32,9 @@ import frc.robot.subsystems.SwerveSubsystem;
 // Run multiple commands in a routine
 public class AutoOne extends SequentialCommandGroup{
 
+
+    // DEPRECATED
+
     // PPTrajectory and event map
     private final PathPlannerTrajectory back = PathPlanner.loadPath("backwards0.5M", new PathConstraints(3.5, 4.5)); 
     // private final HashMap<String, Command> eventMap = new HashMap<>();
