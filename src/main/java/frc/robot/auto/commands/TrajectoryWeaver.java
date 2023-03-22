@@ -46,13 +46,13 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
       PathPlannerState initalState = pptrajectory.getInitialState();
 
         addCommands(
-
+          new ResetOdometry(swerveSubsystem, pptrajectory.getInitialHolonomicPose()),
        // new ResetOdometry(swerveSubsystem, PathPlannerTrajectory
        //  .transformTrajectoryForAlliance(pptrajectory, DriverStation.getAlliance()).getInitialHolonomicPose()),
 
          //new ResetOdometry(swerveSubsystem, new Pose2d(pptrajectory.getInitialHolonomicPose().getTranslation(), pptrajectory.getInitialHolonomicPose().getRotation())),
         //new ResetOdometry(swerveSubsystem, new Pose2d(pptrajectory.getInitialHolonomicPose().getTranslation(), pptrajectory.getInitialHolonomicPose().getRotation())),
-        new ResetOdometryRotation(swerveSubsystem, pptrajectory.getInitialHolonomicPose(), pptrajectory.getInitialState().holonomicRotation),
+        //new ResetOdometryRotation(swerveSubsystem, pptrajectory.getInitialHolonomicPose(), pptrajectory.getInitialState().holonomicRotation),
        // new ResetOdometry(swerveSubsystem, new Pose2d(initalState.poseMeters.getTranslation(), initalState.holonomicRotation)),
          // 
             // Commands to run sequentially

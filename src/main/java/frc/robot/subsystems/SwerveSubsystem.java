@@ -85,6 +85,7 @@ public class SwerveSubsystem extends SubsystemBase {
     new Thread(() -> {
         try {
             Thread.sleep(1000);
+            gyro.calibrate();
             zeroHeading();
         } catch (Exception e) {
         }
@@ -203,7 +204,12 @@ public class SwerveSubsystem extends SubsystemBase {
    SmartDashboard.putNumber("ROBOT DEGREES NAVX", getRobotDegrees());
    SmartDashboard.putString("ODOMETRY", odometer.getPoseMeters().toString());
    SmartDashboard.putString("Raw R2d ROBOT DEG", getOdometryAngle().toString());
-  
+    
+  SmartDashboard.putBoolean("Gyro Calibrating", gyro.isCalibrating());
+  SmartDashboard.putBoolean("Magnetic Issues", gyro.isMagneticDisturbance());
+  SmartDashboard.putBoolean("Magnetic Calibartion", gyro.isMagnetometerCalibrated());
+
+
    // Update smartdashboard data for each swerve module object
     frontLeft.update();
     frontRight.update();

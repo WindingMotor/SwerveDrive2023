@@ -22,6 +22,7 @@ import frc.robot.auto.commands.TrajectoryRunner;
 import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.AutoOne;
+import frc.robot.auto.routines.AutoThree;
 import frc.robot.auto.routines.AutoTwo;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.elevator.ElevatorApriltag;
@@ -101,10 +102,11 @@ public class RobotContainer {
   // Create PID controllers for trajectory tracking
   public final PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
   public final PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
-  public final ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
+  //public final ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
+  public final ProfiledPIDController thetaController = new ProfiledPIDController(4, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
 
   // Create a non profiled PID controller for path planner
-  private final PIDController ppThetaController = new PIDController( 0.01, 0, 0);
+  private final PIDController ppThetaController = new PIDController(0, 0, 0);
 
   // Create xbox controller
   //private final XboxController xbox = new XboxController(3);
@@ -252,10 +254,10 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
       // Routine
    Command autoOne = new AutoOne(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
    Command autoTwo = new AutoTwo(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
-   Command autoThree = new TestRoutine(swerveSubsystem, xController, yController, ppThetaController);
-// Command auto = swerveSubsystem.auto(back, true);
+   Command autoThree = new AutoThree(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, thetaController);
+   // Command auto = swerveSubsystem.auto(back, true);
 
-    return autoThree;
+    return autoOne;
   }
 
 }

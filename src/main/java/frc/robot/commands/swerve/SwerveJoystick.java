@@ -7,6 +7,7 @@ import frc.robot.util.Constants.IOConstants;
 import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -129,7 +130,7 @@ public class SwerveJoystick extends CommandBase {
     // Create chassis speeds
     ChassisSpeeds chassisSpeeds;
 
-    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
+    chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, turningSpeed, Rotation2d.fromDegrees(swerveSubsystem.getRobotDegrees()));
     //chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
 
     // Put field oriented value on smart dashboard

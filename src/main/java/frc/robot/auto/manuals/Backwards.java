@@ -14,20 +14,20 @@ import frc.robot.util.Constants.DriveConstants;
 public class Backwards {
 
     // Create trajectory settings
-    private static TrajectoryConfig trajectoryConfig = new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared).setKinematics(DriveConstants.kDriveKinematics);
-    private static double distance = -1.0;
+    private static TrajectoryConfig trajectoryConfig = new TrajectoryConfig(5, 5).setKinematics(DriveConstants.kDriveKinematics);
+    private static double distance = 2.35;
 
 //--------------------------------T-R-A-J-E-C-T-O-R-Y---S-T-A-R-T------------------------------//
 
     private static Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
     /* Starting point*/ new Pose2d(0,0,Rotation2d.fromDegrees(0)), List.of(
     /* Middle point*/ new Translation2d(0,distance/2)),
-    /* Ending point*/new Pose2d(0,distance, Rotation2d.fromDegrees(0)), trajectoryConfig);
+    /* Ending point*/new Pose2d(0,distance, Rotation2d.fromDegrees(-180)), trajectoryConfig);
 
 //--------------------------------T-R-A-J-E-C-T-O-R-Y---E-N-D----------------------------------//
 
     public static void setDistance(double d){
-        distance = -d;
+        distance = d;
     }
 
     public static Trajectory getTrajectory(){

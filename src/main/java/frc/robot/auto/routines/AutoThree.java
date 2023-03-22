@@ -63,14 +63,10 @@ public class AutoThree extends SequentialCommandGroup{
         new ElevatorZero(elevatorSubsystem, grabberSubsystem),
         new WaitCommand(1),
         // Set backwards value to 1 meter
-        new SetBackwardsValue(1.0),
+       // new SetBackwardsValue(1.0),
         // Start driving onto charge station
         new TrajectoryRunner(swerveSubsystem, xController, yController, thetaController, Backwards.getTrajectory(), Backwards.getTrajectoryConfig()),
-        // Close grabber
-        new GrabberSolenoid(grabberSubsystem),
-        new WaitCommand(2),
-        // Reset gyro yaw
-        new ResetYaw(swerveSubsystem)
+        new WaitCommand(2)
 
         );
     }
