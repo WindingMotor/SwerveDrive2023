@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.commands.util.ResetOdometry;
+import frc.robot.commands.util.ResetYaw;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.Constants.DriveConstants;
 
@@ -21,10 +22,10 @@ public class TrajectoryRunner extends SequentialCommandGroup{
     Trajectory trajectory, TrajectoryConfig trajectoryConfig){
 
         // Tell theta PID controller that its a circle
-        thetaController.enableContinuousInput(0, 360);
+        thetaController.enableContinuousInput(-180, 180);
 
          // Create controller command, this outputs module states for the trajectory given
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, thetaController, swerveSubsystem::setModuleStates, swerveSubsystem);
+       // SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, thetaController, swerveSubsystem::setModuleStates, swerveSubsystem);
 
         // Create report warning command, prints running trajectory to driver station
        // ReportWarning sendData = new ReportWarning("Trajectory runner: " + trajectory.toString(), true);
@@ -33,8 +34,8 @@ public class TrajectoryRunner extends SequentialCommandGroup{
             // Commands to run sequentially
             new SequentialCommandGroup(
                 new ResetOdometry(swerveSubsystem, trajectory.getInitialPose()),  // Reset robot odometry before movement 
-                swerveControllerCommand, // Move robot with trajectory and module states
-                //sendData, // Tell driver station that command is running
+                new ResetYaw(swerveSubsystem),
+                new SwerveControllerCommand(trajectory, swerveSubsystem::getPose, DriveConstants.kDriveKinematics, xController, yController, thetaController, swerveSubsystem::setModuleStates, swerveSubsystem), // Move robot with trajectory and module states
                 new InstantCommand(() -> swerveSubsystem.stopModules()) // Stop all modules
             )
         ); 

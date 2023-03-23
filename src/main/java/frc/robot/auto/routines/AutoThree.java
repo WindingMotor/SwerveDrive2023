@@ -46,7 +46,6 @@ public class AutoThree extends SequentialCommandGroup{
 
         // Add commands to run
         addCommands(
-
         // Bring elevator to top
         new ConeTop(elevatorSubsystem, grabberSubsystem),
         new WaitCommand(2.5),
