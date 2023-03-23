@@ -208,6 +208,9 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     // 9 LJ - Loading station
     xbox.button(9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
 
+    // 10 RJ - Grabber angle zero
+    xbox.button(10).onTrue(new GrabberDegrees(grabberSubsystem, 0));
+
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
