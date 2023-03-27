@@ -48,9 +48,9 @@ public class LightStrip  extends SubsystemBase{
         //updateYellowPurple();
         //updateStripRainbow();
 
-      //  if(!DriverStation.isEnabled()){
-      //      updateStripRainbow();
-      //  }
+        if(!DriverStation.isEnabled()){
+            updateStripRainbow();
+        }
    
 
         /* 

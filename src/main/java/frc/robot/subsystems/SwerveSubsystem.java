@@ -108,6 +108,10 @@ public class SwerveSubsystem extends SubsystemBase {
     gyro.zeroYaw();
   }
 
+  public void calibrateGyro(){
+    gyro.calibrate();
+  }
+
   // Return gyro heading, make sure to read navx docs on this
   public double getHeading(){
     return gyro.getAngle();

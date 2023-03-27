@@ -24,11 +24,11 @@ public class ConePlatform extends SequentialCommandGroup{
     
         addCommands(
         // Set grabber angle to horizontal
-        new GrabberDegrees(grabberSubsystem, 20),
+        new GrabberDegrees(grabberSubsystem, 38), // CHANGED TO 38 instead of 20 -> 9:00
         // Turn on intake
         new GrabberForward(grabberSubsystem),
         // Move the elevator UP to platform height
-        new ElevatorSetpoint(elevatorSubsystem, -1.30 /* Height of platform in meters */)
+        new ElevatorSetpoint(elevatorSubsystem, -1.28 /* Height of platform in meters */)
         );
 
     }

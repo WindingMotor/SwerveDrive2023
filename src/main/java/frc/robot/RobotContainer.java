@@ -55,6 +55,7 @@ import frc.robot.commands.grabber.angle.GrabberTrigger;
 import frc.robot.commands.swerve.SwerveAlignBasic;
 import frc.robot.commands.swerve.SwerveJoystick;
 import frc.robot.commands.util.ResetOdometry;
+import frc.robot.commands.util.SwerveReset;
 import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
@@ -183,7 +184,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   private void configureButtonBindings(){
 
     // ELEVATOR SOLENOID
-    new JoystickButton(tx16s, 2).onTrue(new ElevatorSolenoid(elevatorSubsystem));
+    new JoystickButton(tx16s, 3).onTrue(new ElevatorSolenoid(elevatorSubsystem));
 
     // 4 Y - Garbber Solenoid
     xbox.y().onTrue(new GrabberSolenoid(grabberSubsystem));
@@ -210,6 +211,9 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 
     // 10 RJ - Grabber angle zero
     xbox.button(10).onTrue(new GrabberDegrees(grabberSubsystem, 0));
+
+    // EMG RESET
+   // tx16sCOMD.button(5).toggleOnTrue(new SwerveReset(swerveSubsystem));
 
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
