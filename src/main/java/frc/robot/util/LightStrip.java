@@ -72,6 +72,16 @@ public class LightStrip  extends SubsystemBase{
       //  rightStrip.setData(stripBuffer);
     }
 
+         // 
+         private void setStripColor(int r, int g, int b, int led){
+            for(var i = 0; i < stripBuffer.getLength(); i++){
+                if(i > led){break;}
+                stripBuffer.setRGB(i, r, g, b);
+                }
+            leftStrip.setData(stripBuffer);
+          //  rightStrip.setData(stripBuffer);
+        }
+
     // Set entire strip to rainbow
     public void updateStripRainbow(){
         // Set strip colors

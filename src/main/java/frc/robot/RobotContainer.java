@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -65,6 +66,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
 import frc.robot.util.LightStrip;
 import frc.robot.util.Transmitter;
+import frc.robot.util.UltrasonicRangefinder;
 import frc.robot.util.Constants.AutoConstants;
 import frc.robot.util.Constants.IOConstants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -119,6 +121,8 @@ public class RobotContainer {
 
   private final LightStrip strips = new LightStrip(tx16s);
 
+  private final UltrasonicRangefinder ultrasonic = new UltrasonicRangefinder(strips);
+  
   //private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
   //--------------------------P-A-T-H-S----------------------------//
@@ -179,6 +183,25 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
   private boolean trueFunct(){return true;}
 
   //------------------------------------B-U-T-T-O-N-S------------------------------------//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // Create button bindings
   private void configureButtonBindings(){
