@@ -11,7 +11,7 @@ import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.GrabberSolenoid;
-import frc.robot.commands.routines.scoring.ConeTop;
+import frc.robot.commands.routines.scoring.ScoreTop;
 import frc.robot.commands.util.ResetOdometryInverse;
 import frc.robot.commands.util.ResetYaw;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -40,7 +40,7 @@ public class AutoOne extends SequentialCommandGroup{
         // Add commands to run
         addCommands(
 
-        new ConeTop(elevatorSubsystem, grabberSubsystem),
+        new ScoreTop(elevatorSubsystem, grabberSubsystem),
         new WaitCommand(2.5),
         new ElevatorSolenoid(elevatorSubsystem),
         new WaitCommand(2),

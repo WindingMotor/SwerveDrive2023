@@ -66,7 +66,7 @@ public class SwerveRotate extends CommandBase {
 
     turningSpeed = thetaController.calculate(swerveSubsystem.getRobotDegrees(), angle);
     
-    // Turning deadband 
+    // Turning motor deadband 
     turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;
 
     // Smartdashboard update

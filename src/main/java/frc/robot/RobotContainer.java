@@ -43,10 +43,10 @@ import frc.robot.commands.intake.IntakeForward;
 import frc.robot.commands.intake.IntakeHold;
 import frc.robot.commands.intake.IntakeReverse;
 import frc.robot.commands.intake.IntakeStop;
-import frc.robot.commands.routines.loading.ConeFloor;
-import frc.robot.commands.routines.loading.ConePlatform;
-import frc.robot.commands.routines.scoring.ConeBottom;
-import frc.robot.commands.routines.scoring.ConeTop;
+import frc.robot.commands.routines.loading.DEPConeFloor;
+import frc.robot.commands.routines.loading.LoadPlatform;
+import frc.robot.commands.routines.scoring.ScoreBottom;
+import frc.robot.commands.routines.scoring.ScoreTop;
 import frc.robot.commands.routines.util.ObjectLaunch;
 import frc.robot.commands.routines.util.SetLedPurple;
 import frc.robot.commands.routines.util.SetLedYellow;
@@ -209,13 +209,13 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem, ultrasonic
     xbox.x().onTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
 
     // 5 LB - Low Score
-    xbox.leftBumper().onTrue(new ConeBottom(elevatorSubsystem, grabberSubsystem));
+    xbox.leftBumper().onTrue(new ScoreBottom(elevatorSubsystem, grabberSubsystem));
 
     // 6 RB - High Score
-    xbox.rightBumper().onTrue(new ConeTop(elevatorSubsystem, grabberSubsystem));
+    xbox.rightBumper().onTrue(new ScoreTop(elevatorSubsystem, grabberSubsystem));
 
     // 9 LJ - Loading station
-    xbox.button(9).onTrue(new ConePlatform(elevatorSubsystem, grabberSubsystem));
+    xbox.button(9).onTrue(new LoadPlatform(elevatorSubsystem, grabberSubsystem));
 
     // 10 RJ - Grabber angle zero
     xbox.button(10).onTrue(new GrabberDegrees(grabberSubsystem, 0));

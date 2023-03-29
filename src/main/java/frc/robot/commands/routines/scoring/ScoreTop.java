@@ -12,16 +12,17 @@ import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 
-public class ConeBottom extends SequentialCommandGroup{
+public class ScoreTop extends SequentialCommandGroup{
     
-    public ConeBottom(ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem){
+    public ScoreTop(ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem){
 
         addCommands(
         // Set grabber angle to horizontal
-        new GrabberDegrees(grabberSubsystem, 90),
+        new GrabberDegrees(grabberSubsystem, 110),  // CHANGED TO 110 instead of 105 -> 9:00
         // Turn on intake
         // Move the elevator UP to platform height
-        new ElevatorSetpoint(elevatorSubsystem, -0.9 /* Height of platform in meters */)
+        new ElevatorSetpoint(elevatorSubsystem, -1.4 /* Height of platform in meters */)
         );
+
     }
 }
