@@ -1,8 +1,6 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
 package frc.robot;
-import com.revrobotics.AnalogInput;
-
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

@@ -6,26 +6,11 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-//import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.TrajectoryWeaver;
-import frc.robot.auto.manuals.TestTrajectory;
-import frc.robot.commands.elevator.ElevatorSetpoint;
-import frc.robot.commands.elevator.ElevatorSolenoid;
-import frc.robot.commands.elevator.ElevatorZero;
-import frc.robot.commands.grabber.GrabberSolenoid;
-import frc.robot.commands.routines.scoring.ConeBottom;
-import frc.robot.commands.routines.scoring.ConeTop;
-import frc.robot.commands.util.ReportString;
-import frc.robot.commands.util.ResetOdometry;
-import frc.robot.commands.util.ResetOdometryInverse;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -36,7 +21,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoTwo extends SequentialCommandGroup{
 
     // PPTrajectory and event map
-    private final PathPlannerTrajectory back = PathPlanner.loadPath("backwardsOne", new PathConstraints(3.5, 4.5)); 
+    //private final PathPlannerTrajectory back = PathPlanner.loadPath("backwardsOne", new PathConstraints(3.5, 4.5)); 
 
 
     PathPlannerTrajectory traj1 = PathPlanner.generatePath(

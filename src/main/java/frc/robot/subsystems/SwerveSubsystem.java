@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.UltrasonicRangefinder;
 import frc.robot.util.Constants.DriveConstants;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -60,6 +61,9 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Create the navX using roboRIO expansion port
   private AHRS gyro = new AHRS(SPI.Port.kMXP);
+
+  // Ultrasonic sensor
+  UltrasonicRangefinder ultrasonic;
   
   // Returns positions of the swerve modules for odometry
   public SwerveModulePosition[] getModulePositions(){
@@ -95,7 +99,7 @@ public class SwerveSubsystem extends SubsystemBase {
     odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics, 
     getOdometryAngle(), getModulePositions());
     // new Rotation2d(gyro.getYaw() * -1 / 180 * Math.PI), getModulePositions()
-  
+
   }
 
   // Reset gyro heading 

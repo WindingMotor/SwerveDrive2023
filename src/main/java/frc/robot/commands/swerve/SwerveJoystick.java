@@ -2,6 +2,7 @@
 
 package frc.robot.commands.swerve;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.util.UltrasonicRangefinder;
 import frc.robot.util.Constants.DriveConstants;
 import frc.robot.util.Constants.IOConstants;
 import java.util.function.Supplier;
@@ -19,11 +20,12 @@ public class SwerveJoystick extends CommandBase {
   // Create variables
   private final SwerveSubsystem swerveSubsystem;
   private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction, headingFunction;
-  private final Supplier<Boolean> fieldOrientedFunction;
+  private final Supplier<Boolean> fieldOrientedFunction, ultrasonicMode;
   private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
   private final Supplier<Boolean> flickFunction;
   private double initialHeading;
   private PIDController thetaController;
+  UltrasonicRangefinder ultrasonic;
   
   private SendableChooser<Double> autoChooser = new SendableChooser<>();
  
@@ -31,9 +33,10 @@ public class SwerveJoystick extends CommandBase {
   private int counter;
 
   // Command constructor
-  public SwerveJoystick(SwerveSubsystem swerveSubsystem,
+  public SwerveJoystick(SwerveSubsystem swerveSubsystem, UltrasonicRangefinder ultrasonic,
   Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
-  Supplier<Boolean> fieldOrientedFunction, Supplier<Double> headingFunction, Supplier<Boolean> flickFunction){
+  Supplier<Boolean> fieldOrientedFunction, Supplier<Double> headingFunction, Supplier<Boolean> flickFunction,
+  Supplier<Boolean> ultrasonicMode){
 
     // Assign values passed from constructor
     this.swerveSubsystem = swerveSubsystem;
@@ -43,6 +46,8 @@ public class SwerveJoystick extends CommandBase {
     this.fieldOrientedFunction = fieldOrientedFunction;
     this.headingFunction = headingFunction;
     this.flickFunction = flickFunction;
+    this.ultrasonicMode = ultrasonicMode;
+    this.ultrasonic = ultrasonic;
 
     // Set the inital heading to the navx +||-inf heading. Should be zero on startup!
     this.initialHeading = headingFunction.get();
@@ -126,6 +131,15 @@ public class SwerveJoystick extends CommandBase {
     SmartDashboard.putNumber("Turning Speed", turningSpeed);
     SmartDashboard.putNumber("Inital Heading", initialHeading);
     SmartDashboard.putNumber("NavX Heading", headingFunction.get());
+
+    if(ultrasonicMode.get()){
+      SmartDashboard.putBoolean("Ultrasonic Loading Station", ultrasonic.isLoadingWall());
+
+      if(ultrasonic.isLoadingWall()){
+      }
+      
+      xSpeed = 0;
+    }
 
     // Create chassis speeds
     ChassisSpeeds chassisSpeeds;

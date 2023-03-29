@@ -1,13 +1,10 @@
 
 package frc.robot.util;
-import java.sql.Driver;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightStrip  extends SubsystemBase{
@@ -17,10 +14,10 @@ public class LightStrip  extends SubsystemBase{
 
     private AddressableLEDBuffer stripBuffer;
     private int rainbowFirstPixelHue = 0;
-    private Joystick tx16s;
+    //private Joystick tx16s;
 
     public LightStrip(Joystick tx16s){
-        this.tx16s = tx16s;
+        //this.tx16s = tx16s;
         // Create LED strip object
         leftStrip = new AddressableLED(0);
        // rightStrip = new AddressableLED(portTwo);
@@ -68,18 +65,15 @@ public class LightStrip  extends SubsystemBase{
             stripBuffer.setRGB(i, r, g, b);
         }
 
-        leftStrip.setData(stripBuffer);
-      //  rightStrip.setData(stripBuffer);
+        leftStrip.setData(stripBuffer);;
     }
 
-         // 
-         private void setStripColor(int r, int g, int b, int led){
-            for(var i = 0; i < stripBuffer.getLength(); i++){
-                if(i > led){break;}
-                stripBuffer.setRGB(i, r, g, b);
-                }
-            leftStrip.setData(stripBuffer);
-          //  rightStrip.setData(stripBuffer);
+    private void setStripColor(int r, int g, int b, int led){
+        for(var i = 0; i < stripBuffer.getLength(); i++){
+            if(i > led){break;}
+            stripBuffer.setRGB(i, r, g, b);
+            }
+        leftStrip.setData(stripBuffer);
         }
 
     // Set entire strip to rainbow

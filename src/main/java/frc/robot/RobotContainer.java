@@ -86,9 +86,19 @@ public class RobotContainer {
 
   //------------------------------------O-B-J-E-C-T-S-----------------------------------//
 
-  // Create joysticks
+  // Deprecated joysticks
   //private final Joystick leftJoystick = new Joystick(IOConstants.kLeftJoystick);
   //private final Joystick rightJoystick = new Joystick(IOConstants.kRightJoystick);
+
+  // Create tx16s transmitter
+  private final Joystick tx16s = new Joystick(4);
+  private final CommandJoystick tx16sCOMD = new CommandJoystick(4);
+
+  // Create led strips
+  private final LightStrip strips = new LightStrip(tx16s);
+
+  // Create ultrasonic sensor 
+  private final UltrasonicRangefinder ultrasonic = new UltrasonicRangefinder(strips);
 
   // Create swerve subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
@@ -115,14 +125,6 @@ public class RobotContainer {
   //private final XboxController xbox = new XboxController(3);
   private final CommandXboxController xbox = new CommandXboxController(3);
 
-  // Create tx16s transmitter
-  private final Joystick tx16s = new Joystick(4);
-  private final CommandJoystick tx16sCOMD = new CommandJoystick(4);
-
-  private final LightStrip strips = new LightStrip(tx16s);
-
-  private final UltrasonicRangefinder ultrasonic = new UltrasonicRangefinder(strips);
-  
   //private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
   //--------------------------P-A-T-H-S----------------------------//
@@ -144,7 +146,7 @@ public class RobotContainer {
 
   //>--------------T-R-A-N-S-----------------//
     
-  /* 
+/* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> tx16s.getRawAxis(0), // X-Axis
     () -> -tx16s.getRawAxis(1), // Y-Axis
@@ -154,14 +156,14 @@ public class RobotContainer {
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 */
 
-swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
+swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem, ultrasonic,
 () -> -tx16sCOMD.getRawAxis(0), // X-Axis
 () -> tx16sCOMD.getRawAxis(1), // Y-Axis
 () -> tx16sCOMD.getRawAxis(3), // R-Axis
 () -> tx16s.getRawButton(2), // Field oriented -does nothing right now
 () -> swerveSubsystem.getHeading(), // Navx heading
-() -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
-
+() -> falseFunct(), // Flick offset button, should be toggle!
+() -> tx16s.getRawButton(4))); // Ultrasonic mode
 
   //elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
   //() -> xbox.getRawAxis(1)));
@@ -182,26 +184,9 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 
   private boolean trueFunct(){return true;}
 
+  private boolean falseFunct(){return false;}
+
   //------------------------------------B-U-T-T-O-N-S------------------------------------//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // Create button bindings
   private void configureButtonBindings(){
