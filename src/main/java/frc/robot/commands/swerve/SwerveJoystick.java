@@ -134,7 +134,7 @@ public class SwerveJoystick extends CommandBase {
 
     if(ultrasonicMode.get()){
       SmartDashboard.putBoolean("Ultrasonic Loading Station", ultrasonic.isLoadingWall());
-      if(ultrasonic.isLoadingWall()){ }
+      if(ultrasonic.isLoadingWall()){}
       ySpeed = 0;
 
     }

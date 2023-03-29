@@ -203,8 +203,8 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic(){
 
-    // Update odometer for it to caculate robot position
-    odometer.update(getOdometryAngle(), getModulePositions());
+   // Update odometer for it to caculate robot position
+   odometer.update(getOdometryAngle(), getModulePositions());
 
    // Put odometry data on smartdashboard
    SmartDashboard.putNumber("Heading", getHeading());
@@ -217,6 +217,8 @@ public class SwerveSubsystem extends SubsystemBase {
   SmartDashboard.putBoolean("Magnetic Issues", gyro.isMagneticDisturbance());
   SmartDashboard.putBoolean("Magnetic Calibartion", gyro.isMagnetometerCalibrated());
 
+  SmartDashboard.putNumber("Robot Acceleration X", gyro.getRawAccelX());
+  SmartDashboard.putNumber("Robot Acceleration Y", gyro.getRawAccelY());
 
    // Update smartdashboard data for each swerve module object
     frontLeft.update();
