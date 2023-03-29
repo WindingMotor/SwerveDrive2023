@@ -90,7 +90,7 @@ public class SwerveRotate extends CommandBase {
   public void end(boolean interrupted){swerveSubsystem.stopModules();}
 
   @Override
-  public boolean isFinished(){return false;}
+  public boolean isFinished(){return finished;}
 
   
 }
