@@ -166,10 +166,10 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem, ultrasonic
 () -> tx16s.getRawButton(4))); // Ultrasonic mode
 
   //elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
-  //() -> xbox.getRawAxis(1)));
+  // () -> xbox.getRawAxis(1)));
 
   //grabberSubsystem.setDefaultCommand(new GrabberTrigger(grabberSubsystem,
-  //  () -> xbox.getRawAxis(3)));
+  // () -> xbox.getRawAxis(3)));
 
   //>----------S-E-N-D-E-R----------<//
 

@@ -49,7 +49,6 @@ public class LightStrip  extends SubsystemBase{
             updateStripRainbow();
         }
    
-
         /* 
         if(DriverStation.isEnabled()){
             setGreen();

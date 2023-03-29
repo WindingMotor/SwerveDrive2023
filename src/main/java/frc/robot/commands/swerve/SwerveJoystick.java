@@ -134,11 +134,9 @@ public class SwerveJoystick extends CommandBase {
 
     if(ultrasonicMode.get()){
       SmartDashboard.putBoolean("Ultrasonic Loading Station", ultrasonic.isLoadingWall());
+      if(ultrasonic.isLoadingWall()){ }
+      ySpeed = 0;
 
-      if(ultrasonic.isLoadingWall()){
-      }
-      
-      xSpeed = 0;
     }
 
     // Create chassis speeds

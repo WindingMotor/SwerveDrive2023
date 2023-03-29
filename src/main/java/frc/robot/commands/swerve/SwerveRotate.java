@@ -15,30 +15,32 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveRotate extends CommandBase {
 
-  /* 
+  
   // Create variables
   private final SwerveSubsystem swerveSubsystem;
-  private final Supplier<Double> headingFunction;
-  private final Supplier<Boolean> fieldOrientedFunction;
-  private double initialHeading;
+  
   private PIDController thetaController;
-
-  double turningSpeed = 0;
+  private double angle;
+  private boolean finished;
+  private double angleTolerance;
 
   // Command constructor
-  public SwerveJoystick(SwerveSubsystem swerveSubsystem,
-  Supplier<Boolean> fieldOrientedFunction, Supplier<Double> headingFunction){
+  public SwerveRotate(SwerveSubsystem swerveSubsystem, double angle){
+
+    this.angle = angle;
+    finished = false;
+
+    // Ending command tolerance
+    angleTolerance = 0.1;
 
     // Assign values passed from constructor
     this.swerveSubsystem = swerveSubsystem;
-    this.fieldOrientedFunction = fieldOrientedFunction;
-    this.headingFunction = headingFunction;
-
-    // Set the inital heading to the navx +||-inf heading. Should be zero on startup!
-    this.initialHeading = headingFunction.get();
 
     // Set default PID values for thetaPID
     thetaController = new PIDController(DriveConstants.kPThetaController, DriveConstants.kIThetaController, DriveConstants.kDThetaController);
+
+    // Enable continuous input for thetaPID
+    thetaController.enableContinuousInput(0, 360);
 
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem);
@@ -47,46 +49,34 @@ public class SwerveRotate extends CommandBase {
 
   @Override
   public void initialize() {
-    //swerveSubsystem.resetYaw();
-    initialHeading = headingFunction.get();
-
+    // Set default command values
+    finished = false;
   }
 
   // Running loop of command
   @Override
   public void execute(){
 
-    // Get current navx heading
-    double newHeading = headingFunction.get();
+    if(swerveSubsystem.getRobotDegrees() > angle - angleTolerance && swerveSubsystem.getRobotDegrees() < angle + angleTolerance){
+      finished = true;
+    }
 
-    turningSpeed = thetaController.calculate(newHeading, initialHeading);
-    //turningSpeed = (headingFunction.get() - initialHeading) * turningPValue;
+    // Get current navx heading
+    double turningSpeed;
+
+    turningSpeed = thetaController.calculate(swerveSubsystem.getRobotDegrees(), angle);
     
     // Turning deadband 
     turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;
-    turningSpeed *= -1;
 
-    // Limit turning rat
-    if (turningSpeed > DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
-      turningSpeed = DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-    }
-    else if (turningSpeed < -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond){
-      turningSpeed = -DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-    }
-    
     // Smartdashboard update
     SmartDashboard.putNumber("Turning Speed", turningSpeed);
-    SmartDashboard.putNumber("Inital Heading", initialHeading);
-    SmartDashboard.putNumber("NavX Heading", headingFunction.get());
-
+    
     // Create chassis speeds
     ChassisSpeeds chassisSpeeds;
 
     chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(0, 0, turningSpeed, swerveSubsystem.getRotation2d());
     //chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,turningSpeed);
-
-    // Put field oriented value on smart dashboard
-    // SmartDashboard.putBoolean("Field Oriented: ", fieldOrientedFunction.get());
 
     // Create module states using array
     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
@@ -102,5 +92,5 @@ public class SwerveRotate extends CommandBase {
   @Override
   public boolean isFinished(){return false;}
 
-  */
+  
 }
