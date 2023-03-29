@@ -1,25 +1,24 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.commands.routines.util;
+package frc.robot.commands.led;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.util.LightStrip;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class SetLedBlue extends CommandBase {
+public class SetLedYellow extends CommandBase {
 
   private LightStrip ledStrip;
-
-  public SetLedBlue(LightStrip ledStrip) {
+  public SetLedYellow(LightStrip ledStrip) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ledStrip);
     this.ledStrip = ledStrip;
   }
-
+    
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ledStrip.setBlue();
+    ledStrip.setYellow();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

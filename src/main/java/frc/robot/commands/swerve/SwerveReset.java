@@ -1,7 +1,6 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.commands.util;
-import frc.robot.commands.routines.util.CalibrateGyro;
+package frc.robot.commands.swerve;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.LightStrip;

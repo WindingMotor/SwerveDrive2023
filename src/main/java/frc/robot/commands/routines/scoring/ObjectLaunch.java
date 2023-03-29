@@ -1,6 +1,6 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.commands.routines.util;
+package frc.robot.commands.routines.scoring;
 import java.sql.Driver;
 
 import edu.wpi.first.wpilibj.DriverStation;
