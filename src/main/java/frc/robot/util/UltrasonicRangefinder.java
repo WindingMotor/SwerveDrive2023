@@ -17,13 +17,12 @@ public class UltrasonicRangefinder extends SubsystemBase{
     public double getDistanceMM(){
 
         double analogValue = analogInput.getAverageVoltage();
-        double voltage = analogValue * 5.0 / 1023.0;
-        double distance = (voltage - offset) / scalingFactor;
+        double distance = analogValue * 5;
         return distance;
     }
 
-    public double getDistanceMM(){
-        return(getDistanceM() * 1000);
+    public double getDistanceM(){
+        return(getDistanceM() / 1000);
     }
 
     public boolean isDistanceMaxMin(double max, double min){
