@@ -11,18 +11,19 @@ public class UltrasonicRangefinder extends SubsystemBase{
     private double offset = 0.097;
 
     public UltrasonicRangefinder(LightStrip lightStrip){
-       analogInput = new AnalogInput(0);
+       analogInput = new AnalogInput(3);
     }
 
     public double getDistanceMM(){
 
         double analogValue = analogInput.getAverageVoltage();
-        double distance = analogValue * 5;
+        double voltage = analogValue * 5.0 / 1023.0;
+        double distance = (voltage - offset) / scalingFactor;
         return distance;
     }
 
-    public double getDistanceM(){
-        return(getDistanceMM() / 1000);
+    public double getDistanceMM(){
+        return(getDistanceM() * 1000);
     }
 
     public boolean isDistanceMaxMin(double max, double min){
@@ -55,6 +56,6 @@ public class UltrasonicRangefinder extends SubsystemBase{
         SmartDashboard.putNumber("Ultrasonic Distance Meters", getDistanceM());
         SmartDashboard.putNumber("Ultrasonic Distance Millimeters", getDistanceMM());
         SmartDashboard.putNumber("Ultrasonic Raw Voltage", analogInput.getAverageVoltage());
-    }
 
+    }
 }

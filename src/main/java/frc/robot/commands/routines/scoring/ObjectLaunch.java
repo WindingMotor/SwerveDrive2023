@@ -20,7 +20,6 @@ public class ObjectLaunch extends SequentialCommandGroup {
 
   public ObjectLaunch(ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem){
 
-
    addCommands(new ElevatorSetpoint(elevatorSubsystem, -0.5),
    new GrabberDegrees(grabberSubsystem, 80),
    new GrabberReverseFast(grabberSubsystem));

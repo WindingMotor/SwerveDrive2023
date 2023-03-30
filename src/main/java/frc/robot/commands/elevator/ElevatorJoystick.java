@@ -17,7 +17,7 @@ public class ElevatorJoystick extends CommandBase {
     this.input = input;
     addRequirements(subsystem);
   }
-
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
