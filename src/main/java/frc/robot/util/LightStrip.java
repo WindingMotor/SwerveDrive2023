@@ -14,16 +14,21 @@ public class LightStrip  extends SubsystemBase{
 
     private AddressableLEDBuffer stripBuffer;
     private int rainbowFirstPixelHue = 0;
+
+    private int stripLen;
     //private Joystick tx16s;
 
     public LightStrip(Joystick tx16s){
+
+        stripLen = 45;
+
         //this.tx16s = tx16s;
         // Create LED strip object
         leftStrip = new AddressableLED(0);
        // rightStrip = new AddressableLED(portTwo);
 
         // Create LED buffer object
-        stripBuffer = new AddressableLEDBuffer(45);
+        stripBuffer = new AddressableLEDBuffer(stripLen);
 
         // Set LED strip length to buffer
         leftStrip.setLength(stripBuffer.getLength());
@@ -67,9 +72,16 @@ public class LightStrip  extends SubsystemBase{
         leftStrip.setData(stripBuffer);;
     }
 
-    private void setStripColor(int r, int g, int b, int led){
+    private void setStripColor(int r, int g, int b, int stopPoint){
+
+        // Filtering and limiting stopPoint
+        stopPoint = Math.abs(stopPoint);
+        if(stopPoint>=stripLen){stopPoint = stripLen;}
+        if(stopPoint<=0){stopPoint = 0;}
+
+        // Set led colors
         for(var i = 0; i < stripBuffer.getLength(); i++){
-            if(i > led){break;}
+            if(i >= stopPoint){break;}
             stripBuffer.setRGB(i, r, g, b);
             }
         leftStrip.setData(stripBuffer);
