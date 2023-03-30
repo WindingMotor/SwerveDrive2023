@@ -114,6 +114,8 @@ public class GrabberSubsystem extends SubsystemBase{
         intakeMotor.set(x);
     }
 
+    
+
 //---------------------// Angle
 
     public void setAngleSpeed(double x){
