@@ -67,6 +67,7 @@ import frc.robot.util.Constants;
 import frc.robot.util.LightStrip;
 import frc.robot.util.Transmitter;
 import frc.robot.util.UltrasonicRangefinder;
+import frc.robot.util.VL53L4CX;
 import frc.robot.util.Constants.AutoConstants;
 import frc.robot.util.Constants.IOConstants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -124,6 +125,8 @@ public class RobotContainer {
   // Create xbox controller
   //private final XboxController xbox = new XboxController(3);
   private final CommandXboxController xbox = new CommandXboxController(3);
+
+ // private final VL53L4CX vl53l4cx = new VL53L4CX(20000);
 
   //private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
