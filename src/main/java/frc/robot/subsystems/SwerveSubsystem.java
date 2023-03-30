@@ -220,16 +220,11 @@ public class SwerveSubsystem extends SubsystemBase {
   SmartDashboard.putNumber("Robot Acceleration X", gyro.getRawAccelX());
   SmartDashboard.putNumber("Robot Acceleration Y", gyro.getRawAccelY());
 
-   // Update smartdashboard data for each swerve module object
-    frontLeft.update();
-    frontRight.update();
-    backLeft.update();
-    backRight.update();
+  // Update smartdashboard data for each swerve module object
+  frontLeft.update();
+  frontRight.update();
+  backLeft.update();
+  backRight.update();
 
   }
-
 }
-
-
- 
-

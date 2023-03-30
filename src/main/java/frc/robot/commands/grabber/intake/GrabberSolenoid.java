@@ -1,6 +1,6 @@
 // FRC2106 Junkyard Dogs - Swerve Drive Base Code
 
-package frc.robot.commands.grabber;
+package frc.robot.commands.grabber.intake;
 import frc.robot.subsystems.GrabberSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 

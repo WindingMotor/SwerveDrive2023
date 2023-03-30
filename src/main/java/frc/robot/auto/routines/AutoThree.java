@@ -9,7 +9,7 @@ import frc.robot.auto.commands.TrajectoryRunner;
 import frc.robot.auto.manuals.Backwards;
 import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorZero;
-import frc.robot.commands.grabber.GrabberSolenoid;
+import frc.robot.commands.grabber.intake.GrabberSolenoid;
 import frc.robot.commands.routines.scoring.ScoreTop;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;

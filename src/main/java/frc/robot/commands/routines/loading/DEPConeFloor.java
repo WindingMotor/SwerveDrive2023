@@ -3,9 +3,9 @@
 package frc.robot.commands.routines.loading;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.elevator.ElevatorSetpoint;
-import frc.robot.commands.grabber.GrabberSolenoid;
 import frc.robot.commands.grabber.angle.GrabberDegrees;
 import frc.robot.commands.grabber.intake.GrabberForward;
+import frc.robot.commands.grabber.intake.GrabberSolenoid;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 
