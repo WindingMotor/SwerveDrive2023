@@ -4,7 +4,10 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightStrip  extends SubsystemBase{
@@ -16,6 +19,9 @@ public class LightStrip  extends SubsystemBase{
     private int rainbowFirstPixelHue = 0;
 
     private int stripLen;
+    public int[] currentColor = {0,0,0};
+
+    private PowerDistribution PDP = new PowerDistribution(1, ModuleType.kRev);
     //private Joystick tx16s;
 
     public LightStrip(Joystick tx16s){
@@ -50,8 +56,13 @@ public class LightStrip  extends SubsystemBase{
         //updateYellowPurple();
         //updateStripRainbow();
 
+        SmartDashboard.putNumber("Total Current", PDP.getTotalCurrent());
+        
         if(!DriverStation.isEnabled()){
             updateStripRainbow();
+        }else{
+            setStripColor(currentColor[0],currentColor[1],currentColor[2],(int) PDP.getTotalCurrent() / 2);
+            SmartDashboard.putNumber("LED AMOUNT",((int) PDP.getTotalCurrent() / 2) + 5);
         }
    
         /* 
@@ -81,8 +92,9 @@ public class LightStrip  extends SubsystemBase{
 
         // Set led colors
         for(var i = 0; i < stripBuffer.getLength(); i++){
-            if(i >= stopPoint){break;}
-            stripBuffer.setRGB(i, r, g, b);
+            if(i >= stopPoint){stripBuffer.setRGB(i, 0, 0, 0);}else{
+                stripBuffer.setRGB(i, r, g, b);
+            }
             }
         leftStrip.setData(stripBuffer);
         }
@@ -121,9 +133,11 @@ public class LightStrip  extends SubsystemBase{
 
     public void setBlue(){ setStripColor(0, 0, 255);}
 
-    public void setYellow(){ setStripColor(255, 255, 0);}
+    // public void setYellow(){ setStripColor(255, 255, 0);}
+    public void setYellow(){currentColor = new int[]{255,255,0};}
 
-    public void setPurple(){ setStripColor(255, 0, 255);}
+    //public void setPurple(){ setStripColor(255, 0, 255);}
+    public void setPurple(){currentColor = new int[]{255,0,255};}
 
     public void updateYellowPurple(){
         setYellow();

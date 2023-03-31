@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class UltrasonicRangefinder extends SubsystemBase{
 
     private AnalogInput analogInput;  
-    private double scalingFactor = 0.0098;
-    private double offset = 0.097;
+   // private double scalingFactor = 0.0098;
+   // private double offset = 0.097;
 
     public UltrasonicRangefinder(LightStrip lightStrip){
        analogInput = new AnalogInput(3);
@@ -16,13 +16,14 @@ public class UltrasonicRangefinder extends SubsystemBase{
 
     public double getDistanceMM(){
 
-        double analogValue = analogInput.getAverageVoltage();
+        double analogValue = analogInput.getVoltage();
         double distance = analogValue * 5;
         return distance;
+
     }
 
     public double getDistanceM(){
-        return(getDistanceM() / 1000);
+        return(getDistanceMM() / 1000);
     }
 
     public boolean isDistanceMaxMin(double max, double min){
@@ -54,7 +55,12 @@ public class UltrasonicRangefinder extends SubsystemBase{
     public void periodic() {
         SmartDashboard.putNumber("Ultrasonic Distance Meters", getDistanceM());
         SmartDashboard.putNumber("Ultrasonic Distance Millimeters", getDistanceMM());
-        SmartDashboard.putNumber("Ultrasonic Raw Voltage", analogInput.getAverageVoltage());
+        SmartDashboard.putNumber("Ultrasonic Raw Voltage", analogInput.getVoltage());
+
+        double voltage = analogInput.getVoltage();
+        double distance = voltage / 0.0098; //convert voltage to distance using the formula in the datasheet
+
+        SmartDashboard.putNumber("Ultrasonic Raw Inches", distance);
 
     }
 }

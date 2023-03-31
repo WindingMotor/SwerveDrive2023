@@ -117,7 +117,7 @@ public class RobotContainer {
   public final PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
   public final PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
   //public final ProfiledPIDController thetaController = new ProfiledPIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
-  public final ProfiledPIDController thetaController = new ProfiledPIDController(4, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
+  public final ProfiledPIDController thetaController = new ProfiledPIDController(0, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
 
   // Create a non profiled PID controller for path planner
   private final PIDController ppThetaController = new PIDController(0, 0, 0);
@@ -224,7 +224,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem, ultrasonic
     xbox.button(10).onTrue(new GrabberDegrees(grabberSubsystem, 0));
 
     // EMG RESET
-   // tx16sCOMD.button(5).toggleOnTrue(new SwerveReset(swerveSubsystem));
+   tx16sCOMD.button(5).toggleOnTrue(new SwerveReset(swerveSubsystem));
 
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
