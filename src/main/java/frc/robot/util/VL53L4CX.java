@@ -1,11 +1,10 @@
-package frc.robot.util;
 
+package frc.robot.util;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VL53L4CX extends SubsystemBase {
 
-    /* 
     private static final int DEVICE_ADDRESS = 0x29;
     private static final int SHORT_RANGE_MODE_REGISTER_ADDRESS = 0x010B;
     private static final int SIGNAL_RATE_LIMIT_REGISTER_ADDRESS = 0x84;
@@ -23,7 +22,6 @@ public class VL53L4CX extends SubsystemBase {
 
         // Configure the sensor
         configureSensor();
-
     }
 
     @Override
@@ -81,5 +79,5 @@ public class VL53L4CX extends SubsystemBase {
         writeWord(TIMING_BUDGET_REGISTER_ADDRESS, timingBudget);
         writeByte(SIGNAL_RATE_LIMIT_REGISTER_ADDRESS, 0x00);
     }
-*/
+
 }
