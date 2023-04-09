@@ -193,14 +193,13 @@ public class RobotContainer {
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 */
 
-swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem, ultrasonic,
+swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 () -> -tx16sCOMD.getRawAxis(0), // X-Axis
 () -> tx16sCOMD.getRawAxis(1), // Y-Axis
 () -> tx16sCOMD.getRawAxis(3), // R-Axis
 () -> tx16s.getRawButton(2), // Field oriented -does nothing right now
 () -> swerveSubsystem.getHeading(), // Navx heading
-() -> falseFunct(), // Flick offset button, should be toggle!
-() -> tx16s.getRawButton(4))); // Ultrasonic mode
+() -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 
   //elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
   // () -> xbox.getRawAxis(1)));

@@ -18,7 +18,7 @@ public class LightStrip  extends SubsystemBase{
     private AddressableLEDBuffer stripBuffer;
     private int rainbowFirstPixelHue = 0;
 
-    private int stripLen;
+    private int stripLen = 45;
     public int[] currentColor = {0,0,0};
 
     private PowerDistribution PDP = new PowerDistribution(1, ModuleType.kRev);
@@ -26,10 +26,6 @@ public class LightStrip  extends SubsystemBase{
 
     public LightStrip(Joystick tx16s){
 
-        stripLen = 45;
-
-        //this.tx16s = tx16s;
-        // Create LED strip object
         leftStrip = new AddressableLED(0);
        // rightStrip = new AddressableLED(portTwo);
 
@@ -40,25 +36,23 @@ public class LightStrip  extends SubsystemBase{
         leftStrip.setLength(stripBuffer.getLength());
        // rightStrip.setLength(stripBuffer.getLength());
     
-        stripBuffer.setRGB(2, 255, 0, 0);
-        stripBuffer.setRGB(3, 0, 255, 0);
-        stripBuffer.setRGB(4, 0, 0, 255);
-
         leftStrip.setData(stripBuffer);
+
         setGreen();
+        setStripColor();
+
         startStrips();
 
     }
 
     @Override
     public void periodic() {
-        // This method will be called once per scheduler run
-        //updateYellowPurple();
-        //updateStripRainbow();
 
         if(!DriverStation.isEnabled()){
+             // Play rainbow during disabled
             updateStripRainbow();
         }else{
+<<<<<<< HEAD
             setStripColor(currentColor[0],currentColor[1],currentColor[2]);
         }
 
@@ -69,17 +63,31 @@ public class LightStrip  extends SubsystemBase{
             setRed();
         }*/
         
-      }
-    
-     // Abstraction method for setting entire strip color
-    private void setStripColor(int r, int g, int b){
-        for(var i = 0; i < stripBuffer.getLength(); i++){
-            stripBuffer.setRGB(i, r, g, b);
+=======
+        if(PDP.getVoltage() < 10){
+            // Modify color if voltage is dropping very low
+            setStripColor(currentColor[0] + (int) PDP.getVoltage() * 2,currentColor[1],currentColor[2],(int) PDP.getTotalCurrent() / 2);
+        } else{ setStripColor(currentColor[0],currentColor[1],currentColor[2],(int) PDP.getTotalCurrent() / 2); } // Normal operation for signaling
         }
+>>>>>>> 66bfe31c1680bbaa2a2e66f5f9c859edb585227d
+      }
 
-        leftStrip.setData(stripBuffer);;
+    
+     // Set entire strip to the color variable
+    private void setStripColor(){
+        for(var i = 0; i < stripBuffer.getLength(); i++){
+            stripBuffer.setRGB(i, currentColor[0],currentColor[1],currentColor[2]);}
+        leftStrip.setData(stripBuffer);
     }
 
+     // Set entire strip to a selected color
+    private void setStripColor(int r, int g, int b){
+        for(var i = 0; i < stripBuffer.getLength(); i++){
+            stripBuffer.setRGB(i, r, g, b);}
+        leftStrip.setData(stripBuffer);
+    }
+
+    // Set enrite strip to one selected color up to a point
     private void setStripColor(int r, int g, int b, int stopPoint){
 
         // Filtering and limiting stopPoint
@@ -124,11 +132,11 @@ public class LightStrip  extends SubsystemBase{
     }
     
 
-    public void setRed(){ setStripColor(255, 0, 0);}
+    public void setRed(){ currentColor = new int[]{255,0,0};}
 
-    public void setGreen(){ setStripColor(0, 255, 0);}
+    public void setGreen(){ currentColor = new int[]{0,255,0};}
 
-    public void setBlue(){ setStripColor(0, 0, 255);}
+    public void setBlue(){ currentColor = new int[]{0,0,255};}
 
     // public void setYellow(){ setStripColor(255, 255, 0);}
     public void setYellow(){currentColor = new int[]{255,255,0};}
