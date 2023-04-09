@@ -56,15 +56,12 @@ public class LightStrip  extends SubsystemBase{
         //updateYellowPurple();
         //updateStripRainbow();
 
-        SmartDashboard.putNumber("Total Current", PDP.getTotalCurrent());
-        
         if(!DriverStation.isEnabled()){
             updateStripRainbow();
         }else{
-            setStripColor(currentColor[0],currentColor[1],currentColor[2],(int) PDP.getTotalCurrent() / 2);
-            SmartDashboard.putNumber("LED AMOUNT",((int) PDP.getTotalCurrent() / 2) + 5);
+            setStripColor(currentColor[0],currentColor[1],currentColor[2]);
         }
-   
+
         /* 
         if(DriverStation.isEnabled()){
             setGreen();

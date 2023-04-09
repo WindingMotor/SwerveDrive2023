@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +26,11 @@ import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.AutoThree;
 import frc.robot.auto.routines.AutoTwo;
+import frc.robot.auto.routines.ConeHigh;
+import frc.robot.auto.routines.ConeHighBump;
+import frc.robot.auto.routines.CubeHigh;
+import frc.robot.auto.routines.CubeHighBump;
+import frc.robot.auto.routines.CubeHighCharge;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.commands.elevator.ElevatorApriltag;
 import frc.robot.commands.elevator.ElevatorDownSetpoint;
@@ -65,6 +71,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
 import frc.robot.util.LightStrip;
+import frc.robot.util.Rumble;
 import frc.robot.util.Transmitter;
 import frc.robot.util.UltrasonicRangefinder;
 import frc.robot.util.VL53L4CX;
@@ -125,8 +132,23 @@ public class RobotContainer {
   // Create xbox controller
   //private final XboxController xbox = new XboxController(3);
   private final CommandXboxController xbox = new CommandXboxController(3);
-
+  private final XboxController xboxNC = new XboxController(3);
+ // private final Rumble rumble = new Rumble(xboxNC, swerveSubsystem);
  // private final VL53L4CX vl53l4cx = new VL53L4CX(20000);
+
+  SendableChooser<Command> chooser = new SendableChooser<>();
+
+  // Only place game object and dont move
+  Command coneHigh = new ConeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
+  Command cubeHigh = new CubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
+
+  // Place game object and go on charge station
+  Command coneHighCharge = new CubeHighCharge(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
+  Command cubeHighCharge = new CubeHighCharge(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
+
+  // Place game object and leave community on bump side
+  Command coneHighBump = new ConeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
+  Command cubeHighBump = new CubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
 
   //private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
@@ -142,6 +164,18 @@ public class RobotContainer {
 
     CameraServer.startAutomaticCapture();
     PathPlannerServer.startServer(5811);
+
+    chooser.setDefaultOption("Cone High Charge", coneHighCharge);
+    chooser.addOption("CUBE High Charge", cubeHighCharge);
+
+    chooser.addOption("Cone High", coneHigh);
+    chooser.addOption("CUBE High", cubeHigh);
+
+    chooser.addOption("Cone High Bump ", coneHighBump);
+    chooser.addOption("CUBE High Bump ", cubeHighBump);
+
+    SmartDashboard.putData(chooser);
+
     // Set swerve subsystem default command to swerve joystick with respective joystick inputs
     // Joystick Numbers 0 = LEFT : 1 = RIGHT
     // Joystick Axises: 0 = left/right : 1 = forward/backwards : 2 = dial
@@ -189,6 +223,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem, ultrasonic
 
   private boolean falseFunct(){return false;}
 
+
   //------------------------------------B-U-T-T-O-N-S------------------------------------//
 
   // Create button bindings
@@ -223,6 +258,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem, ultrasonic
     // 10 RJ - Grabber angle zero
     xbox.button(10).onTrue(new GrabberDegrees(grabberSubsystem, 0));
 
+    
     // EMG RESET
    tx16sCOMD.button(5).toggleOnTrue(new SwerveReset(swerveSubsystem));
 
@@ -270,12 +306,10 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem, ultrasonic
   // PathPlannerTrajectory back = PathPlanner.loadPath("backwards0.5M", new PathConstraints(4, 2)); 
     // Command to run
       // Routine
-   Command autoOne = new AutoOne(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
-   Command autoTwo = new AutoTwo(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
-   Command autoThree = new AutoThree(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, thetaController);
+
    // Command auto = swerveSubsystem.auto(back, true);
 
-    return autoOne;
+    return chooser.getSelected();
   }
 
 }

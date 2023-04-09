@@ -18,7 +18,7 @@ public class ScoreBottom extends SequentialCommandGroup{
 
         addCommands(
         // Set grabber angle to horizontal
-        new GrabberDegrees(grabberSubsystem, 90),
+        new GrabberDegrees(grabberSubsystem, 100),
         // Turn on intake
         // Move the elevator UP to platform height
         new ElevatorSetpoint(elevatorSubsystem, -0.9 /* Height of platform in meters */)

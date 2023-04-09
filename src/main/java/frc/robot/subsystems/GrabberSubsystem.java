@@ -127,7 +127,7 @@ public class GrabberSubsystem extends SubsystemBase{
     }
 
     public void setAnglePID(double x){
-        if(x > 95){
+        if(x > 110){
             x = 95;
         }else if(x < 8){
             x = 8;
