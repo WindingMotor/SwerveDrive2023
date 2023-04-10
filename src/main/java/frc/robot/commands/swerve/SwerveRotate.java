@@ -31,20 +31,20 @@ public class SwerveRotate extends CommandBase {
     finished = false;
 
     // Ending command tolerance
-    angleTolerance = 0.1;
+    angleTolerance = 1.0;
 
     // Assign values passed from constructor
     this.swerveSubsystem = swerveSubsystem;
 
     // Set default PID values for thetaPID
-    thetaController = new PIDController(DriveConstants.kPThetaController, DriveConstants.kIThetaController, DriveConstants.kDThetaController);
+    thetaController = new PIDController(0.11, 0.004, 0.02);
 
     // Enable continuous input for thetaPID
     thetaController.enableContinuousInput(0, 360);
 
     // Tell command that it needs swerveSubsystem
     addRequirements(swerveSubsystem);
-
+  
   }
 
   @Override
@@ -57,14 +57,18 @@ public class SwerveRotate extends CommandBase {
   @Override
   public void execute(){
 
-    if(swerveSubsystem.getRobotDegrees() > angle - angleTolerance && swerveSubsystem.getRobotDegrees() < angle + angleTolerance){
-      finished = true;
+    if(swerveSubsystem.getRobotDegrees() > angle - angleTolerance){
+      if(swerveSubsystem.getRobotDegrees() < angle + angleTolerance){
+        finished = true;
+      }
     }
 
     // Get current navx heading
     double turningSpeed;
 
-    turningSpeed = thetaController.calculate(swerveSubsystem.getRobotDegrees(), angle);
+    turningSpeed = -thetaController.calculate(swerveSubsystem.getRobotDegrees(), angle);
+    SmartDashboard.putNumber("ROT CACL", turningSpeed);
+    SmartDashboard.putNumber("ROBO DEG", swerveSubsystem.getRobotDegrees());
     
     // Turning motor deadband 
     turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;
@@ -83,6 +87,7 @@ public class SwerveRotate extends CommandBase {
  
     // Set the module state
     swerveSubsystem.setModuleStates(moduleStates);
+
   }
 
   // Stop all module motor movement when command ends

@@ -12,31 +12,32 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightStrip  extends SubsystemBase{
     
-    private AddressableLED leftStrip;
-   // private AddressableLED rightStrip;
+    private AddressableLED strip;
+    //private AddressableLED rightStrip;
 
     private AddressableLEDBuffer stripBuffer;
     private int rainbowFirstPixelHue = 0;
 
-    private int stripLen = 45;
+    private int stripLen = 90;
     public int[] currentColor = {0,0,0};
 
     private PowerDistribution PDP = new PowerDistribution(1, ModuleType.kRev);
     //private Joystick tx16s;
 
-    public LightStrip(Joystick tx16s){
+    public LightStrip(Joystick tx16s, int port){
 
-        leftStrip = new AddressableLED(0);
-       // rightStrip = new AddressableLED(portTwo);
+        strip = new AddressableLED(port);
+        //rightStrip = new AddressableLED(0);
 
         // Create LED buffer object
         stripBuffer = new AddressableLEDBuffer(stripLen);
 
         // Set LED strip length to buffer
-        leftStrip.setLength(stripBuffer.getLength());
-       // rightStrip.setLength(stripBuffer.getLength());
+        strip.setLength(stripBuffer.getLength());
+        //rightStrip.setLength(stripBuffer.getLength());
     
-        leftStrip.setData(stripBuffer);
+        strip.setData(stripBuffer);
+        //rightStrip.setData(stripBuffer);
 
         setGreen();
         setStripColor();
@@ -48,43 +49,33 @@ public class LightStrip  extends SubsystemBase{
     @Override
     public void periodic() {
 
+        setGreen();
+        setStripColor(currentColor[0],currentColor[1],currentColor[2]);
+
+        /* 
         if(!DriverStation.isEnabled()){
              // Play rainbow during disabled
             updateStripRainbow();
         }else{
-<<<<<<< HEAD
             setStripColor(currentColor[0],currentColor[1],currentColor[2]);
         }
+        */
+    }
 
-        /* 
-        if(DriverStation.isEnabled()){
-            setGreen();
-        }else{
-            setRed();
-        }*/
-        
-=======
-        if(PDP.getVoltage() < 10){
-            // Modify color if voltage is dropping very low
-            setStripColor(currentColor[0] + (int) PDP.getVoltage() * 2,currentColor[1],currentColor[2],(int) PDP.getTotalCurrent() / 2);
-        } else{ setStripColor(currentColor[0],currentColor[1],currentColor[2],(int) PDP.getTotalCurrent() / 2); } // Normal operation for signaling
-        }
->>>>>>> 66bfe31c1680bbaa2a2e66f5f9c859edb585227d
-      }
-
-    
      // Set entire strip to the color variable
     private void setStripColor(){
         for(var i = 0; i < stripBuffer.getLength(); i++){
             stripBuffer.setRGB(i, currentColor[0],currentColor[1],currentColor[2]);}
-        leftStrip.setData(stripBuffer);
+        strip.setData(stripBuffer);
+        //rightStrip.setData(stripBuffer);
     }
 
      // Set entire strip to a selected color
     private void setStripColor(int r, int g, int b){
         for(var i = 0; i < stripBuffer.getLength(); i++){
             stripBuffer.setRGB(i, r, g, b);}
-        leftStrip.setData(stripBuffer);
+        strip.setData(stripBuffer);
+       // rightStrip.setData(stripBuffer);
     }
 
     // Set enrite strip to one selected color up to a point
@@ -101,7 +92,8 @@ public class LightStrip  extends SubsystemBase{
                 stripBuffer.setRGB(i, r, g, b);
             }
             }
-        leftStrip.setData(stripBuffer);
+        strip.setData(stripBuffer);
+        //rightStrip.setData(stripBuffer);
         }
 
     // Set entire strip to rainbow
@@ -119,16 +111,19 @@ public class LightStrip  extends SubsystemBase{
         rainbowFirstPixelHue %= 180;
 
         // Set led strip to new buffer
-        leftStrip.setData(stripBuffer);
+        strip.setData(stripBuffer);
+        //rightStrip.setData(stripBuffer);
         //rightStrip.setData(stripBuffer);
     }
 
     public void startStrips(){
-        leftStrip.start();
+        strip.start();
+       // rightStrip.start();
     }
 
     public void stopStrips(){
-        leftStrip.stop();
+        strip.stop();
+        //rightStrip.start();
     }
     
 

@@ -32,6 +32,7 @@ import frc.robot.auto.routines.CubeHigh;
 import frc.robot.auto.routines.CubeHighBump;
 import frc.robot.auto.routines.CubeHighCharge;
 import frc.robot.auto.routines.TestRoutine;
+import frc.robot.auto.routines.TwoPiece;
 import frc.robot.commands.elevator.ElevatorApriltag;
 import frc.robot.commands.elevator.ElevatorDownSetpoint;
 import frc.robot.commands.elevator.ElevatorHome;
@@ -61,7 +62,9 @@ import frc.robot.commands.grabber.angle.GrabberDegrees;
 import frc.robot.commands.grabber.angle.GrabberTrigger;
 import frc.robot.commands.swerve.SwerveAlignBasic;
 import frc.robot.commands.swerve.SwerveJoystick;
+import frc.robot.commands.swerve.SwerveMove;
 import frc.robot.commands.swerve.SwerveReset;
+import frc.robot.commands.swerve.SwerveRotate;
 import frc.robot.commands.util.ResetOdometry;
 import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -103,7 +106,7 @@ public class RobotContainer {
   private final CommandJoystick tx16sCOMD = new CommandJoystick(4);
 
   // Create led strips
-  private final LightStrip strips = new LightStrip(tx16s);
+  private final LightStrip strips = new LightStrip(tx16s,0);
 
   // Create ultrasonic sensor 
   private final UltrasonicRangefinder ultrasonic = new UltrasonicRangefinder(strips);
@@ -150,6 +153,7 @@ public class RobotContainer {
   Command coneHighBump = new ConeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
   Command cubeHighBump = new CubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
 
+  Command twoPiece = new TwoPiece(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
   //private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
   //--------------------------P-A-T-H-S----------------------------//
@@ -173,6 +177,8 @@ public class RobotContainer {
 
     chooser.addOption("Cone High Bump ", coneHighBump);
     chooser.addOption("CUBE High Bump ", cubeHighBump);
+
+    chooser.addOption("Two Piece", twoPiece);
 
     SmartDashboard.putData(chooser);
 
@@ -255,11 +261,11 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     xbox.button(9).onTrue(new LoadPlatform(elevatorSubsystem, grabberSubsystem));
 
     // 10 RJ - Grabber angle zero
-    xbox.button(10).onTrue(new GrabberDegrees(grabberSubsystem, 0));
+    xbox.button(10).onTrue(new SwerveMove(swerveSubsystem,
+    () -> swerveSubsystem.getHeading(), 1.0,1.0));
 
-    
     // EMG RESET
-   tx16sCOMD.button(5).toggleOnTrue(new SwerveReset(swerveSubsystem));
+   //tx16sCOMD.button(5).toggleOnTrue(new SwerveMove(swerveSubsystem, visionSubsystem, null, null, null));
 
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
