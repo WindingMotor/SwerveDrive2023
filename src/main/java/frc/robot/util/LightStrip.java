@@ -50,17 +50,16 @@ public class LightStrip  extends SubsystemBase{
     @Override
     public void periodic() {
 
-        setGreen();
-        setStripColor(currentColor[0],currentColor[1],currentColor[2]);
+        //setGreen();
+        //setStripColor(currentColor[0],currentColor[1],currentColor[2]);
 
-        /* 
+        
         if(!DriverStation.isEnabled()){
              // Play rainbow during disabled
             updateStripRainbow();
         }else{
             setStripColor(currentColor[0],currentColor[1],currentColor[2]);
         }
-        */
     }
 
      // Set entire strip to the color variable

@@ -58,10 +58,7 @@ public class ConeHigh extends SequentialCommandGroup{
         new ElevatorZero(elevatorSubsystem, grabberSubsystem), // zero elevator
         new WaitCommand(1),
         //new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, back, true, false), // bring robot back
-        new GrabberSolenoid(grabberSubsystem), // close grabber
-        new WaitCommand(2), // wait
-        new ResetYaw(swerveSubsystem), // reset gyro yaw
-        new ResetOdometryInverse(swerveSubsystem) // reset odometry
+        new GrabberSolenoid(grabberSubsystem) // close grabber
         );
 
     }

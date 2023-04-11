@@ -12,7 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class SwerveMoveRotate extends CommandBase {
+public class SwerveGoTo extends CommandBase {
 
   
   private boolean finished;
@@ -40,7 +40,7 @@ public class SwerveMoveRotate extends CommandBase {
   private Pose2d resetPose;
 
   // Command constructor
-  public SwerveMoveRotate(SwerveSubsystem swerveSubsystem,Supplier<Double> headingFunction,
+  public SwerveGoTo(SwerveSubsystem swerveSubsystem,Supplier<Double> headingFunction,
   double xSetpoint, double ySetpoint, double tSetpoint, boolean reset, Pose2d resetPose){
 
   this.reset = reset;
@@ -48,19 +48,19 @@ public class SwerveMoveRotate extends CommandBase {
 
     addRequirements(swerveSubsystem);
 
-    tolerance = 0.03;
+    tolerance = 0.08;
 
     this.swerveSubsystem = swerveSubsystem;
     this.headingFunction = headingFunction;
 
     this.tSetpoint = tSetpoint;
-    this.xSetpoint = xSetpoint * 2;
-    this.ySetpoint = ySetpoint * 2;
+    this.xSetpoint = xSetpoint;
+    this.ySetpoint = ySetpoint;
 
     initalHeading = headingFunction.get();
 
-    vXController = new PIDController(1.8, 0.005, 0);
-    vYController = new PIDController(1.4, 0.005, 0);
+    vXController = new PIDController(1.9, 0.006, 0.008);
+    vYController = new PIDController(1.6, 0.006, 0.008);
 
     thetaController = new PIDController(0.1, 0.004, 0.02);
     thetaController.enableContinuousInput(0, 360);
@@ -89,11 +89,11 @@ public class SwerveMoveRotate extends CommandBase {
   @Override
   public void execute(){
 
-    if(swerveSubsystem.getOdometryMeters().getY()  > (ySetpoint/2) - tolerance){
-      if(swerveSubsystem.getOdometryMeters().getY()  < (ySetpoint/2) + tolerance){
+    if(swerveSubsystem.getOdometryMeters().getY()  > (ySetpoint) - tolerance){
+      if(swerveSubsystem.getOdometryMeters().getY()  < (ySetpoint) + tolerance){
 
-        if(swerveSubsystem.getOdometryMeters().getX()  > (xSetpoint/2) - tolerance){
-          if(swerveSubsystem.getOdometryMeters().getX()  < (xSetpoint/2) + tolerance){
+        if(swerveSubsystem.getOdometryMeters().getX()  > (xSetpoint) - tolerance){
+          if(swerveSubsystem.getOdometryMeters().getX()  < (xSetpoint) + tolerance){
             finished = true;
           }
         }
@@ -112,19 +112,19 @@ public class SwerveMoveRotate extends CommandBase {
       SmartDashboard.putNumber("ROT CACL", turningSpeed);
       SmartDashboard.putNumber("ODO Y", swerveSubsystem.getOdometryMeters().getY());
       SmartDashboard.putNumber("ODO X", swerveSubsystem.getOdometryMeters().getX());
-      SmartDashboard.putNumber("DODO DEG", swerveSubsystem.getRobotDegrees());
+      SmartDashboard.putNumber("ROBO DEG", swerveSubsystem.getRobotDegrees());
       
-      double xError = ( swerveSubsystem.getOdometryMeters().getX() + (swerveSubsystem.getOdometryMeters().getX() - startingPose.getX()));
-      double yError = ( swerveSubsystem.getOdometryMeters().getY() + (swerveSubsystem.getOdometryMeters().getY() - startingPose.getY()));
+      //double xError = ( swerveSubsystem.getOdometryMeters().getX() + (swerveSubsystem.getOdometryMeters().getX() - startingPose.getX()));
+      //double yError = ( swerveSubsystem.getOdometryMeters().getY() + (swerveSubsystem.getOdometryMeters().getY() - startingPose.getY()));
        
-      vX = vXController.calculate(xError, xSetpoint); // X-Axis PID
-      vY = vYController.calculate(yError, ySetpoint); // Y-Axis PID
+      vX = vXController.calculate(swerveSubsystem.getOdometryMeters().getX(), xSetpoint); // X-Axis PID
+      vY = vYController.calculate(swerveSubsystem.getOdometryMeters().getY(), ySetpoint); // Y-Axis PID
 
       SmartDashboard.putNumber("vX", vX);
       SmartDashboard.putNumber("vY", vY);
      
-      SmartDashboard.putNumber("X Error", xError);
-      SmartDashboard.putNumber("Y Error", yError);
+     // SmartDashboard.putNumber("X Error", xError);
+     // SmartDashboard.putNumber("Y Error", yError);
 
       // Create chassis speeds
       ChassisSpeeds chassisSpeeds;
