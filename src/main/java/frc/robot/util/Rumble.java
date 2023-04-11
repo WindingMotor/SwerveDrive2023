@@ -7,9 +7,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 public class Rumble extends SubsystemBase{
 
-    // Joystick object
-    // My Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
-    // My Transmitter max and min values: 0.700 and -0.700
     private XboxController xbox;
     SwerveSubsystem swerveSubsystem;
 
@@ -28,6 +25,5 @@ public class Rumble extends SubsystemBase{
         if(amount < 0){amount = 0;}
        // xbox.setRumble(RumbleType.kBothRumble, amount);
     }
-
 
 }

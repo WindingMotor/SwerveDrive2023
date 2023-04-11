@@ -138,6 +138,9 @@ public class RobotContainer {
  // private final Rumble rumble = new Rumble(xboxNC, swerveSubsystem);
  // private final VL53L4CX vl53l4cx = new VL53L4CX(20000);
 
+  //----------------------A-U-T-O---C-O-M-M-A-N-D-S----------------------------//
+
+  // Command chooser for auto
   SendableChooser<Command> chooser = new SendableChooser<>();
 
   // Only place game object and dont move
@@ -152,13 +155,8 @@ public class RobotContainer {
   Command coneHighBump = new ConeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
   Command cubeHighBump = new CubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
 
+  // Two piece
   Command twoPiece = new TwoPiece(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
-
-  //--------------------------P-A-T-H-S----------------------------//
-
-  // Manual path 
-  //private final PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
-  //  private Command autoForward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
 
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
@@ -181,13 +179,13 @@ public class RobotContainer {
     SmartDashboard.putData(chooser);
 
     // Set swerve subsystem default command to swerve joystick with respective joystick inputs
-    // Joystick Numbers 0 = LEFT : 1 = RIGHT
-    // Joystick Axises: 0 = left/right : 1 = forward/backwards : 2 = dial
-    // OLD-> Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
+  //>--------------O-L-D--T-R-A-N-S----------------//
 
-  //>--------------T-R-A-N-S-----------------//
+  // Joystick Numbers 0 = LEFT : 1 = RIGHT
+  // Joystick Axises: 0 = left/right : 1 = forward/backwards : 2 = dial
+  // OLD-> Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
 
-/* 
+  /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> tx16s.getRawAxis(0), // X-Axis
     () -> -tx16s.getRawAxis(1), // Y-Axis
@@ -195,7 +193,9 @@ public class RobotContainer {
     () -> tx16s.getRawButton(0), // Field oriented -does nothing right now
     () -> swerveSubsystem.getHeading(), // Navx heading
     () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
-*/
+  */
+
+ //>-----------T-X-1-6-S---------<//
 
 swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 () -> -tx16sCOMD.getRawAxis(0), // X-Axis
@@ -205,16 +205,18 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 () -> swerveSubsystem.getHeading(), // Navx heading
 () -> tx16s.getRawButton(4))); // Flick offset button, should be toggle!
 
-  //elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
-  // () -> xbox.getRawAxis(1)));
-
-  //grabberSubsystem.setDefaultCommand(new GrabberTrigger(grabberSubsystem,
-  // () -> xbox.getRawAxis(3)));
-
   //>----------S-E-N-D-E-R----------<//
 
     // Run button binding method
     configureButtonBindings();
+
+  //>---------D-E-F-A-U-L-T----------<//
+
+  /* elevatorSubsystem.setDefaultCommand(new ElevatorJoystick(elevatorSubsystem,
+  () -> xbox.getRawAxis(1))); */
+
+  /* grabberSubsystem.setDefaultCommand(new GrabberTrigger(grabberSubsystem,
+  () -> xbox.getRawAxis(3))); */
 
   }
 
@@ -261,9 +263,6 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     // 10 RJ - Grabber angle zero
     xbox.button(10).onTrue(new SwerveMove(swerveSubsystem,
     () -> swerveSubsystem.getHeading(), 1.0,1.0));
-
-    // EMG RESET
-   //tx16sCOMD.button(5).toggleOnTrue(new SwerveMove(swerveSubsystem, visionSubsystem, null, null, null));
 
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
