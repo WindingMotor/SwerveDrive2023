@@ -74,7 +74,7 @@ public class TwoPiece extends SequentialCommandGroup{
         new WaitCommand(0.5),
         new SetLedPurple(ledStrip), // LED Purple - Cube
 
-        // Move sideways infront of cube area
+        // Move sideways infront of high cube
         new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),-1.0,-5.2,0, false, new Pose2d(new Translation2d(), Rotation2d.fromDegrees(180)))
 
         //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0.2,-5.4,0, false, new Pose2d()),

@@ -129,6 +129,8 @@ public class LightStrip  extends SubsystemBase{
 
     public void setRed(){ currentColor = new int[]{255,0,0};}
 
+    public void setRGB(int r, int g, int b){ currentColor = new int[]{r,g,b};}
+
     public void setGreen(){ currentColor = new int[]{0,255,0};}
 
     public void setBlue(){ currentColor = new int[]{0,0,255};}

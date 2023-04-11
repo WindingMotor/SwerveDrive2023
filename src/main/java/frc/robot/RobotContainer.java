@@ -169,7 +169,9 @@ public class RobotContainer {
     CameraServer.startAutomaticCapture();
     PathPlannerServer.startServer(5811);
 
-    chooser.setDefaultOption("Cone High Charge", coneHighCharge);
+    chooser.setDefaultOption("Two Piece", twoPiece);
+
+    chooser.addOption("Cone High Charge", coneHighCharge);
     chooser.addOption("CUBE High Charge", cubeHighCharge);
 
     chooser.addOption("Cone High", coneHigh);
@@ -177,8 +179,6 @@ public class RobotContainer {
 
     chooser.addOption("Cone High Bump ", coneHighBump);
     chooser.addOption("CUBE High Bump ", cubeHighBump);
-
-    chooser.addOption("Two Piece", twoPiece);
 
     SmartDashboard.putData(chooser);
 
