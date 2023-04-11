@@ -160,7 +160,7 @@ public class RobotContainer {
 
   // Manual path 
   //private final PathPlannerTrajectory pathOne = PathPlanner.loadPath("forward1M", new PathConstraints(0.25, 0.25)); 
-//  private Command autoForward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
+  //  private Command autoForward = new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true);
 
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
@@ -188,7 +188,7 @@ public class RobotContainer {
     // OLD-> Transmitter Axises: 0 = roll : 1 = pitch : 2 = throttle : 3 = yaw : 4 = analog1 : 5 = analog2
 
   //>--------------T-R-A-N-S-----------------//
-    
+
 /* 
     swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     () -> tx16s.getRawAxis(0), // X-Axis

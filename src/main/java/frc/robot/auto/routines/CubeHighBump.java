@@ -37,9 +37,6 @@ public class CubeHighBump extends SequentialCommandGroup{
     public CubeHighBump(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController, LightStrip ledStrip){
 
-        // Add commands to event map markers
-        // eventMap.put("marker1", new PrintCommand("TRAJ1: Passed Marker 1"));
-
         // Add commands to run
         addCommands(
         new GrabberHold(grabberSubsystem), // reverse grabber for hold

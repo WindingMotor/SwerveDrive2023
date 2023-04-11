@@ -29,24 +29,12 @@ import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.LightStrip;
 
-
-
 // Run multiple commands in a routine
 public class TwoPiece extends SequentialCommandGroup{
-
-
-    // DEPRECATED
-
-    // PPTrajectory and event map
-    private final PathPlannerTrajectory back = PathPlanner.loadPath("backwards0.5M", new PathConstraints(3.5, 4.5)); 
-    // private final HashMap<String, Command> eventMap = new HashMap<>();
 
     // Routine command constructor
     public TwoPiece(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController, LightStrip ledStrip){
-
-        // Add commands to event map markers
-        // eventMap.put("marker1", new PrintCommand("TRAJ1: Passed Marker 1"));
 
         new Rotation2d();
         // Add commands to run
@@ -66,29 +54,32 @@ public class TwoPiece extends SequentialCommandGroup{
         new WaitCommand(1),
         new ElevatorSolenoid(elevatorSubsystem), 
 
-        // Run grabber inwards
-         new GrabberForward(grabberSubsystem),
+        new GrabberForward(grabberSubsystem), // Run grabber inwards
+        new GrabberSolenoid(grabberSubsystem), // Open grabber
 
-        // Open grabber
-        new GrabberSolenoid(grabberSubsystem),
-
-        // Move infront of the game peice 
-
+        // Move backwards and spin around
         new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0,5.42,180.0, true, new Pose2d()),
+
+        // Grab game peice
         new WaitCommand(0.2),
         new GrabberSolenoid(grabberSubsystem),
         new ElevatorSolenoid(elevatorSubsystem),
-        new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),-0.05,-5.2,0, true, new Pose2d(new Translation2d(), Rotation2d.fromDegrees(180)))
+
+        // Move forwards and rotate twoards grid
+        new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),-0.05,-5.2,0, true, new Pose2d(new Translation2d(), Rotation2d.fromDegrees(180))),
+        new WaitCommand(0.5),
+
+        // Move sideways infront of cube area
+        new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),-1.0,-5.2,0, false, new Pose2d(new Translation2d(), Rotation2d.fromDegrees(180)))
 
         //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0.2,-5.4,0, false, new Pose2d()),
 
         // Move to grab the game peice
         //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0.2,5.4,180.0, false),
 
-        // Close the grabber
-
         //new ResetYaw(swerveSubsystem), // reset gyro yaw
         //new ResetOdometryInverse(swerveSubsystem) // reset odometry
+
         );
 
     }
