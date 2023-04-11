@@ -1,4 +1,4 @@
-// FRC2106 Junkyard Dogs - Swerve Drive Base Code
+// FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.auto.routines;
 import com.pathplanner.lib.PathConstraints;
@@ -25,6 +25,7 @@ import frc.robot.commands.led.SetLedYellow;
 import frc.robot.commands.routines.scoring.ScoreTop;
 import frc.robot.commands.swerve.SwerveMove;
 import frc.robot.commands.swerve.SwerveMoveRotate;
+import frc.robot.commands.swerve.SwerveRotate;
 import frc.robot.commands.util.ResetOdometryInverse;
 import frc.robot.commands.util.ResetYaw;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -69,13 +70,16 @@ public class TwoPiece extends SequentialCommandGroup{
         new ElevatorSolenoid(elevatorSubsystem),
         new SetLedGreen(ledStrip), // LED Green - Forward
 
-        // Move forwards and rotate twoards grid
+        // Move forwards and rotate towards grid
         new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),-0.05,-5.2,0, true, new Pose2d(new Translation2d(), Rotation2d.fromDegrees(180))),
         new WaitCommand(0.5),
         new SetLedPurple(ledStrip), // LED Purple - Cube
 
         // Move sideways infront of high cube
-        new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),-1.0,-5.2,0, false, new Pose2d(new Translation2d(), Rotation2d.fromDegrees(180)))
+        new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),-1.0,-5.2,0, false, new Pose2d(new Translation2d(), Rotation2d.fromDegrees(180))),
+
+        // Make sure angle is correct before scoring
+        new SwerveRotate(swerveSubsystem, 180)
 
         //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0.2,-5.4,0, false, new Pose2d()),
 

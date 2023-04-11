@@ -1,4 +1,4 @@
-// FRC2106 Junkyard Dogs - Swerve Drive Base Code
+// FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.commands.led;
 import frc.robot.subsystems.GrabberSubsystem;
@@ -15,6 +15,7 @@ public class SetLedRGB extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ledStrip);
     this.ledStrip = ledStrip;
+
     rgb[0] = r;
     rgb[1] = g;
     rgb[2] = b;

@@ -1,7 +1,6 @@
-// FRC2106 Junkyard Dogs - Swerve Drive Base Code
+// FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.auto.routines;
-//import java.util.HashMap;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;

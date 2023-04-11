@@ -1,8 +1,7 @@
-// FRC2106 Junkyard Dogs - Swerve Drive Base Code
+// FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.commands.routines.scoring;
 import java.sql.Driver;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

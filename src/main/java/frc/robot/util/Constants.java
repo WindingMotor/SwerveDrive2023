@@ -1,8 +1,7 @@
-// FRC2106 Junkyard Dogs - Swerve Drive Base Code
+// FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.util;
 import com.pathplanner.lib.PathConstraints;
-
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;

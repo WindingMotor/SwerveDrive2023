@@ -1,4 +1,4 @@
-// FRC2106 Junkyard Dogs - Swerve Drive Base Code
+// FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
