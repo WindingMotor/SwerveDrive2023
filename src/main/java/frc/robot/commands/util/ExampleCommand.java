@@ -1,19 +1,14 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.commands.util;
-import frc.robot.subsystems.ButtonSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class ExampleCommand extends CommandBase {
-  /** 
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */ 
-  public ExampleCommand(ButtonSubsystem subsystem) {
+
+  public ExampleCommand() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    addRequirements();
   }
 
   // Called when the command is initially scheduled.

@@ -66,7 +66,6 @@ import frc.robot.commands.swerve.SwerveMove;
 import frc.robot.commands.swerve.SwerveReset;
 import frc.robot.commands.swerve.SwerveRotate;
 import frc.robot.commands.util.ResetOdometry;
-import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -154,7 +153,6 @@ public class RobotContainer {
   Command cubeHighBump = new CubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
 
   Command twoPiece = new TwoPiece(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
-  //private final ButtonSubsystem btn = new ButtonSubsystem(xbox);
 
   //--------------------------P-A-T-H-S----------------------------//
 
