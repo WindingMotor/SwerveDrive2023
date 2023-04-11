@@ -29,21 +29,31 @@ public class SwerveMove extends CommandBase {
 
   private double xSetpoint;
   private double ySetpoint;
+  private double tSetpoint;
 
   private double initalHeading;
+  private boolean reset;
+  private double tolerance = 1.0;
 
   private Pose2d startingPose;
   private Transform3d visionTransform;
+  private Pose2d resetPose;
 
   // Command constructor
   public SwerveMove(SwerveSubsystem swerveSubsystem,Supplier<Double> headingFunction,
   double xSetpoint, double ySetpoint){
 
+  this.reset = reset;
+  this.resetPose = resetPose;
+
     addRequirements(swerveSubsystem);
+
+    tolerance = 0.03;
 
     this.swerveSubsystem = swerveSubsystem;
     this.headingFunction = headingFunction;
 
+    this.tSetpoint = tSetpoint;
     this.xSetpoint = xSetpoint * 2;
     this.ySetpoint = ySetpoint * 2;
 
@@ -51,8 +61,9 @@ public class SwerveMove extends CommandBase {
 
     vXController = new PIDController(1.8, 0.005, 0);
     vYController = new PIDController(1.4, 0.005, 0);
-   // thetaController = new PIDController(0.1, 0, 0);
-   // thetaController.enableContinuousInput(0, 360);
+
+    thetaController = new PIDController(0.1, 0.004, 0.02);
+    thetaController.enableContinuousInput(0, 360);
 
     vX = 0;
     vY = 0;
@@ -64,7 +75,9 @@ public class SwerveMove extends CommandBase {
 
   @Override
   public void initialize() {
-    swerveSubsystem.resetOdometry(new Pose2d());
+    if(reset){
+      swerveSubsystem.resetOdometry(resetPose);
+    }
 
     finished = false;
 
@@ -76,6 +89,30 @@ public class SwerveMove extends CommandBase {
   @Override
   public void execute(){
 
+    if(swerveSubsystem.getOdometryMeters().getY()  > (ySetpoint/2) - tolerance){
+      if(swerveSubsystem.getOdometryMeters().getY()  < (ySetpoint/2) + tolerance){
+
+        if(swerveSubsystem.getOdometryMeters().getX()  > (xSetpoint/2) - tolerance){
+          if(swerveSubsystem.getOdometryMeters().getX()  < (xSetpoint/2) + tolerance){
+            finished = true;
+          }
+        }
+
+      }
+    }
+
+
+      double turningSpeed;
+
+      turningSpeed = -thetaController.calculate(swerveSubsystem.getRobotDegrees(), tSetpoint);
+      // Turning motor deadband 
+      turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;
+
+
+      SmartDashboard.putNumber("ROT CACL", turningSpeed);
+      SmartDashboard.putNumber("ODO Y", swerveSubsystem.getOdometryMeters().getY());
+      SmartDashboard.putNumber("ROBO DEG", swerveSubsystem.getRobotDegrees());
+      
       double xError = ( swerveSubsystem.getOdometryMeters().getX() + (swerveSubsystem.getOdometryMeters().getX() - startingPose.getX()));
       double yError = ( swerveSubsystem.getOdometryMeters().getY() + (swerveSubsystem.getOdometryMeters().getY() - startingPose.getY()));
        
