@@ -1,11 +1,7 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.util;
-import java.text.DecimalFormat;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.SwerveSubsystem;
 

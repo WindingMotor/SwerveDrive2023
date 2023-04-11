@@ -1,14 +1,9 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.commands.routines.scoring;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.elevator.ElevatorSetpoint;
 import frc.robot.commands.grabber.angle.GrabberDegrees;
-import frc.robot.commands.grabber.intake.GrabberForward;
-import frc.robot.commands.grabber.intake.GrabberSolenoid;
-import frc.robot.commands.util.ButtonFalse;
-import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 

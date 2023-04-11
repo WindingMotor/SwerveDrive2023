@@ -2,9 +2,6 @@
 
 package frc.robot.commands.elevator;
 import frc.robot.subsystems.ElevatorSubsystem;
-
-import java.util.function.Supplier;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */

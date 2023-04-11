@@ -3,7 +3,6 @@
 package frc.robot.auto.commands;
 import java.util.function.Consumer;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -38,7 +37,7 @@ public class TrajectoryWeaver extends SequentialCommandGroup{
       //   addCommands(new ResetOdometry(swerveSubsystem, PathPlannerTrajectory
       //   .transformTrajectoryForAlliance(pptrajectory, DriverStation.getAlliance()).getInitialHolonomicPose()));
       //  }
-      PathPlannerState initalState = pptrajectory.getInitialState();
+      //PathPlannerState initalState = pptrajectory.getInitialState();
 
         addCommands(
           new ResetOdometry(swerveSubsystem, pptrajectory.getInitialHolonomicPose()),

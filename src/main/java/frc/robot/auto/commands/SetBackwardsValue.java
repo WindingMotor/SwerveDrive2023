@@ -1,7 +1,6 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.auto.commands;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.auto.manuals.Backwards;
 

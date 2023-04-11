@@ -7,8 +7,6 @@ import frc.robot.commands.elevator.ElevatorSetpoint;
 import frc.robot.commands.grabber.angle.GrabberDegrees;
 import frc.robot.commands.grabber.intake.GrabberForward;
 import frc.robot.commands.grabber.intake.GrabberSolenoid;
-import frc.robot.commands.util.ButtonFalse;
-import frc.robot.subsystems.ButtonSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 
@@ -28,8 +26,7 @@ public class DEPCubePlatform extends SequentialCommandGroup{
         // Turn on intake
         new GrabberForward(grabberSubsystem),
         // Move the elevator UP to platform height
-        new ElevatorSetpoint(elevatorSubsystem, -0.9 /* Height of platform in meters */),
-        new ButtonFalse(xbox)
+        new ElevatorSetpoint(elevatorSubsystem, -0.9 /* Height of platform in meters */)
         );
     }
 }
