@@ -3,11 +3,12 @@ A swerve drive base code using SDS MK4 Modules, Neos, and SRX Mag Encoders.
 Fully working and updated for 2023. Designed for our 2023 Robot, Continuity, that
 features a elevator and grabber combo. 
 
+## Pathplanner support is currently being removed for my own auto implementation
 
 ## This part of the code is working:
 #### Teleop control with Joysticks or an FPV Transmitter
 #### Field Oriented control with PID
-#### Command based auto with pathplanner or swerve
+#### Command based auto with pathplanner
 #### Photonvision basic april tag aligment
 #### Elevator and grabber PID Code
 
