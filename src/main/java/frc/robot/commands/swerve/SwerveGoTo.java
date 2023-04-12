@@ -6,7 +6,6 @@ import frc.robot.util.Constants.DriveConstants;
 import java.util.function.Supplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,31 +26,26 @@ public class SwerveGoTo extends CommandBase {
 
   private double vX;
   private double vY;
-  private double vT;
 
   private double xSetpoint;
   private double ySetpoint;
   private double tSetpoint;
 
-  private double initalHeading;
   private boolean reset;
   private double tolerance;
   private double multiplier = 1.0;
 
-  private Pose2d startingPose;
-  private Transform3d visionTransform;
   private Pose2d resetPose;
 
   // Command constructor
   public SwerveGoTo(SwerveSubsystem swerveSubsystem,Supplier<Double> headingFunction,
   double xSetpoint, double ySetpoint, double tSetpoint,double multiplier,boolean reset, Pose2d resetPose){
 
+    addRequirements(swerveSubsystem);
+
     this.reset = reset;
     this.resetPose = resetPose;
-
     this.multiplier = multiplier;
-
-    addRequirements(swerveSubsystem);
 
     tolerance = 0.1;
 
@@ -62,8 +56,6 @@ public class SwerveGoTo extends CommandBase {
     this.xSetpoint = xSetpoint;
     this.ySetpoint = ySetpoint;
 
-    initalHeading = headingFunction.get();
-
     vXController = new PIDController(2.5, 0.006, 0.008);
     vYController = new PIDController(2.5, 0.006, 0.008);
 
@@ -72,7 +64,6 @@ public class SwerveGoTo extends CommandBase {
 
     vX = 0;
     vY = 0;
-    vT = 0;
 
     finished = false;
 
@@ -80,62 +71,48 @@ public class SwerveGoTo extends CommandBase {
 
   @Override
   public void initialize() {
-    if(reset){
-      swerveSubsystem.resetOdometry(resetPose);
-    }
+  
+    if(reset){ swerveSubsystem.resetOdometry(resetPose);}
 
     finished = false;
-    xflag=false;
+    xflag = false;
     yflag = false;
-
-    initalHeading = headingFunction.get();
-    startingPose = swerveSubsystem.getOdometryMeters();
-
+  
   }
 
   @Override
   public void execute(){
 
-    if(swerveSubsystem.getOdometryMeters().getY()  > (ySetpoint) - tolerance){
+      if(swerveSubsystem.getOdometryMeters().getY()  > (ySetpoint) - tolerance){
       if(swerveSubsystem.getOdometryMeters().getY()  < (ySetpoint) + tolerance){
-
-        yflag = true;
+          yflag = true;
+        }
       }
-    }
-    if(swerveSubsystem.getOdometryMeters().getX()  > (xSetpoint) - tolerance){
+
+      if(swerveSubsystem.getOdometryMeters().getX()  > (xSetpoint) - tolerance){
       if(swerveSubsystem.getOdometryMeters().getX()  < (xSetpoint) + tolerance){
-        xflag = true;
+          xflag = true;
+        }
       }
-    }
-    if(yflag && xflag){
-      finished = true;
-    }
 
-
+      if(yflag && xflag){ finished = true;}
 
       double turningSpeed;
 
       turningSpeed = -thetaController.calculate(swerveSubsystem.getRobotDegrees(), tSetpoint);
-      // Turning motor deadband 
-      turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;
 
+      turningSpeed = Math.abs(turningSpeed) > 0.05 ? turningSpeed : 0.0;
 
       SmartDashboard.putNumber("ROT CACL", turningSpeed);
       SmartDashboard.putNumber("ODO Y", swerveSubsystem.getOdometryMeters().getY());
       SmartDashboard.putNumber("ODO X", swerveSubsystem.getOdometryMeters().getX());
       SmartDashboard.putNumber("ROBO DEG", swerveSubsystem.getRobotDegrees());
-      
-      //double xError = ( swerveSubsystem.getOdometryMeters().getX() + (swerveSubsystem.getOdometryMeters().getX() - startingPose.getX()));
-      //double yError = ( swerveSubsystem.getOdometryMeters().getY() + (swerveSubsystem.getOdometryMeters().getY() - startingPose.getY()));
-       
+
       vX = vXController.calculate(swerveSubsystem.getOdometryMeters().getX(), xSetpoint) * multiplier; // X-Axis PID
       vY = vYController.calculate(swerveSubsystem.getOdometryMeters().getY(), ySetpoint) * multiplier; // Y-Axis PID
 
       SmartDashboard.putNumber("vX", vX);
       SmartDashboard.putNumber("vY", vY);
-     
-     // SmartDashboard.putNumber("X Error", xError);
-     // SmartDashboard.putNumber("Y Error", yError);
 
       // Create chassis speeds
       ChassisSpeeds chassisSpeeds;

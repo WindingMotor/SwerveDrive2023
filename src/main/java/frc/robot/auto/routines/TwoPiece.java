@@ -56,7 +56,7 @@ public class TwoPiece extends SequentialCommandGroup{
         new ElevatorSolenoid(elevatorSubsystem), // Bring up pistons
         new WaitCommand(1), // Wait for pistons
         new ElevatorZero(elevatorSubsystem, grabberSubsystem), // Bring elevator down
-        new WaitCommand(0.8), // Wait for elevator
+        //new WaitCommand(0.8), // Wait for elevator
 
         new GrabberForward(grabberSubsystem), // Run grabber inwards
         new ElevatorSolenoid(elevatorSubsystem), // Bring down pistons
