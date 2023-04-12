@@ -35,7 +35,8 @@ public class SwerveGoTo extends CommandBase {
 
   private double initalHeading;
   private boolean reset;
-  private double tolerance = 1.0;
+  private double tolerance;
+  private double multiplier = 1.0;
 
   private Pose2d startingPose;
   private Transform3d visionTransform;
@@ -43,10 +44,12 @@ public class SwerveGoTo extends CommandBase {
 
   // Command constructor
   public SwerveGoTo(SwerveSubsystem swerveSubsystem,Supplier<Double> headingFunction,
-  double xSetpoint, double ySetpoint, double tSetpoint, boolean reset, Pose2d resetPose){
+  double xSetpoint, double ySetpoint, double tSetpoint,double multiplier,boolean reset, Pose2d resetPose){
 
-  this.reset = reset;
-  this.resetPose = resetPose;
+    this.reset = reset;
+    this.resetPose = resetPose;
+
+    this.multiplier = multiplier;
 
     addRequirements(swerveSubsystem);
 
@@ -125,8 +128,8 @@ public class SwerveGoTo extends CommandBase {
       //double xError = ( swerveSubsystem.getOdometryMeters().getX() + (swerveSubsystem.getOdometryMeters().getX() - startingPose.getX()));
       //double yError = ( swerveSubsystem.getOdometryMeters().getY() + (swerveSubsystem.getOdometryMeters().getY() - startingPose.getY()));
        
-      vX = vXController.calculate(swerveSubsystem.getOdometryMeters().getX(), xSetpoint); // X-Axis PID
-      vY = vYController.calculate(swerveSubsystem.getOdometryMeters().getY(), ySetpoint); // Y-Axis PID
+      vX = vXController.calculate(swerveSubsystem.getOdometryMeters().getX(), xSetpoint) * multiplier; // X-Axis PID
+      vY = vYController.calculate(swerveSubsystem.getOdometryMeters().getY(), ySetpoint) * multiplier; // Y-Axis PID
 
       SmartDashboard.putNumber("vX", vX);
       SmartDashboard.putNumber("vY", vY);

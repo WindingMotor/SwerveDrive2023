@@ -44,36 +44,39 @@ public class TwoPiece extends SequentialCommandGroup{
     PIDController yController,  PIDController ppthetaController, LightStrip ledStrip){
 
         addCommands(
-        //new ResetOdometry(swerveSubsystem, new Pose2d()),
-        //new ResetYaw(swerveSubsystem),
 
-        new SetLedYellow(ledStrip), // LED Yellow - Cone
-        new ConeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppthetaController, ledStrip),
-        new ElevatorSolenoid(elevatorSubsystem),
+        new SetLedYellow(ledStrip), // Set led to yellow - Cone
+        new GrabberHold(grabberSubsystem), // Set grabber to hold mode
+        new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
+        new WaitCommand(0.8), // Wait for elevator
+        new ElevatorSolenoid(elevatorSubsystem), // Bring down pistons
+        new WaitCommand(1), // Wait for pistons
+        new GrabberSolenoid(grabberSubsystem), // Open the grabber
+        new WaitCommand(0.5), // Wait for drop
+        new ElevatorSolenoid(elevatorSubsystem), // Bring up pistons
+        new WaitCommand(1), // Wait for pistons
+        new ElevatorZero(elevatorSubsystem, grabberSubsystem), // Bring elevator down
+        new WaitCommand(0.8), // Wait for elevator
+
         new GrabberForward(grabberSubsystem), // Run grabber inwards
-       
-        new GrabberSolenoid(grabberSubsystem), // Open grabber
-        new SetLedRed(ledStrip), // LED Red - Reverse
+        new ElevatorSolenoid(elevatorSubsystem), // Bring down pistons
+        new SetLedRed(ledStrip), // Set LED to Red - Reverse
 
-        // Move backwards and spin around
-        //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0,5.42,180.0, true, new Pose2d()),
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 160.0, true, new Pose2d()),
+        // Move backwards and spin around - pick up game peice
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 160.0,1.0, true, new Pose2d()),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.4, 5.35, 160,1.0, false, null),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 0,1.0, false, null),
 
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.4, 5.35, 160, false, null),
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 0, false, null),
-
-        // Grab game peice
-        new ElevatorSolenoid(elevatorSubsystem),
-        //new GrabberHold(grabberSubsystem),
-        new SetLedGreen(ledStrip), // LED Green - Forward
+        new ElevatorSolenoid(elevatorSubsystem), // Bring up pistons
+        new GrabberHold(grabberSubsystem), // Set grabber to hold mode
+        
         // Move forwards and rotate towards grid
-        // new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),0,-5.4,0, false, new Pose2d()),
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.1, 0.0, false, null),
-        new SetLedPurple(ledStrip), // LED Purple - Cube
+        new SetLedGreen(ledStrip), // LED Green - Forward
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.1, 0.0,1.0, false, null),
 
         // Move sideways infront of high cube
-        // new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),1.0,0,180.0, false, new Pose2d())
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.1, 0.0, false, null),
+        new SetLedPurple(ledStrip), // LED Purple - Cube
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.1, 0.0,1.0, false, null),
 
         
         // Make sure angle is correct before scoring
@@ -91,17 +94,6 @@ public class TwoPiece extends SequentialCommandGroup{
         new ElevatorSolenoid(elevatorSubsystem), // bring up elevator
         new WaitCommand(1), // wait
         new ElevatorZero(elevatorSubsystem, grabberSubsystem) // zero elevator
-
-        //new ElevatorSolenoid(elevatorSubsystem)
-
-
-        //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0.2,-5.4,0, false, new Pose2d()),
-
-        // Move to grab the game peice
-        //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0.2,5.4,180.0, false),
-
-        //new ResetYaw(swerveSubsystem), // reset gyro yaw
-        //new ResetOdometryInverse(swerveSubsystem) // reset odometry
 
         );
     }
