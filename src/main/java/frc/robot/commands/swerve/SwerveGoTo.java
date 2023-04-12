@@ -16,6 +16,8 @@ public class SwerveGoTo extends CommandBase {
 
   
   private boolean finished;
+  private boolean xflag;
+  private boolean yflag;
   SwerveSubsystem swerveSubsystem;
   Supplier<Boolean> switchOverride;
   Supplier<Double> headingFunction, setpointFunction;
@@ -48,7 +50,7 @@ public class SwerveGoTo extends CommandBase {
 
     addRequirements(swerveSubsystem);
 
-    tolerance = 0.08;
+    tolerance = 0.1;
 
     this.swerveSubsystem = swerveSubsystem;
     this.headingFunction = headingFunction;
@@ -59,8 +61,8 @@ public class SwerveGoTo extends CommandBase {
 
     initalHeading = headingFunction.get();
 
-    vXController = new PIDController(1.9, 0.006, 0.008);
-    vYController = new PIDController(1.6, 0.006, 0.008);
+    vXController = new PIDController(2.5, 0.006, 0.008);
+    vYController = new PIDController(2.5, 0.006, 0.008);
 
     thetaController = new PIDController(0.1, 0.004, 0.02);
     thetaController.enableContinuousInput(0, 360);
@@ -80,6 +82,8 @@ public class SwerveGoTo extends CommandBase {
     }
 
     finished = false;
+    xflag=false;
+    yflag = false;
 
     initalHeading = headingFunction.get();
     startingPose = swerveSubsystem.getOdometryMeters();
@@ -92,14 +96,18 @@ public class SwerveGoTo extends CommandBase {
     if(swerveSubsystem.getOdometryMeters().getY()  > (ySetpoint) - tolerance){
       if(swerveSubsystem.getOdometryMeters().getY()  < (ySetpoint) + tolerance){
 
-        if(swerveSubsystem.getOdometryMeters().getX()  > (xSetpoint) - tolerance){
-          if(swerveSubsystem.getOdometryMeters().getX()  < (xSetpoint) + tolerance){
-            finished = true;
-          }
-        }
-
+        yflag = true;
       }
     }
+    if(swerveSubsystem.getOdometryMeters().getX()  > (xSetpoint) - tolerance){
+      if(swerveSubsystem.getOdometryMeters().getX()  < (xSetpoint) + tolerance){
+        xflag = true;
+      }
+    }
+    if(yflag && xflag){
+      finished = true;
+    }
+
 
 
       double turningSpeed;

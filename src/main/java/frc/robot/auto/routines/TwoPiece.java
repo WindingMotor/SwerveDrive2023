@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.TrajectoryWeaver;
@@ -50,15 +51,16 @@ public class TwoPiece extends SequentialCommandGroup{
         new ConeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppthetaController, ledStrip),
         new ElevatorSolenoid(elevatorSubsystem),
         new GrabberForward(grabberSubsystem), // Run grabber inwards
+       
         new GrabberSolenoid(grabberSubsystem), // Open grabber
         new SetLedRed(ledStrip), // LED Red - Reverse
 
         // Move backwards and spin around
         //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0,5.42,180.0, true, new Pose2d()),
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0, 4.8, 180.0, true, new Pose2d()),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 160.0, true, new Pose2d()),
 
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.8, 5.45, 150, false, null),
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-0.2, 4.8, 180.0, false, null),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.4, 5.35, 160, false, null),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 0, false, null),
 
         // Grab game peice
         new ElevatorSolenoid(elevatorSubsystem),
@@ -66,12 +68,12 @@ public class TwoPiece extends SequentialCommandGroup{
         new SetLedGreen(ledStrip), // LED Green - Forward
         // Move forwards and rotate towards grid
         // new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),0,-5.4,0, false, new Pose2d()),
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-0.2, 0.1, 0.0, false, null),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.1, 0.0, false, null),
         new SetLedPurple(ledStrip), // LED Purple - Cube
 
         // Move sideways infront of high cube
         // new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),1.0,0,180.0, false, new Pose2d())
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.0, 0.0, false, null),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.1, 0.0, false, null),
 
         
         // Make sure angle is correct before scoring
