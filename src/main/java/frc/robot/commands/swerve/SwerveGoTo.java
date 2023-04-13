@@ -58,9 +58,6 @@ public class SwerveGoTo extends CommandBase {
     this.xSetpoint = xSetpoint;
     this.ySetpoint = ySetpoint;
 
-
-    initalHeading = headingFunction.get();
-
     vXController = new PIDController(6, 0.006, 0.008);
     vYController = new PIDController(6, 0.006, 0.008);
 
@@ -114,8 +111,8 @@ public class SwerveGoTo extends CommandBase {
       SmartDashboard.putNumber("ODO X", swerveSubsystem.getOdometryMeters().getX());
       SmartDashboard.putNumber("ROBO DEG", swerveSubsystem.getRobotDegrees());
 
-      vX = vXController.calculate(swerveSubsystem.getOdometryMeters().getX(), xSetpoint) * multiplier; // X-Axis PID
-      vY = vYController.calculate(swerveSubsystem.getOdometryMeters().getY(), ySetpoint) * multiplier; // Y-Axis PID
+      vX = vXController.calculate(swerveSubsystem.getOdometryMeters().getX(), xSetpoint); // X-Axis PID
+      vY = vYController.calculate(swerveSubsystem.getOdometryMeters().getY(), ySetpoint); // Y-Axis PID
 
       SmartDashboard.putNumber("vX", vX);
       SmartDashboard.putNumber("vY", vY);
