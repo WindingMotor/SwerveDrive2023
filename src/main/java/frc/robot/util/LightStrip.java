@@ -5,10 +5,7 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightStrip  extends SubsystemBase{
@@ -22,9 +19,6 @@ public class LightStrip  extends SubsystemBase{
 
     private int stripLen = 109;
     public int[] currentColor = {0,0,0};
-
-    private PowerDistribution PDP = new PowerDistribution(1, ModuleType.kRev);
-    //private Joystick tx16s;
 
     public LightStrip(Joystick tx16s, int port){
 

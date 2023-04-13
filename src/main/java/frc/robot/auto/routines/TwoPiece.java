@@ -63,20 +63,24 @@ public class TwoPiece extends SequentialCommandGroup{
         new SetLedRed(ledStrip), // Set LED to Red - Reverse
 
         // Move backwards and spin around - pick up game peice
+
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 160.0, true, new Pose2d(), 0.1),
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.4, 5.35, 160, false, null,0.1),
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 0, false, null,0.1),
+
 
         new ElevatorSolenoid(elevatorSubsystem), // Bring up pistons
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
         
         // Move forwards and rotate towards grid
         new SetLedGreen(ledStrip), // LED Green - Forward
+        
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.1, 0.0, false, null,0.1),
 
         // Move sideways infront of high cube
         new SetLedPurple(ledStrip), // LED Purple - Cube
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.1, 0.0, false, null,0.1),
+
 
         
         // Make sure angle is correct before scoring
