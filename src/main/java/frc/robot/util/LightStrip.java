@@ -18,8 +18,9 @@ public class LightStrip  extends SubsystemBase{
 
     private AddressableLEDBuffer stripBuffer;
     private int rainbowFirstPixelHue = 0;
+    private boolean rgbMode;
 
-    private int stripLen = 90;
+    private int stripLen = 109;
     public int[] currentColor = {0,0,0};
 
     private PowerDistribution PDP = new PowerDistribution(1, ModuleType.kRev);
@@ -39,10 +40,11 @@ public class LightStrip  extends SubsystemBase{
     
         strip.setData(stripBuffer);
         //rightStrip.setData(stripBuffer);
-
+        
         setGreen();
         setStripColor();
 
+        rgbMode = true;
         startStrips();
 
     }
@@ -58,11 +60,15 @@ public class LightStrip  extends SubsystemBase{
              // Play rainbow during disabled
             updateStripRainbow();
         }else{
-            setStripColor(currentColor[0],currentColor[1],currentColor[2]);
+            if(rgbMode){
+                updateStripRainbow();
+            }else{
+                setStripColor(currentColor[0],currentColor[1],currentColor[2]);
+            }
         }
     }
 
-     // Set entire strip to the color variable
+    // Set entire strip to the color variable
     private void setStripColor(){
         for(var i = 0; i < stripBuffer.getLength(); i++){
             stripBuffer.setRGB(i, currentColor[0],currentColor[1],currentColor[2]);}
@@ -127,19 +133,21 @@ public class LightStrip  extends SubsystemBase{
     }
     
 
-    public void setRed(){ currentColor = new int[]{255,0,0};}
+    public void setRed(){ currentColor = new int[]{255,0,0}; rgbMode = false;}
 
-    public void setRGB(int r, int g, int b){ currentColor = new int[]{r,g,b};}
+    public void setRGB(int r, int g, int b){ currentColor = new int[]{r,g,b}; rgbMode = false;}
 
-    public void setGreen(){ currentColor = new int[]{0,255,0};}
+    public void setGreen(){ currentColor = new int[]{0,255,0}; rgbMode = false;}
 
-    public void setBlue(){ currentColor = new int[]{0,0,255};}
+    public void setBlue(){ currentColor = new int[]{0,0,255}; rgbMode = false;}
 
     // public void setYellow(){ setStripColor(255, 255, 0);}
-    public void setYellow(){currentColor = new int[]{255,255,0};}
+    public void setYellow(){currentColor = new int[]{255,255,0}; rgbMode = false;}
 
     //public void setPurple(){ setStripColor(255, 0, 255);}
-    public void setPurple(){currentColor = new int[]{255,0,255};}
+    public void setPurple(){currentColor = new int[]{255,0,255}; rgbMode = false;}
+
+    public void setRainbow(){rgbMode = true;}
 
     public void updateYellowPurple(){
         setYellow();
