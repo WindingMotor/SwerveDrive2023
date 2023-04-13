@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.commands.TrajectoryRunner;
 import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
+import frc.robot.auto.routines.AutoBalance;
 import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.AutoThree;
 import frc.robot.auto.routines.AutoTwo;
@@ -33,6 +34,9 @@ import frc.robot.auto.routines.CubeHighBump;
 import frc.robot.auto.routines.CubeHighCharge;
 import frc.robot.auto.routines.TestRoutine;
 import frc.robot.auto.routines.TwoPiece;
+import frc.robot.auto.routines.TwoPieceWithLessPaths;
+import frc.robot.auto.routines.TwoPieceWithMulti;
+import frc.robot.auto.routines.TwoPieceWithMultiBUMP;
 import frc.robot.commands.elevator.ElevatorApriltag;
 import frc.robot.commands.elevator.ElevatorDownSetpoint;
 import frc.robot.commands.elevator.ElevatorHome;
@@ -52,6 +56,9 @@ import frc.robot.commands.intake.IntakeHold;
 import frc.robot.commands.intake.IntakeReverse;
 import frc.robot.commands.intake.IntakeStop;
 import frc.robot.commands.led.SetLedPurple;
+import frc.robot.commands.led.SetLedRGB;
+import frc.robot.commands.led.SetLedRainbow;
+import frc.robot.commands.led.SetLedRed;
 import frc.robot.commands.led.SetLedYellow;
 import frc.robot.commands.routines.loading.DEPConeFloor;
 import frc.robot.commands.routines.loading.LoadPlatform;
@@ -61,6 +68,7 @@ import frc.robot.commands.routines.scoring.ScoreTop;
 import frc.robot.commands.grabber.angle.GrabberDegrees;
 import frc.robot.commands.grabber.angle.GrabberTrigger;
 import frc.robot.commands.swerve.SwerveAlignBasic;
+import frc.robot.commands.swerve.SwerveAutoBalance;
 import frc.robot.commands.swerve.SwerveJoystick;
 import frc.robot.commands.swerve.SwerveMove;
 import frc.robot.commands.swerve.SwerveReset;
@@ -157,7 +165,9 @@ public class RobotContainer {
 
   // Two piece
   Command twoPiece = new TwoPiece(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
-
+  Command twoPieceWithMulti = new TwoPieceWithMulti(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
+  Command twoPieceWithMultiBUMP = new TwoPieceWithMultiBUMP(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
+  Command twoPieceWithLessPaths = new TwoPieceWithLessPaths(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
   public RobotContainer(){
@@ -165,7 +175,12 @@ public class RobotContainer {
     CameraServer.startAutomaticCapture();
     PathPlannerServer.startServer(5811);
 
-    chooser.setDefaultOption("Two Piece", twoPiece);
+
+    chooser.setDefaultOption("Two MULTI BUMP", twoPieceWithMultiBUMP);
+    chooser.addOption("Two MULTI", twoPieceWithMulti);
+    chooser.addOption("Two Piece", twoPiece);
+    chooser.addOption("Two Piece LESS", twoPieceWithLessPaths);
+    
 
     chooser.addOption("Cone High Charge", coneHighCharge);
     chooser.addOption("CUBE High Charge", cubeHighCharge);
@@ -173,8 +188,8 @@ public class RobotContainer {
     chooser.addOption("Cone High", coneHigh);
     chooser.addOption("CUBE High", cubeHigh);
 
-    chooser.addOption("Cone High Bump ", coneHighBump);
-    chooser.addOption("CUBE High Bump ", cubeHighBump);
+    chooser.addOption("Cone High Bump", coneHighBump);
+    chooser.addOption("CUBE High Bump", cubeHighBump);
 
     SmartDashboard.putData(chooser);
 
@@ -261,8 +276,10 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     xbox.button(9).onTrue(new LoadPlatform(elevatorSubsystem, grabberSubsystem));
 
     // 10 RJ - Grabber angle zero
-    xbox.button(10).onTrue(new SwerveMove(swerveSubsystem,
-    () -> swerveSubsystem.getHeading(), 1.0,1.0));
+    //xbox.button(10).onTrue(new SwerveMove(swerveSubsystem,
+   // () -> swerveSubsystem.getHeading(), 1.0,1.0));
+
+   xbox.button(10).onTrue(new AutoBalance(swerveSubsystem, strips));
 
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
@@ -274,6 +291,8 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     // D-Pad POV testing - elevator setpoint
     xbox.povUp().toggleOnTrue(new SetLedYellow(strips));
     xbox.povDown().toggleOnTrue(new SetLedPurple(strips));
+    xbox.povLeft().toggleOnTrue(new SetLedRainbow(strips));
+    xbox.povRight().toggleOnTrue(new SetLedRed(strips));
 
     //tx16sCOMD.axisGreaterThan(1, 50.0).toggleOnTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
 

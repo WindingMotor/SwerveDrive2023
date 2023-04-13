@@ -203,6 +203,14 @@ public class SwerveSubsystem extends SubsystemBase {
     return gyro.getRawAccelX();
   }
 
+  public double getRollChange(){
+    return(gyro.getRawGyroY());
+  }
+
+  public double getRoll(){
+    return(gyro.getRoll());
+  }
+
   // Periodic looooooop
   @Override
   public void periodic(){
@@ -225,6 +233,10 @@ public class SwerveSubsystem extends SubsystemBase {
   SmartDashboard.putNumber("Robot Acceleration Y", gyro.getRawAccelY());
   SmartDashboard.putNumber("Robot Force X Newtons", 57.0 * 9.8 * gyro.getRawAccelX());
   SmartDashboard.putNumber("Robot Force X Pounds", (57.0 * 9.8 * gyro.getRawAccelX()) / 4.45);
+
+  SmartDashboard.putNumber("RAW ROLL", getRoll());
+  SmartDashboard.putNumber("RAW Y", getRollChange());
+
 
   // Update smartdashboard data for each swerve module object
   frontLeft.update();

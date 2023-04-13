@@ -37,50 +37,60 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.LightStrip;
 
 // Run multiple commands in a routine
-public class TwoPiece extends SequentialCommandGroup{
+public class TwoPieceWithLessPaths extends SequentialCommandGroup{
 
     // Routine command constructor
-    public TwoPiece(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
+    public TwoPieceWithLessPaths(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController, LightStrip ledStrip){
 
         addCommands(
+        //new ResetOdometry(swerveSubsystem, new Pose2d()),
+        //new ResetYaw(swerveSubsystem),
 
-        new SetLedYellow(ledStrip), // Set led to yellow - Cone
-        new GrabberHold(grabberSubsystem), // Set grabber to hold mode
-        new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
-        new WaitCommand(0.8), // Wait for elevator
-        new ElevatorSolenoid(elevatorSubsystem), // Bring down pistons
-        new WaitCommand(1), // Wait for pistons
-        new GrabberSolenoid(grabberSubsystem), // Open the grabber
-        new WaitCommand(0.5), // Wait for drop
-        new ElevatorSolenoid(elevatorSubsystem), // Bring up pistons
-        new WaitCommand(1), // Wait for pistons
-        new ElevatorZero(elevatorSubsystem, grabberSubsystem), // Bring elevator down
-        //new WaitCommand(0.8), // Wait for elevator
-
+        new SetLedYellow(ledStrip), // LED Yellow - Cone
+        //new ConeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppthetaController, ledStrip),
+        new SetLedRed(ledStrip),
+        new GrabberHold(grabberSubsystem), // reverse grabber for hold
+        new ScoreTop(elevatorSubsystem, grabberSubsystem), // raise elevator
+        new WaitCommand(0.5), // wait
+        new ElevatorSolenoid(elevatorSubsystem), // bring down elevator
+        new WaitCommand(1), // wait
+        //new GrabberReverse(grabberSubsystem), // reverse grabber motor
+        new GrabberSolenoid(grabberSubsystem), // open grabber up
+        //new WaitCommand(0.5), //
+        //new ElevatorSolenoid(elevatorSubsystem),
+        //new SwerveGoTo(swerveSubsystem, ()->swerveSubsystem.getHeading(), 0, 0.5, 0, true, new Pose2d()),
+        //new ElevatorZero(elevatorSubsystem, grabberSubsystem), // zero elevator
+        new ParallelCommandGroup(
         new GrabberForward(grabberSubsystem), // Run grabber inwards
-        new ElevatorSolenoid(elevatorSubsystem), // Bring down pistons
-        new SetLedRed(ledStrip), // Set LED to Red - Reverse
 
-        // Move backwards and spin around - pick up game peice
+        new SequentialCommandGroup(
+            new WaitCommand(0.2),
+            new ElevatorZero(elevatorSubsystem, grabberSubsystem)),
+        
+        //new GrabberSolenoid(grabberSubsystem), // Open grabber
+        new SetLedRed(ledStrip), // LED Red - Reverse
 
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 160.0, true, new Pose2d(), 0.1),
+        // Move backwards and spin around
+        //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0,5.42,180.0, true, new Pose2d()),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 160.0, false, null,0.1)
+        ),
+
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.4, 5.35, 160, false, null,0.1),
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.2, 4.5, 0, false, null,0.1),
 
-
-        new ElevatorSolenoid(elevatorSubsystem), // Bring up pistons
-        new GrabberHold(grabberSubsystem), // Set grabber to hold mode
-        
-        // Move forwards and rotate towards grid
+        // Grab game peice
+        new ElevatorSolenoid(elevatorSubsystem),
+        //new GrabberHold(grabberSubsystem),
         new SetLedGreen(ledStrip), // LED Green - Forward
-        
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.1, 0.0, false, null,0.1),
+        // Move forwards and rotate towards grid
+        // new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),0,-5.4,0, false, new Pose2d()),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),.5, 0.1, 20, false, null,0.1),
+        new SetLedPurple(ledStrip), // LED Purple - Cube
 
         // Move sideways infront of high cube
-        new SetLedPurple(ledStrip), // LED Purple - Cube
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.1, 0.0, false, null,0.1),
-
+        // new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),1.0,0,180.0, false, new Pose2d())
+        //new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.1, 0.0, false, null),
 
         
         // Make sure angle is correct before scoring
@@ -98,6 +108,17 @@ public class TwoPiece extends SequentialCommandGroup{
         new ElevatorSolenoid(elevatorSubsystem), // bring up elevator
         new WaitCommand(1), // wait
         new ElevatorZero(elevatorSubsystem, grabberSubsystem) // zero elevator
+
+        //new ElevatorSolenoid(elevatorSubsystem)
+
+
+        //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0.2,-5.4,0, false, new Pose2d()),
+
+        // Move to grab the game peice
+        //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0.2,5.4,180.0, false),
+
+        //new ResetYaw(swerveSubsystem), // reset gyro yaw
+        //new ResetOdometryInverse(swerveSubsystem) // reset odometry
 
         );
     }
