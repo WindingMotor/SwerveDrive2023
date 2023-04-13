@@ -1,6 +1,6 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
-package frc.robot.auto.routines;
+package frc.robot.auto.routines.one;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -24,7 +24,7 @@ import frc.robot.util.LightStrip;
 
 
 // Run multiple commands in a routine
-public class ConeHighCharge extends SequentialCommandGroup{
+public class CubeHighCharge extends SequentialCommandGroup{
 
 
     // DEPRECATED
@@ -34,7 +34,7 @@ public class ConeHighCharge extends SequentialCommandGroup{
     // private final HashMap<String, Command> eventMap = new HashMap<>();
 
     // Routine command constructor
-    public ConeHighCharge(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
+    public CubeHighCharge(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController, LightStrip ledStrip){
 
         // Add commands to event map markers
@@ -47,7 +47,7 @@ public class ConeHighCharge extends SequentialCommandGroup{
         new WaitCommand(0.8), // wait
         new ElevatorSolenoid(elevatorSubsystem), // bring down elevator
         new WaitCommand(1), // wait
-        //new GrabberReverse(grabberSubsystem), // reverse grabber motor
+        new GrabberReverse(grabberSubsystem), // reverse grabber motor
         new GrabberSolenoid(grabberSubsystem), // open grabber up
         new WaitCommand(0.5), // wait
         new ElevatorSolenoid(elevatorSubsystem), // bring up elevator
@@ -59,7 +59,6 @@ public class ConeHighCharge extends SequentialCommandGroup{
         new WaitCommand(2), // wait
         new ResetYaw(swerveSubsystem), // reset gyro yaw
         new ResetOdometryInverse(swerveSubsystem) // reset odometry
-
         );
 
     }

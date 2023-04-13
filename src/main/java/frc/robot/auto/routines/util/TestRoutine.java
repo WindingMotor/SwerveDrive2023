@@ -1,6 +1,6 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
-package frc.robot.auto.routines;
+package frc.robot.auto.routines.util;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;

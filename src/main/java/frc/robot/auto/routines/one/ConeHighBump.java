@@ -1,6 +1,6 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
-package frc.robot.auto.routines;
+package frc.robot.auto.routines.one;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
@@ -11,11 +11,8 @@ import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.intake.GrabberHold;
-import frc.robot.commands.grabber.intake.GrabberReverse;
 import frc.robot.commands.grabber.intake.GrabberSolenoid;
 import frc.robot.commands.routines.scoring.ScoreTop;
-import frc.robot.commands.util.ResetOdometryInverse;
-import frc.robot.commands.util.ResetYaw;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -24,7 +21,7 @@ import frc.robot.util.LightStrip;
 
 
 // Run multiple commands in a routine
-public class CubeHighBump extends SequentialCommandGroup{
+public class ConeHighBump extends SequentialCommandGroup{
 
 
     // DEPRECATED
@@ -34,8 +31,11 @@ public class CubeHighBump extends SequentialCommandGroup{
     // private final HashMap<String, Command> eventMap = new HashMap<>();
 
     // Routine command constructor
-    public CubeHighBump(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
+    public ConeHighBump(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController, LightStrip ledStrip){
+
+        // Add commands to event map markers
+        // eventMap.put("marker1", new PrintCommand("TRAJ1: Passed Marker 1"));
 
         // Add commands to run
         addCommands(
@@ -53,10 +53,10 @@ public class CubeHighBump extends SequentialCommandGroup{
         new WaitCommand(1),
         new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, back, true, false), // bring robot back
         new GrabberSolenoid(grabberSubsystem), // close grabber
-        new WaitCommand(2), // wait
+        new WaitCommand(2) // wait
         //new ResetYaw(swerveSubsystem), // reset gyro yaw
-        new ResetOdometryInverse(swerveSubsystem) // reset odometry
-
+       // new ResetOdometryInverse(swerveSubsystem) // reset odometry
+// SEEEE
         );
 
     }

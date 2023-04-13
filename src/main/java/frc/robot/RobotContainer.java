@@ -23,20 +23,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.commands.TrajectoryRunner;
 import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
-import frc.robot.auto.routines.AutoBalance;
-import frc.robot.auto.routines.AutoOne;
-import frc.robot.auto.routines.AutoThree;
-import frc.robot.auto.routines.AutoTwo;
-import frc.robot.auto.routines.ConeHigh;
-import frc.robot.auto.routines.ConeHighBump;
-import frc.robot.auto.routines.CubeHigh;
-import frc.robot.auto.routines.CubeHighBump;
-import frc.robot.auto.routines.CubeHighCharge;
-import frc.robot.auto.routines.TestRoutine;
-import frc.robot.auto.routines.TwoPiece;
-import frc.robot.auto.routines.TwoPieceWithLessPaths;
-import frc.robot.auto.routines.TwoPieceWithMulti;
-import frc.robot.auto.routines.TwoPieceWithMultiBUMP;
+import frc.robot.auto.routines.one.ConeHigh;
+import frc.robot.auto.routines.one.ConeHighBump;
+import frc.robot.auto.routines.one.CubeHigh;
+import frc.robot.auto.routines.one.CubeHighBump;
+import frc.robot.auto.routines.one.CubeHighCharge;
+import frc.robot.auto.routines.two.ConeCubeHigh;
+import frc.robot.auto.routines.two.ConeCubeHighBump;
+import frc.robot.auto.routines.two.TwoPiece;
+import frc.robot.auto.routines.two.TwoPieceWithLessPaths;
+import frc.robot.auto.routines.util.AutoBalance;
+import frc.robot.auto.routines.util.AutoOne;
+import frc.robot.auto.routines.util.AutoThree;
+import frc.robot.auto.routines.util.AutoTwo;
+import frc.robot.auto.routines.util.TestRoutine;
 import frc.robot.commands.elevator.ElevatorApriltag;
 import frc.robot.commands.elevator.ElevatorDownSetpoint;
 import frc.robot.commands.elevator.ElevatorHome;
@@ -165,8 +165,8 @@ public class RobotContainer {
 
   // Two piece
   Command twoPiece = new TwoPiece(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
-  Command twoPieceWithMulti = new TwoPieceWithMulti(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
-  Command twoPieceWithMultiBUMP = new TwoPieceWithMultiBUMP(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
+  Command twoPieceWithMulti = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
+  Command twoPieceWithMultiBUMP = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
   Command twoPieceWithLessPaths = new TwoPieceWithLessPaths(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 

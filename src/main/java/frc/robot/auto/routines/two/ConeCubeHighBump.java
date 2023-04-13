@@ -1,6 +1,6 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
-package frc.robot.auto.routines;
+package frc.robot.auto.routines.two;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,18 +40,19 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.LightStrip;
 import frc.robot.commands.swerve.SetPoint;
 import frc.robot.commands.swerve.SwerveGoToMulti;
+import frc.robot.commands.swerve.SwerveGoToMultiP;
 
 // Run multiple commands in a routine
-public class TwoPieceWithMulti extends SequentialCommandGroup{
+public class ConeCubeHighBump extends SequentialCommandGroup{
 
     // Routine command constructor
-    public TwoPieceWithMulti(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
+    public ConeCubeHighBump(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController, LightStrip ledStrip){
 
     List<SetPoint> setpoints = new ArrayList<>();
-    setpoints.add(new SetPoint(0, 4.5, 160.0, true, new Pose2d()));
-    setpoints.add(new SetPoint(0.4, 5.35, 160, false, null));
-    setpoints.add(new SetPoint(0.2, 4.5, 0, false, null));
+    setpoints.add(new SetPoint(-0.2, 4.5, 230, true, new Pose2d()));
+    setpoints.add(new SetPoint(-0.6, 5.35, 230, false, null));
+    setpoints.add(new SetPoint(-0.2, 4.5, 0, false, null));
 
         addCommands(
 
@@ -73,7 +74,7 @@ public class TwoPieceWithMulti extends SequentialCommandGroup{
                 new ElevatorSolenoid(elevatorSubsystem)
             ),
 
-            new SwerveGoToMulti(swerveSubsystem,()-> swerveSubsystem.getHeading(), setpoints,0.02)
+            new SwerveGoToMultiP(swerveSubsystem,()-> swerveSubsystem.getHeading(), setpoints,0.02,2.5)
         ),
 
         new ElevatorSolenoid(elevatorSubsystem), // Bring up pistons
@@ -81,11 +82,11 @@ public class TwoPieceWithMulti extends SequentialCommandGroup{
         
         // Move forwards and rotate towards grid
         new SetLedGreen(ledStrip), // LED Green - Forward
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.2, 0.0, false, null,0.08),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-0.5, 0.2, 0.0, false, null,0.08),
 
         // Move sideways infront of high cube
         new SetLedPurple(ledStrip), // LED Purple - Cube
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.2, 0.0, false, null,0.08),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-1.25, 0.2, 0.0, false, null,0.08),
 
         
         // Make sure angle is correct before scoring
