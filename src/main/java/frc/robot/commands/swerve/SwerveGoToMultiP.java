@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveGoToMultiP extends CommandBase {
 
-
-
   private boolean finished;
   private boolean xflag;
   private boolean yflag;

@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.auto.commands.TrajectoryRunner;
 import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
+import frc.robot.auto.routines.AutoBalance;
 import frc.robot.auto.routines.AutoOne;
 import frc.robot.auto.routines.AutoThree;
 import frc.robot.auto.routines.AutoTwo;
@@ -278,7 +279,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     //xbox.button(10).onTrue(new SwerveMove(swerveSubsystem,
    // () -> swerveSubsystem.getHeading(), 1.0,1.0));
 
-   xbox.button(10).onTrue(new SwerveAutoBalance(swerveSubsystem, () -> swerveSubsystem.getHeading(), strips));
+   xbox.button(10).onTrue(new AutoBalance(swerveSubsystem, strips));
 
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));

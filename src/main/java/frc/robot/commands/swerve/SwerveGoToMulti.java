@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class SwerveGoToMulti extends CommandBase {
 
-
-
   private boolean finished;
   private boolean xflag;
   private boolean yflag;
@@ -114,6 +112,7 @@ public class SwerveGoToMulti extends CommandBase {
         xflag = true;
       }
     }
+
     if(yflag && xflag){
         if(count < setpoints.size()-1){
             count++;
@@ -124,7 +123,6 @@ public class SwerveGoToMulti extends CommandBase {
           finished = true;
         }
     }
-
 
       double turningSpeed;
 
