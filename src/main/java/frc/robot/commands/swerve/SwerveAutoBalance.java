@@ -64,7 +64,7 @@ public class SwerveAutoBalance extends CommandBase {
   public void execute(){
 
 
-      lightStrip.setBlue();
+      lightStrip.setRGB(59, 163, 219);
 
       // Turning PID
       double turningSpeed;
@@ -99,7 +99,7 @@ public class SwerveAutoBalance extends CommandBase {
 
   // Stop all module motor movement when command ends
   @Override
-  public void end(boolean interrupted){swerveSubsystem.stopModules(); lightStrip.setRed();}
+  public void end(boolean interrupted){swerveSubsystem.stopModules(); lightStrip.setRGB(155, 219, 59);}
 
   @Override
   public boolean isFinished(){return finished;}

@@ -173,9 +173,8 @@ public class RobotContainer {
 
   public RobotContainer(){
 
-    CameraServer.startAutomaticCapture();
-    PathPlannerServer.startServer(5811);
-
+    //CameraServer.startAutomaticCapture();
+    //PathPlannerServer.startServer(5811);
 
     chooser.setDefaultOption("RED ConeCubeHigh BUMP", REDConeCubeHighBump);
     chooser.addOption("BLU ConeCubeHigh BUMP", BLUConeCubeHighBump);
@@ -289,7 +288,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     // Manual grabber angle test code
    // xbox.axisGreaterThan(1, 0.55).onTrue(new GrabberTrigger(grabberSubsystem, () -> xbox.getRawAxis(1)));
     
-    // D-Pad POV testing - elevator setpoint
+    // D-PAD LED Color selection
     xbox.povUp().toggleOnTrue(new SetLedYellow(strips));
     xbox.povDown().toggleOnTrue(new SetLedPurple(strips));
     xbox.povLeft().toggleOnTrue(new SetLedRainbow(strips));
