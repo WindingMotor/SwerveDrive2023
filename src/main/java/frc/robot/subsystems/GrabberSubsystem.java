@@ -88,6 +88,9 @@ public class GrabberSubsystem extends SubsystemBase{
         SmartDashboard.putBoolean("Grabber Open", grabberOpen);
     }
 
+    public void setCurrentLimit(int amount){
+        intakeMotor.setSmartCurrentLimit(amount);
+    }
 //---------------------// Intake
 
     // Open or close the intake soldenoid with a toggle

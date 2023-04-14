@@ -49,6 +49,7 @@ import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.intake.GrabberForward;
 import frc.robot.commands.grabber.intake.GrabberHold;
 import frc.robot.commands.grabber.intake.GrabberReverse;
+import frc.robot.commands.grabber.intake.GrabberReverseFast;
 import frc.robot.commands.grabber.intake.GrabberSolenoid;
 import frc.robot.commands.grabber.intake.GrabberStop;
 import frc.robot.commands.intake.IntakeForward;
@@ -68,7 +69,6 @@ import frc.robot.commands.routines.scoring.ScoreTop;
 import frc.robot.commands.grabber.angle.GrabberDegrees;
 import frc.robot.commands.grabber.angle.GrabberTrigger;
 import frc.robot.commands.swerve.SwerveAlignBasic;
-import frc.robot.commands.swerve.SwerveAutoBalance;
 import frc.robot.commands.swerve.SwerveJoystick;
 import frc.robot.commands.swerve.SwerveMove;
 import frc.robot.commands.swerve.SwerveReset;
@@ -166,7 +166,7 @@ public class RobotContainer {
   // Two piece
   Command twoPiece = new TwoPiece(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
   Command twoPieceWithMulti = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
-  Command twoPieceWithMultiBUMP = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
+  Command twoPieceWithMultiBUMP = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, true);
   Command twoPieceWithLessPaths = new TwoPieceWithLessPaths(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
@@ -279,7 +279,8 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     //xbox.button(10).onTrue(new SwerveMove(swerveSubsystem,
    // () -> swerveSubsystem.getHeading(), 1.0,1.0));
 
-   xbox.button(10).onTrue(new AutoBalance(swerveSubsystem, strips));
+   //xbox.button(10).onTrue(new AutoBalance(swerveSubsystem, strips));
+   xbox.button(10).onTrue(new GrabberReverseFast(grabberSubsystem));
 
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));

@@ -18,23 +18,25 @@ public class GrabberReverseFast extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    subsystem.setCurrentLimit(20);
+    subsystem.setIntakeSpeed(-1);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    subsystem.setIntakeSpeed(-1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    subsystem.setCurrentLimit(5);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    
     return true;
   }
 }
