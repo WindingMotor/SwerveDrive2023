@@ -63,7 +63,7 @@ public class LightStrip  extends SubsystemBase{
     }
 
     // Set entire strip to the color variable
-    private void setStripColor(){
+    public void setStripColor(){
         for(var i = 0; i < stripBuffer.getLength(); i++){
             stripBuffer.setRGB(i, currentColor[0],currentColor[1],currentColor[2]);}
         strip.setData(stripBuffer);
@@ -71,7 +71,7 @@ public class LightStrip  extends SubsystemBase{
     }
 
      // Set entire strip to a selected color
-    private void setStripColor(int r, int g, int b){
+    public void setStripColor(int r, int g, int b){
         for(var i = 0; i < stripBuffer.getLength(); i++){
             stripBuffer.setRGB(i, r, g, b);}
         strip.setData(stripBuffer);
@@ -79,7 +79,7 @@ public class LightStrip  extends SubsystemBase{
     }
 
     // Set enrite strip to one selected color up to a point
-    private void setStripColor(int r, int g, int b, int stopPoint){
+    public void setStripColor(int r, int g, int b, int stopPoint){
 
         // Filtering and limiting stopPoint
         stopPoint = Math.abs(stopPoint);
@@ -96,6 +96,40 @@ public class LightStrip  extends SubsystemBase{
         //rightStrip.setData(stripBuffer);
         }
 
+    // Set enrite strip to one selected color up to a point
+    public void setStripColor(int r1, int g1, int b1, int stopPoint, int r2, int g2, int b2){
+
+        // Filtering and limiting stopPoint
+        stopPoint = Math.abs(stopPoint);
+        if(stopPoint>=stripLen){stopPoint = stripLen;}
+        if(stopPoint<=0){stopPoint = 0;}
+
+        // Set led colors
+        for(var i = 0; i < stripBuffer.getLength(); i++){
+            if(i >= stopPoint){stripBuffer.setRGB(i, r2, g2, b2);}else{
+                stripBuffer.setRGB(i, r1, g1, b1);
+            }
+            }
+        strip.setData(stripBuffer);
+        //rightStrip.setData(stripBuffer);
+        }
+
+     // Set entire strip to a selected color
+     public void setStripColorEveryOther(int r1, int g1, int b1, int r2, int g2, int b2){
+        boolean flip = true;
+        for(var i = 0; i < stripBuffer.getLength(); i++){
+            if(flip){
+                stripBuffer.setRGB(i, r1, g1, b1);
+                flip = false;
+            }else{
+                stripBuffer.setRGB(i, r2, g2, b2);
+                flip = true;
+            }
+        }
+        strip.setData(stripBuffer);
+       // rightStrip.setData(stripBuffer);
+    }
+    
     // Set entire strip to rainbow
     public void updateStripRainbow(){
         // Set strip colors
@@ -142,6 +176,8 @@ public class LightStrip  extends SubsystemBase{
     public void setPurple(){currentColor = new int[]{255,0,255}; rgbMode = false;}
 
     public void setRainbow(){rgbMode = true;}
+
+    public void disableRainbow(){rgbMode = false;}
 
     public void updateYellowPurple(){
         setYellow();
