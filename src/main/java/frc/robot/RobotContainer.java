@@ -163,11 +163,12 @@ public class RobotContainer {
   Command coneHighBump = new ConeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
   Command cubeHighBump = new CubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
 
-  // Two piece
-  Command twoPiece = new TwoPiece(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
-  Command twoPieceWithMulti = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
-  Command twoPieceWithMultiBUMP = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, true);
-  Command twoPieceWithLessPaths = new TwoPieceWithLessPaths(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
+  Command REDConeCubeHigh = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
+
+  Command REDConeCubeHighBump = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, true);
+  Command BLUConeCubeHighBump = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, false);
+
+  //Command REDtwoPieceWithLessPaths = new TwoPieceWithLessPaths(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
 
   public RobotContainer(){
@@ -176,11 +177,10 @@ public class RobotContainer {
     PathPlannerServer.startServer(5811);
 
 
-    chooser.setDefaultOption("Two MULTI BUMP", twoPieceWithMultiBUMP);
-    chooser.addOption("Two MULTI", twoPieceWithMulti);
-    chooser.addOption("Two Piece", twoPiece);
-    chooser.addOption("Two Piece LESS", twoPieceWithLessPaths);
-    
+    chooser.setDefaultOption("RED ConeCubeHigh BUMP", REDConeCubeHighBump);
+    chooser.addOption("BLU ConeCubeHigh BUMP", BLUConeCubeHighBump);
+
+    chooser.addOption("RED ConeCubeHigh", REDConeCubeHigh);
 
     chooser.addOption("Cone High Charge", coneHighCharge);
     chooser.addOption("CUBE High Charge", cubeHighCharge);
