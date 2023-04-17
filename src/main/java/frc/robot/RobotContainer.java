@@ -73,6 +73,7 @@ import frc.robot.commands.swerve.SwerveJoystick;
 import frc.robot.commands.swerve.SwerveMove;
 import frc.robot.commands.swerve.SwerveReset;
 import frc.robot.commands.swerve.SwerveRotate;
+import frc.robot.commands.swerve.SwerveRotateInput;
 import frc.robot.commands.util.ResetOdometry;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
@@ -305,9 +306,11 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 
     //--------------// Auto Bindings
 
+    new JoystickButton(tx16s, 8).onTrue(new SwerveRotateInput(swerveSubsystem, 0, () -> -tx16sCOMD.getRawAxis(0), () -> tx16sCOMD.getRawAxis(1), () -> tx16s.getRawAxis(5)));
+
     // Apriltag
-    new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
-       () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
+    //new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
+    //   () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
     
     // Run autonmous command during teleop
     //new JoystickButton(tx16s, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));
