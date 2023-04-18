@@ -1,24 +1,26 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot.commands.led;
-import frc.robot.util.LightStrip;
+import frc.robot.util.Leds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class SetLedBlue extends CommandBase {
+public class SetLedGameObject extends CommandBase {
 
-  private LightStrip ledStrip;
+  private Leds leds;
+  private String string;
 
-  public SetLedBlue(LightStrip ledStrip) {
+  public SetLedGameObject(Leds leds, String string) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(ledStrip);
-    this.ledStrip = ledStrip;
+    addRequirements(leds);
+    this.string = string;
+    this.leds = leds;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ledStrip.setBlue();
+    leds.setGameObject(string);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

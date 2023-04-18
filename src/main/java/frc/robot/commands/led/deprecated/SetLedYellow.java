@@ -1,6 +1,6 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
-package frc.robot.commands.led;
+package frc.robot.commands.led.deprecated;
 import frc.robot.util.LightStrip;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -13,7 +13,7 @@ public class SetLedYellow extends CommandBase {
     addRequirements(ledStrip);
     this.ledStrip = ledStrip;
   }
-    
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {

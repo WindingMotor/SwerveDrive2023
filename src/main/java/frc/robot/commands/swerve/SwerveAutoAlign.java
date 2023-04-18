@@ -2,6 +2,7 @@
 
 package frc.robot.commands.swerve;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.util.Leds;
 import frc.robot.util.Constants.DriveConstants;
 import frc.robot.util.Constants.IOConstants;
 import java.util.function.Supplier;
@@ -9,33 +10,36 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class SwerveRotateInput extends CommandBase {
+public class SwerveAutoAlign extends CommandBase {
 
   
   // Create variables
   private final SwerveSubsystem swerveSubsystem;
+  private final Leds leds;
   
   private PIDController thetaController;
-  private double angle;
   private boolean finished;
   private double angleTolerance;
 
   private final SlewRateLimiter xLimiter, yLimiter;
   private final Supplier<Double> xSpdFunction, ySpdFunction;
+  private final Supplier<Boolean> override;
 
   // Command constructor
-  public SwerveRotateInput(SwerveSubsystem swerveSubsystem, double angle, Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> override){
+  public SwerveAutoAlign(SwerveSubsystem swerveSubsystem,Leds leds, Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Boolean> override){
 
     this.xSpdFunction = xSpdFunction;
     this.ySpdFunction = ySpdFunction;
+    this.override = override;
 
     this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
     this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
 
-    this.angle = angle;
     finished = false;
 
     // Ending command tolerance
@@ -43,6 +47,7 @@ public class SwerveRotateInput extends CommandBase {
 
     // Assign values passed from constructor
     this.swerveSubsystem = swerveSubsystem;
+    this.leds = leds;
 
     // Set default PID values for thetaPID
     thetaController = new PIDController(0.11, 0.004, 0.02);
@@ -59,11 +64,23 @@ public class SwerveRotateInput extends CommandBase {
   public void initialize() {
     // Set default command values
     finished = false;
+    leds.setAutoAlign(true);
   }
 
   // Running loop of command
   @Override
   public void execute(){
+
+    if(override.get() == false){
+      finished = true;
+    }
+
+    double angle;
+    if(DriverStation.getAlliance() == Alliance.Red){
+       angle = 90;
+    }else{
+      angle = -90;
+    }
 
     // Set joystick inputs to speed variables
     double xSpeed = xSpdFunction.get();
@@ -77,11 +94,13 @@ public class SwerveRotateInput extends CommandBase {
     xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
     ySpeed = yLimiter.calculate(ySpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
 
+    /* 
     if(swerveSubsystem.getRobotDegrees() > angle - angleTolerance){
       if(swerveSubsystem.getRobotDegrees() < angle + angleTolerance){
         finished = true;
       }
     }
+    */
 
     // Get current navx heading
     double turningSpeed;
@@ -111,7 +130,7 @@ public class SwerveRotateInput extends CommandBase {
 
   // Stop all module motor movement when command ends
   @Override
-  public void end(boolean interrupted){swerveSubsystem.stopModules();}
+  public void end(boolean interrupted){swerveSubsystem.stopModules(); leds.setAutoAlign(false);}
 
   @Override
   public boolean isFinished(){return finished;}
