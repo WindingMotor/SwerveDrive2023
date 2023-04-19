@@ -19,11 +19,9 @@ import frc.robot.commands.grabber.intake.GrabberHold;
 import frc.robot.commands.grabber.intake.GrabberReverse;
 import frc.robot.commands.grabber.intake.GrabberReverseFast;
 import frc.robot.commands.grabber.intake.GrabberSolenoid;
-import frc.robot.commands.led.SetLedBlue;
-import frc.robot.commands.led.SetLedGreen;
-import frc.robot.commands.led.SetLedPurple;
-import frc.robot.commands.led.SetLedRed;
-import frc.robot.commands.led.SetLedYellow;
+import frc.robot.commands.led.deprecated.SetLedGreen;
+import frc.robot.commands.led.deprecated.SetLedPurple;
+import frc.robot.commands.led.deprecated.SetLedYellow;
 import frc.robot.commands.routines.scoring.ScoreTop;
 import frc.robot.commands.swerve.SwerveGoTo;
 import frc.robot.commands.swerve.SwerveMove;
@@ -154,7 +152,7 @@ public class ConeCubeCube extends SequentialCommandGroup{
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
         
         // Move forwards and rotate towards grid
-        new SetLedGreen(ledStrip), // LED Green - Forward
+        //new SetLedGreen(ledStrip), // LED Green - Forward
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-0.35, 0.35, 0.0, false, null,0.08),
 
         // Move sideways infront of high cube
