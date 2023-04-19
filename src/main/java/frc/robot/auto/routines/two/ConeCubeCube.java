@@ -17,6 +17,7 @@ import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.intake.GrabberForward;
 import frc.robot.commands.grabber.intake.GrabberHold;
 import frc.robot.commands.grabber.intake.GrabberReverse;
+import frc.robot.commands.grabber.intake.GrabberReverseFast;
 import frc.robot.commands.grabber.intake.GrabberSolenoid;
 import frc.robot.commands.led.SetLedBlue;
 import frc.robot.commands.led.SetLedGreen;
@@ -39,13 +40,13 @@ import frc.robot.commands.swerve.SetPoint;
 import frc.robot.commands.swerve.SwerveGoToMulti;
 
 // Run multiple commands in a routine
-public class ConeCubeHigh extends SequentialCommandGroup{
+public class ConeCubeCube extends SequentialCommandGroup{
 
     // Routine command constructor
-    public ConeCubeHigh(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
+    public ConeCubeCube(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController, LightStrip ledStrip, boolean isRed){
 
-    if(isRed){
+    if(false){
 
         List<SetPoint> setpoints = new ArrayList<>();
         setpoints.add(new SetPoint(0, 4.5, 160.0, true, new Pose2d()));
@@ -114,7 +115,16 @@ public class ConeCubeHigh extends SequentialCommandGroup{
     setpoints.add(new SetPoint(-0.8, 5.5, 200, false, null));
     setpoints.add(new SetPoint(-0.5, 4.5, 0, false, null));
 
+    List<SetPoint> setpoints2 = new ArrayList<>();
+    setpoints2.add(new SetPoint(-0.8, 4.3, 235, false, null));
+    setpoints2.add(new SetPoint(-2.35, 5.4, 235, false, null));
+    setpoints2.add(new SetPoint(-0.8, 4.3, 0, false, null));
+
+
         addCommands(
+
+
+        // CONE PLACE
 
         new SetLedYellow(ledStrip), // Set led to yellow - Cone
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
@@ -134,38 +144,35 @@ public class ConeCubeHigh extends SequentialCommandGroup{
                 new ElevatorSolenoid(elevatorSubsystem)
             ),
 
-            new SwerveGoToMulti(swerveSubsystem,()-> swerveSubsystem.getHeading(), setpoints,0.02)
+             // PICK UP CUBE
+            new SwerveGoToMulti(swerveSubsystem,()-> swerveSubsystem.getHeading(), setpoints,0.05)
         ),
+
+        
 
         new ElevatorSolenoid(elevatorSubsystem), // Bring up pistons
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
         
         // Move forwards and rotate towards grid
         new SetLedGreen(ledStrip), // LED Green - Forward
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-0.5, 0.35, 0.0, false, null,0.08),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-0.35, 0.35, 0.0, false, null,0.08),
 
         // Move sideways infront of high cube
-        new SetLedPurple(ledStrip), // LED Purple - Cube
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-1.22, 0.35, 0.0, false, null,0.08),
+        //new SetLedPurple(ledStrip), // LED Purple - Cube
+        // new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-1.22, 0.35, 0.0, false, null,0.08),
 
         // Make sure angle is correct before scoring
         //new SwerveRotate(swerveSubsystem, 0),
 
-        new SetLedPurple(ledStrip), 
-        new GrabberHold(grabberSubsystem), // reverse grabber for hold
-        new ScoreTop(elevatorSubsystem, grabberSubsystem), // raise elevator
-        new WaitCommand(0.8), // wait
-        new ElevatorSolenoid(elevatorSubsystem), // bring down elevator
-        new WaitCommand(1), // wait
-        new GrabberReverse(grabberSubsystem), // reverse grabber motor - only for cube ejecting
-        new GrabberSolenoid(grabberSubsystem), // open grabber up
-        new WaitCommand(0.5), // wait
-        new ElevatorSolenoid(elevatorSubsystem), // bring up elevator
-        new WaitCommand(1), // wait
-        new ElevatorZero(elevatorSubsystem, grabberSubsystem) // zero elevator
-
+        new GrabberReverseFast(grabberSubsystem),
+        new WaitCommand(0.4),
+        new ElevatorSolenoid(elevatorSubsystem),
+        new GrabberForward(grabberSubsystem),
+        new SwerveGoToMulti(swerveSubsystem,()-> swerveSubsystem.getHeading(), setpoints2,0.05),
+        new WaitCommand(0.3),
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-1.2, 0.35, 0.0, false, null,0.08),
+        new GrabberReverseFast(grabberSubsystem)
         );
-
 
 
     }

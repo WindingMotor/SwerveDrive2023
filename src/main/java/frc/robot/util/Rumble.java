@@ -2,28 +2,33 @@
 
 package frc.robot.util;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class Rumble extends SubsystemBase{
 
     private XboxController xbox;
-    SwerveSubsystem swerveSubsystem;
+    GrabberSubsystem grabberSubsystem;
 
     // Class constructor takes: joystick ID
-    public Rumble(XboxController xbox, SwerveSubsystem swerveSubsystem){
+    public Rumble(XboxController xbox, GrabberSubsystem grabberSubsystem){
         this.xbox = xbox;
-        this.swerveSubsystem = swerveSubsystem;
+        this.grabberSubsystem = grabberSubsystem;
     }
 
     @Override
     public void periodic() {
-        double amount = swerveSubsystem.getRumble();
-        System.out.println(amount);
-        amount = Math.abs(amount);
-        if(amount > 1){amount = 1;}
-        if(amount < 0){amount = 0;}
-       // xbox.setRumble(RumbleType.kBothRumble, amount);
+
+        if(grabberSubsystem.intakeMotor.getAppliedOutput() > 0.12){
+            xbox.setRumble(RumbleType.kBothRumble, 0.65);
+        }else{ 
+            xbox.setRumble(RumbleType.kBothRumble, 0);
+        }
+
     }
+
 
 }

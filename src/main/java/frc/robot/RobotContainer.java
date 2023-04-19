@@ -1,15 +1,12 @@
 // FRC2106 Junkyard Dogs - Continuity Base Code - www.team2106.org
 
 package frc.robot;
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -31,6 +28,7 @@ import frc.robot.auto.routines.one.CubeHighCharge;
 import frc.robot.auto.routines.two.ConeCubeHigh;
 import frc.robot.auto.routines.two.ConeCubeHighBump;
 import frc.robot.auto.routines.two.TwoPiece;
+import frc.robot.auto.routines.two.ConeCubeCube;
 import frc.robot.auto.routines.two.TwoPieceWithLessPaths;
 import frc.robot.auto.routines.util.AutoBalance;
 import frc.robot.auto.routines.util.AutoOne;
@@ -61,8 +59,10 @@ import frc.robot.commands.led.SetLedRGB;
 import frc.robot.commands.led.SetLedRainbow;
 import frc.robot.commands.led.SetLedRed;
 import frc.robot.commands.led.SetLedYellow;
+import frc.robot.commands.led.shows.LedLightShowOne;
 import frc.robot.commands.routines.loading.DEPConeFloor;
 import frc.robot.commands.routines.loading.LoadPlatform;
+import frc.robot.commands.routines.loading.LoadSlide;
 import frc.robot.commands.routines.scoring.ObjectLaunch;
 import frc.robot.commands.routines.scoring.ScoreBottom;
 import frc.robot.commands.routines.scoring.ScoreTop;
@@ -143,7 +143,7 @@ public class RobotContainer {
   //private final XboxController xbox = new XboxController(3);
   private final CommandXboxController xbox = new CommandXboxController(3);
   private final XboxController xboxNC = new XboxController(3);
- // private final Rumble rumble = new Rumble(xboxNC, swerveSubsystem);
+  private final Rumble rumble = new Rumble(xboxNC, grabberSubsystem);
  // private final VL53L4CX vl53l4cx = new VL53L4CX(20000);
 
   //----------------------A-U-T-O---C-O-M-M-A-N-D-S----------------------------//
@@ -163,10 +163,13 @@ public class RobotContainer {
   Command coneHighBump = new ConeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
   Command cubeHighBump = new CubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
 
-  Command REDConeCubeHigh = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
+  Command REDConeCubeHigh = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, true);
+  Command BLUConeCubeHigh = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, false);
 
   Command REDConeCubeHighBump = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, true);
   Command BLUConeCubeHighBump = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, false);
+
+  Command ConeCubeCube = new ConeCubeCube(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, false);
 
   //Command REDtwoPieceWithLessPaths = new TwoPieceWithLessPaths(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
@@ -176,10 +179,11 @@ public class RobotContainer {
     //CameraServer.startAutomaticCapture();
     //PathPlannerServer.startServer(5811);
 
-    chooser.setDefaultOption("RED ConeCubeHigh BUMP", REDConeCubeHighBump);
+    chooser.addOption("RED ConeCubeHigh BUMP", REDConeCubeHighBump);
     chooser.addOption("BLU ConeCubeHigh BUMP", BLUConeCubeHighBump);
 
     chooser.addOption("RED ConeCubeHigh", REDConeCubeHigh);
+    chooser.addOption("BLU ConeCubeHigh", BLUConeCubeHigh);
 
     chooser.addOption("Cone High Charge", coneHighCharge);
     chooser.addOption("CUBE High Charge", cubeHighCharge);
@@ -189,6 +193,8 @@ public class RobotContainer {
 
     chooser.addOption("Cone High Bump", coneHighBump);
     chooser.addOption("CUBE High Bump", cubeHighBump);
+
+    chooser.setDefaultOption("Cone Cube Cube", ConeCubeCube);
 
     SmartDashboard.putData(chooser);
 
@@ -279,7 +285,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
    // () -> swerveSubsystem.getHeading(), 1.0,1.0));
 
    //xbox.button(10).onTrue(new AutoBalance(swerveSubsystem, strips));
-   xbox.button(10).onTrue(new GrabberReverseFast(grabberSubsystem));
+   xbox.button(10).onTrue(new LoadSlide(elevatorSubsystem, grabberSubsystem));
 
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
