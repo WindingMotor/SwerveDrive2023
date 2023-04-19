@@ -86,17 +86,18 @@ public class ElevatorSubsystem extends SubsystemBase{
 
 
         // Set PID values from constants
-            elevatorPID = new PIDController(0.5, 0, 0);
+            //elevatorPID = new PIDController(0.5, 0, 0);
             //elevatorPID = new PIDController(0.6, 0.06, 0);
 
         //slew = new SlewRateLimiter(10, 5, 0);
 
         // Set PID values for elevator
         //elevatorPID = new PIDController(0.5, 0, 0);
-        elevatorPID = new PIDController(0.85, 0.05, 0);
+        elevatorPID = new PIDController(0.95, 0.08, 0.05);
+        //PIDController(0.85, 0.05, 0);
 
         // Set slew rate limiter max and min rates
-        slewRateLimiter = new SlewRateLimiter(5, -10, 0);
+        slewRateLimiter = new SlewRateLimiter(5, -20, 0);
         
         // Set setpoint to zero
 

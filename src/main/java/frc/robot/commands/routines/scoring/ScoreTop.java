@@ -16,7 +16,7 @@ public class ScoreTop extends SequentialCommandGroup{
         new GrabberDegrees(grabberSubsystem, 105),  // CHANGED TO 105 instead of 95 -> 4/7/2023
         // Turn on intake
         // Move the elevator UP to platform height
-        new ElevatorSetpoint(elevatorSubsystem, -1.41 /* Height of platform in meters */)
+        new ElevatorSetpoint(elevatorSubsystem, -1.40 /* Height of platform in meters */)
         );
 
     }

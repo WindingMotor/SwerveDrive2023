@@ -32,7 +32,7 @@ public class GrabberSubsystem extends SubsystemBase{
     private DoubleSolenoid grabberSolenoid;
 
     // Intake motor
-    private CANSparkMax intakeMotor;
+    public CANSparkMax intakeMotor;
     private RelativeEncoder intakeMotorEncoder;
 
     // Angle motor 
@@ -131,7 +131,7 @@ public class GrabberSubsystem extends SubsystemBase{
     }
 
     public void setAnglePID(double x){
-        if(x > 110){
+        if(x > 130){
             x = 95;
         }else if(x < 8){
             x = 8;
