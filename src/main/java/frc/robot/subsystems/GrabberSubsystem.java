@@ -8,6 +8,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.FaultID;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -137,6 +138,37 @@ public class GrabberSubsystem extends SubsystemBase{
         }
         double angle = anglePID.calculate(angleMotorEncoder.getPosition(), x);
         angleMotor.set(angle);
+    }
+
+//---------------------// Motor Data
+
+    public short getAngleMotorFaults(){
+        return(angleMotor.getFaults());
+    }
+
+    public double getAngleMotorCurrent(){
+        return(angleMotor.getOutputCurrent());
+    }
+
+
+    public short getIntakeMotorFaults(){
+        return(intakeMotor.getFaults());
+    }
+
+    public double getIntakeMotorCurrent(){
+        return(intakeMotor.getOutputCurrent());
+    }
+
+    public double getAngleSetpoint(){
+        return(angleSetpoint);
+    }
+
+    public CANSparkMax getAngleMotor(){
+        return angleMotor;
+    }
+
+    public CANSparkMax getIntakeMotor(){
+        return intakeMotor;
     }
 
 //---------------------// Smartdashboard

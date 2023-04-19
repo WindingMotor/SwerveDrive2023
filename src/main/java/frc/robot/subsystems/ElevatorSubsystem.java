@@ -190,6 +190,18 @@ public class ElevatorSubsystem extends SubsystemBase{
         return true;
     }
 
+    public CANSparkMax getElevatorMotorOne(){
+        return motorOne;
+    }
+
+    public CANSparkMax getElevatorMotorTwo(){
+        return motorTwo;
+    }
+    
+    public double getElevatorSetpointMeters(){
+        return elevatorSetpointMeters;
+    }
+
     public void updateSmartDashboard(){
        SmartDashboard.putNumber("Elevator Encoder:", motorOneEncoder.getPosition());
        // SmartDashboard.putBoolean("Bottom Limit Switch", bottomLimitSwitch.isPressed());

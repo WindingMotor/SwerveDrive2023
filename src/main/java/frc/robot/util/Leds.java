@@ -36,6 +36,9 @@ public class Leds  extends SubsystemBase{
     // Mode for when auto align is on
     private boolean autoAlign;
 
+    // Mode for when SelfCheck detects something wrong
+    private boolean selfcheck;
+
     public Leds(){
 
         leds = new AddressableLED(port);
