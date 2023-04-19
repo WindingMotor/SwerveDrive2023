@@ -8,7 +8,7 @@ import frc.robot.commands.elevator.ElevatorSolenoid;
 import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.intake.GrabberHold;
 import frc.robot.commands.grabber.intake.GrabberSolenoid;
-import frc.robot.commands.led.SetLedRed;
+import frc.robot.commands.led.deprecated.SetLedRed;
 import frc.robot.commands.routines.scoring.ScoreTop;
 import frc.robot.commands.util.ResetOdometryInverse;
 import frc.robot.commands.util.ResetYaw;

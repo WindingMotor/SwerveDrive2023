@@ -54,12 +54,12 @@ import frc.robot.commands.intake.IntakeForward;
 import frc.robot.commands.intake.IntakeHold;
 import frc.robot.commands.intake.IntakeReverse;
 import frc.robot.commands.intake.IntakeStop;
-import frc.robot.commands.led.SetLedPurple;
-import frc.robot.commands.led.SetLedRGB;
-import frc.robot.commands.led.SetLedRainbow;
-import frc.robot.commands.led.SetLedRed;
-import frc.robot.commands.led.SetLedYellow;
-import frc.robot.commands.led.shows.LedLightShowOne;
+import frc.robot.commands.led.SetLedGameObject;
+import frc.robot.commands.led.deprecated.SetLedPurple;
+import frc.robot.commands.led.deprecated.SetLedRGB;
+import frc.robot.commands.led.deprecated.SetLedRainbow;
+import frc.robot.commands.led.deprecated.SetLedRed;
+import frc.robot.commands.led.deprecated.SetLedYellow;
 import frc.robot.commands.routines.loading.DEPConeFloor;
 import frc.robot.commands.routines.loading.LoadPlatform;
 import frc.robot.commands.routines.loading.LoadSlide;
@@ -73,6 +73,7 @@ import frc.robot.commands.swerve.SwerveJoystick;
 import frc.robot.commands.swerve.SwerveMove;
 import frc.robot.commands.swerve.SwerveReset;
 import frc.robot.commands.swerve.SwerveRotate;
+import frc.robot.commands.swerve.SwerveAutoAlign;
 import frc.robot.commands.util.ResetOdometry;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GrabberSubsystem;
@@ -80,6 +81,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.util.Constants;
+import frc.robot.util.Leds;
 import frc.robot.util.LightStrip;
 import frc.robot.util.Rumble;
 import frc.robot.util.Transmitter;
@@ -115,8 +117,10 @@ public class RobotContainer {
   // Create led strips
   private final LightStrip strips = new LightStrip(tx16s,0);
 
+  private final Leds leds = new Leds();
+
   // Create ultrasonic sensor 
-  private final UltrasonicRangefinder ultrasonic = new UltrasonicRangefinder(strips);
+  //private final UltrasonicRangefinder ultrasonic = new UltrasonicRangefinder(strips);
 
   // Create swerve subsystem
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
@@ -295,8 +299,8 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
    // xbox.axisGreaterThan(1, 0.55).onTrue(new GrabberTrigger(grabberSubsystem, () -> xbox.getRawAxis(1)));
     
     // D-PAD LED Color selection
-    xbox.povUp().toggleOnTrue(new SetLedYellow(strips));
-    xbox.povDown().toggleOnTrue(new SetLedPurple(strips));
+    xbox.povUp().toggleOnTrue(new SetLedGameObject(leds, "cone"));
+    xbox.povDown().toggleOnTrue(new SetLedGameObject(leds, "cube"));
     xbox.povLeft().toggleOnTrue(new SetLedRainbow(strips));
     xbox.povRight().toggleOnTrue(new SetLedRed(strips));
 
@@ -311,9 +315,12 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
 
     //--------------// Auto Bindings
 
+    // Auto align with side station
+    new JoystickButton(tx16s, 8).onTrue(new SwerveAutoAlign(swerveSubsystem, leds, () -> -tx16sCOMD.getRawAxis(0), () -> tx16sCOMD.getRawAxis(1), () -> tx16s.getRawButton(8)));
+
     // Apriltag
-    new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
-       () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
+    //new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,
+    //   () -> swerveSubsystem.getHeading(), () -> tx16s.getRawButton(8), () -> tx16s.getRawAxis(5)));
     
     // Run autonmous command during teleop
     //new JoystickButton(tx16s, 3).onTrue(new TrajectoryWeaver(swerveSubsystem,xController,yController,ppThetaController, pathOne, true));

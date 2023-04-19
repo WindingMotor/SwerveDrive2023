@@ -211,6 +211,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return(gyro.getRoll());
   }
 
+  public double getRobotForceNewtons(){
+    return(57.0 * 9.8 * gyro.getRawAccelX());
+  }
+
   // Periodic looooooop
   @Override
   public void periodic(){
