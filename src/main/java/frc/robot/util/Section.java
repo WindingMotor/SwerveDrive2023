@@ -8,9 +8,9 @@ public enum Section {
     kLeft(0,45),
     kRight(46,109),
     kBottomLeft(0, 10),
-    kBottomRight(99,109),
+    kBottomRight(45,64),
     kTopLeft(35,45),
-    kTopRight(46, 56);
+    kTopRight(99, 109);
 
     private int start;
     private int end;

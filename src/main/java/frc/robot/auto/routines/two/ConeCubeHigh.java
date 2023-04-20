@@ -43,18 +43,18 @@ public class ConeCubeHigh extends SequentialCommandGroup{
 
     // Routine command constructor
     public ConeCubeHigh(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
-    PIDController yController,  PIDController ppthetaController, LightStrip ledStrip, boolean isRed){
+    PIDController yController,  PIDController ppthetaController, boolean isRed){
 
     if(isRed){
 
         List<SetPoint> setpoints = new ArrayList<>();
         setpoints.add(new SetPoint(0, 4.5, 160.0, true, new Pose2d()));
-        setpoints.add(new SetPoint(0.4, 5.35, 160, false, null));
+        setpoints.add(new SetPoint(0.45, 5.5, 160, false, null));
         setpoints.add(new SetPoint(0.2, 4.5, 0, false, null));
     
             addCommands(
     
-            new SetLedYellow(ledStrip), // Set led to yellow - Cone
+
             new GrabberHold(grabberSubsystem), // Set grabber to hold mode
             new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
             new WaitCommand(0.8), // Wait for elevator
@@ -79,18 +79,18 @@ public class ConeCubeHigh extends SequentialCommandGroup{
             new GrabberHold(grabberSubsystem), // Set grabber to hold mode
             
             // Move forwards and rotate towards grid
-            new SetLedGreen(ledStrip), // LED Green - Forward
-            new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.2, 0.0, false, null,0.08),
+
+            new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.45, 0.0, false, null,0.08),
     
             // Move sideways infront of high cube
-            new SetLedPurple(ledStrip), // LED Purple - Cube
-            new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.2, 0.0, false, null,0.08),
+
+            new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.45, 0.0, false, null,0.08),
     
             
             // Make sure angle is correct before scoring
             //new SwerveRotate(swerveSubsystem, 0),
     
-            new SetLedPurple(ledStrip), 
+
             new GrabberHold(grabberSubsystem), // reverse grabber for hold
             new ScoreTop(elevatorSubsystem, grabberSubsystem), // raise elevator
             new WaitCommand(0.8), // wait
@@ -111,12 +111,11 @@ public class ConeCubeHigh extends SequentialCommandGroup{
 
         List<SetPoint> setpoints = new ArrayList<>();
     setpoints.add(new SetPoint(-0.6, 4.5, 200, true, new Pose2d()));
-    setpoints.add(new SetPoint(-0.8, 5.5, 200, false, null));
-    setpoints.add(new SetPoint(-0.5, 4.5, 0, false, null));
+    setpoints.add(new SetPoint(-0.7, 5.5, 200, false, null));
+    setpoints.add(new SetPoint(-0.6, 4.5, 0, false, null));
 
         addCommands(
 
-        new SetLedYellow(ledStrip), // Set led to yellow - Cone
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
         new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
         new WaitCommand(0.8), // Wait for elevator
@@ -141,17 +140,16 @@ public class ConeCubeHigh extends SequentialCommandGroup{
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
         
         // Move forwards and rotate towards grid
-        new SetLedGreen(ledStrip), // LED Green - Forward
+
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-0.5, 0.35, 0.0, false, null,0.08),
 
         // Move sideways infront of high cube
-        new SetLedPurple(ledStrip), // LED Purple - Cube
-        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-1.22, 0.35, 0.0, false, null,0.08),
+
+        new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-1.20, 0.45, 0.0, false, null,0.08),
 
         // Make sure angle is correct before scoring
         //new SwerveRotate(swerveSubsystem, 0),
 
-        new SetLedPurple(ledStrip), 
         new GrabberHold(grabberSubsystem), // reverse grabber for hold
         new ScoreTop(elevatorSubsystem, grabberSubsystem), // raise elevator
         new WaitCommand(0.8), // wait

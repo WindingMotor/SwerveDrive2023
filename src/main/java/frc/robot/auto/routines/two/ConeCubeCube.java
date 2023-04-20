@@ -42,7 +42,7 @@ public class ConeCubeCube extends SequentialCommandGroup{
 
     // Routine command constructor
     public ConeCubeCube(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
-    PIDController yController,  PIDController ppthetaController, LightStrip ledStrip, boolean isRed){
+    PIDController yController,  PIDController ppthetaController, boolean isRed){
 
     if(false){
 
@@ -53,7 +53,6 @@ public class ConeCubeCube extends SequentialCommandGroup{
     
             addCommands(
     
-            new SetLedYellow(ledStrip), // Set led to yellow - Cone
             new GrabberHold(grabberSubsystem), // Set grabber to hold mode
             new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
             new WaitCommand(0.8), // Wait for elevator
@@ -78,18 +77,15 @@ public class ConeCubeCube extends SequentialCommandGroup{
             new GrabberHold(grabberSubsystem), // Set grabber to hold mode
             
             // Move forwards and rotate towards grid
-            new SetLedGreen(ledStrip), // LED Green - Forward
             new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.2, 0.0, false, null,0.08),
     
             // Move sideways infront of high cube
-            new SetLedPurple(ledStrip), // LED Purple - Cube
             new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),1.25, 0.2, 0.0, false, null,0.08),
     
             
             // Make sure angle is correct before scoring
             //new SwerveRotate(swerveSubsystem, 0),
     
-            new SetLedPurple(ledStrip), 
             new GrabberHold(grabberSubsystem), // reverse grabber for hold
             new ScoreTop(elevatorSubsystem, grabberSubsystem), // raise elevator
             new WaitCommand(0.8), // wait
@@ -110,8 +106,8 @@ public class ConeCubeCube extends SequentialCommandGroup{
 
         List<SetPoint> setpoints = new ArrayList<>();
     setpoints.add(new SetPoint(-0.6, 4.5, 200, true, new Pose2d()));
-    setpoints.add(new SetPoint(-0.8, 5.5, 200, false, null));
-    setpoints.add(new SetPoint(-0.5, 4.5, 0, false, null));
+    setpoints.add(new SetPoint(-0.7, 5.5, 200, false, null));
+    setpoints.add(new SetPoint(-0.6, 4.5, 0, false, null));
 
     List<SetPoint> setpoints2 = new ArrayList<>();
     setpoints2.add(new SetPoint(-0.8, 4.3, 235, false, null));
@@ -124,7 +120,6 @@ public class ConeCubeCube extends SequentialCommandGroup{
 
         // CONE PLACE
 
-        new SetLedYellow(ledStrip), // Set led to yellow - Cone
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
         new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
         new WaitCommand(0.8), // Wait for elevator

@@ -38,15 +38,15 @@ public class TwoPieceWithLessPaths extends SequentialCommandGroup{
 
     // Routine command constructor
     public TwoPieceWithLessPaths(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
-    PIDController yController,  PIDController ppthetaController, LightStrip ledStrip){
+    PIDController yController,  PIDController ppthetaController){
 
         addCommands(
         //new ResetOdometry(swerveSubsystem, new Pose2d()),
         //new ResetYaw(swerveSubsystem),
 
-        new SetLedYellow(ledStrip), // LED Yellow - Cone
+ 
         //new ConeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppthetaController, ledStrip),
-        new SetLedRed(ledStrip),
+      
         new GrabberHold(grabberSubsystem), // reverse grabber for hold
         new ScoreTop(elevatorSubsystem, grabberSubsystem), // raise elevator
         new WaitCommand(0.5), // wait
@@ -66,7 +66,7 @@ public class TwoPieceWithLessPaths extends SequentialCommandGroup{
             new ElevatorZero(elevatorSubsystem, grabberSubsystem)),
         
         //new GrabberSolenoid(grabberSubsystem), // Open grabber
-        new SetLedRed(ledStrip), // LED Red - Reverse
+      
 
         // Move backwards and spin around
         //new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(), 0,5.42,180.0, true, new Pose2d()),
@@ -79,11 +79,11 @@ public class TwoPieceWithLessPaths extends SequentialCommandGroup{
         // Grab game peice
         new ElevatorSolenoid(elevatorSubsystem),
         //new GrabberHold(grabberSubsystem),
-        new SetLedGreen(ledStrip), // LED Green - Forward
+       
         // Move forwards and rotate towards grid
         // new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),0,-5.4,0, false, new Pose2d()),
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),.5, 0.1, 20, false, null,0.1),
-        new SetLedPurple(ledStrip), // LED Purple - Cube
+      
 
         // Move sideways infront of high cube
         // new SwerveMoveRotate(swerveSubsystem,() -> swerveSubsystem.getHeading(),1.0,0,180.0, false, new Pose2d())
@@ -93,7 +93,7 @@ public class TwoPieceWithLessPaths extends SequentialCommandGroup{
         // Make sure angle is correct before scoring
         //new SwerveRotate(swerveSubsystem, 0),
 
-        new SetLedPurple(ledStrip), // LED Yellow - Cone
+       
         new GrabberHold(grabberSubsystem), // reverse grabber for hold
         new ScoreTop(elevatorSubsystem, grabberSubsystem), // raise elevator
         new WaitCommand(0.8), // wait

@@ -31,7 +31,7 @@ public class ConeCubeHighBump extends SequentialCommandGroup{
 
     // Routine command constructor
     public ConeCubeHighBump(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
-    PIDController yController,  PIDController ppthetaController, LightStrip ledStrip, boolean isRed){
+    PIDController yController,  PIDController ppthetaController, boolean isRed){
 
 
     if(isRed){
@@ -43,7 +43,7 @@ public class ConeCubeHighBump extends SequentialCommandGroup{
 
         addCommands(
 
-        new SetLedYellow(ledStrip), // Set led to yellow - Cone
+
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
         new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
         new WaitCommand(0.8), // Wait for elevator
@@ -68,18 +68,18 @@ public class ConeCubeHighBump extends SequentialCommandGroup{
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
         
         // Move forwards and rotate towards grid
-        new SetLedGreen(ledStrip), // LED Green - Forward
+   
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-0.5, 0.15, 0.0, false, null,0.1),
 
         // Move sideways infront of high cube
-        new SetLedPurple(ledStrip), // LED Purple - Cube
+
         new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),-0.75, 0.15, 0.0, false, null,0.1),
 
         
         // Make sure angle is correct before scoring
         //new SwerveRotate(swerveSubsystem, 0),
 
-        new SetLedPurple(ledStrip), 
+    
         new GrabberHold(grabberSubsystem), // reverse grabber for hold
         new ScoreTop(elevatorSubsystem, grabberSubsystem), // raise elevator
         new WaitCommand(0.8), // wait
@@ -100,12 +100,12 @@ public class ConeCubeHighBump extends SequentialCommandGroup{
 
         List<SetPoint> setpoints = new ArrayList<>();
         setpoints.add(new SetPoint(0, 4.5, 165, true, new Pose2d()));
-        setpoints.add(new SetPoint(0.25, 5.7, 165, false, null));
+        setpoints.add(new SetPoint(0.35, 5.8, 165, false, null));
         setpoints.add(new SetPoint(0.2, 4.5, 0, false, null));
-
+        //0.25, 6.18
             addCommands(
     
-            new SetLedYellow(ledStrip), // Set led to yellow - Cone
+          
             new GrabberHold(grabberSubsystem), // Set grabber to hold mode
             new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
             new WaitCommand(0.8), // Wait for elevator
@@ -130,18 +130,17 @@ public class ConeCubeHighBump extends SequentialCommandGroup{
             new GrabberHold(grabberSubsystem), // Set grabber to hold mode
             
             // Move forwards and rotate towards grid
-            new SetLedGreen(ledStrip), // LED Green - Forward
+          
             new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.5, 0.25, 0.0, false, null,0.1),
     
             // Move sideways infront of high cube
-            new SetLedPurple(ledStrip), // LED Purple - Cube
+       
             new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(),0.95, 0.35, 0.0, false, null,0.1),
     
             
             // Make sure angle is correct before scoring
             //new SwerveRotate(swerveSubsystem, 0),
     
-            new SetLedPurple(ledStrip), 
             new GrabberHold(grabberSubsystem), // reverse grabber for hold
             new ScoreTop(elevatorSubsystem, grabberSubsystem), // raise elevator
             new WaitCommand(0.8), // wait

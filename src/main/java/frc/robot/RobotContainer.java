@@ -22,14 +22,15 @@ import frc.robot.auto.commands.TrajectoryWeaver;
 import frc.robot.auto.manuals.Forward2M;
 import frc.robot.auto.routines.one.ConeHigh;
 import frc.robot.auto.routines.one.ConeHighBump;
+import frc.robot.auto.routines.one.ConeHighCharge;
 import frc.robot.auto.routines.one.CubeHigh;
 import frc.robot.auto.routines.one.CubeHighBump;
 import frc.robot.auto.routines.one.CubeHighCharge;
 import frc.robot.auto.routines.two.ConeCubeHigh;
 import frc.robot.auto.routines.two.ConeCubeHighBump;
-import frc.robot.auto.routines.two.TwoPiece;
 import frc.robot.auto.routines.two.ConeCubeCube;
 import frc.robot.auto.routines.two.TwoPieceWithLessPaths;
+import frc.robot.auto.routines.two.BalanceNew;
 import frc.robot.auto.routines.util.AutoBalance;
 import frc.robot.auto.routines.util.AutoOne;
 import frc.robot.auto.routines.util.AutoThree;
@@ -63,6 +64,7 @@ import frc.robot.commands.led.deprecated.SetLedYellow;
 import frc.robot.commands.routines.loading.DEPConeFloor;
 import frc.robot.commands.routines.loading.LoadPlatform;
 import frc.robot.commands.routines.loading.LoadSlide;
+import frc.robot.commands.routines.loading.LoadSlideAlign;
 import frc.robot.commands.routines.scoring.ObjectLaunch;
 import frc.robot.commands.routines.scoring.ScoreBottom;
 import frc.robot.commands.routines.scoring.ScoreTop;
@@ -115,9 +117,9 @@ public class RobotContainer {
   private final CommandJoystick tx16sCOMD = new CommandJoystick(4);
 
   // Create led strips
-  private final LightStrip strips = new LightStrip(tx16s,0);
+ // private final LightStrip strips = new LightStrip(tx16s,0);
 
-  private final Leds leds = new Leds();
+ private final Leds leds = new Leds();
 
   // Create ultrasonic sensor 
   //private final UltrasonicRangefinder ultrasonic = new UltrasonicRangefinder(strips);
@@ -156,24 +158,29 @@ public class RobotContainer {
   SendableChooser<Command> chooser = new SendableChooser<>();
 
   // Only place game object and dont move
-  Command coneHigh = new ConeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
-  Command cubeHigh = new CubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
+  Command coneHigh = new ConeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
+  Command cubeHigh = new CubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
 
   // Place game object and go on charge station
-  Command coneHighCharge = new CubeHighCharge(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
-  Command cubeHighCharge = new CubeHighCharge(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
+  Command coneHighCharge = new ConeHighCharge(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, leds);
+  Command cubeHighCharge = new CubeHighCharge(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, leds);
 
   // Place game object and leave community on bump side
-  Command coneHighBump = new ConeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
-  Command cubeHighBump = new CubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,strips);
+  Command coneHighBump = new ConeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
+  Command cubeHighBump = new CubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController);
 
-  Command REDConeCubeHigh = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, true);
-  Command BLUConeCubeHigh = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, false);
+  Command REDConeCubeHigh = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, true);
+  Command BLUConeCubeHigh = new ConeCubeHigh(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, false);
 
-  Command REDConeCubeHighBump = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, true);
-  Command BLUConeCubeHighBump = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, false);
+  Command REDConeCubeHighBump = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController,true);
 
-  Command ConeCubeCube = new ConeCubeCube(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips, false);
+  Command BLUConeCubeHighBump = new ConeCubeHighBump(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, false);
+
+  Command ConeCubeCube = new ConeCubeCube(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, false);
+
+  Command balanceNew = new BalanceNew(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, leds);
+
+  Command balanceOnly = new AutoBalance(swerveSubsystem, leds);
 
   //Command REDtwoPieceWithLessPaths = new TwoPieceWithLessPaths(swerveSubsystem, elevatorSubsystem, grabberSubsystem, xController, yController, ppThetaController, strips);
   //------------------------------------C-O-N-S-T-R-U-C-T-O-R----------------------------//
@@ -186,17 +193,21 @@ public class RobotContainer {
     chooser.addOption("RED ConeCubeHigh BUMP", REDConeCubeHighBump);
     chooser.addOption("BLU ConeCubeHigh BUMP", BLUConeCubeHighBump);
 
-    chooser.addOption("RED ConeCubeHigh", REDConeCubeHigh);
-    chooser.addOption("BLU ConeCubeHigh", BLUConeCubeHigh);
+    chooser.addOption("RED Cone Cube High", REDConeCubeHigh);
+    chooser.addOption("BLU Cone Cube High", BLUConeCubeHigh);
 
-    chooser.addOption("Cone High Charge", coneHighCharge);
-    chooser.addOption("CUBE High Charge", cubeHighCharge);
+    chooser.addOption("Cone High CHARGE", coneHighCharge);
+    chooser.addOption("CUBE High CHARGE", cubeHighCharge);
 
     chooser.addOption("Cone High", coneHigh);
     chooser.addOption("CUBE High", cubeHigh);
 
     chooser.addOption("Cone High Bump", coneHighBump);
     chooser.addOption("CUBE High Bump", cubeHighBump);
+
+    chooser.addOption("Balance NEW", balanceNew);
+    chooser.addOption("Balance ONLY", balanceOnly);
+
 
     chooser.setDefaultOption("Cone Cube Cube", ConeCubeCube);
 
@@ -282,14 +293,14 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     xbox.rightBumper().onTrue(new ScoreTop(elevatorSubsystem, grabberSubsystem));
 
     // 9 LJ - Loading station
-    xbox.button(9).onTrue(new LoadPlatform(elevatorSubsystem, grabberSubsystem));
+    xbox.button(10).onTrue(new LoadPlatform(elevatorSubsystem, grabberSubsystem));
 
     // 10 RJ - Grabber angle zero
     //xbox.button(10).onTrue(new SwerveMove(swerveSubsystem,
    // () -> swerveSubsystem.getHeading(), 1.0,1.0));
 
    //xbox.button(10).onTrue(new AutoBalance(swerveSubsystem, strips));
-   xbox.button(10).onTrue(new LoadSlide(elevatorSubsystem, grabberSubsystem));
+   xbox.button(9).onTrue(new LoadSlide(elevatorSubsystem, grabberSubsystem));
 
     // 10 RJ - Reset Odometry
    // xbox.button(10).onTrue(new ResetOdometry(swerveSubsystem, new Pose2d()));
@@ -299,10 +310,12 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
    // xbox.axisGreaterThan(1, 0.55).onTrue(new GrabberTrigger(grabberSubsystem, () -> xbox.getRawAxis(1)));
     
     // D-PAD LED Color selection
-    xbox.povUp().toggleOnTrue(new SetLedGameObject(leds, "cone"));
-    xbox.povDown().toggleOnTrue(new SetLedGameObject(leds, "cube"));
-    xbox.povLeft().toggleOnTrue(new SetLedRainbow(strips));
-    xbox.povRight().toggleOnTrue(new SetLedRed(strips));
+    xbox.povUp().toggleOnTrue(new SetLedGameObject(leds, true));
+
+    xbox.povDown().toggleOnTrue(new SetLedGameObject(leds, false));
+
+    //xbox.povLeft().toggleOnTrue(new SetLedRainbow(strips));
+    //xbox.povRight().toggleOnTrue(new SetLedRed(strips));
 
     //tx16sCOMD.axisGreaterThan(1, 50.0).toggleOnTrue(new ElevatorZero(elevatorSubsystem, grabberSubsystem));
 
@@ -316,7 +329,7 @@ swerveSubsystem.setDefaultCommand(new SwerveJoystick(swerveSubsystem,
     //--------------// Auto Bindings
 
     // Auto align with side station
-    new JoystickButton(tx16s, 8).onTrue(new SwerveAutoAlign(swerveSubsystem, leds, () -> -tx16sCOMD.getRawAxis(0), () -> tx16sCOMD.getRawAxis(1), () -> tx16s.getRawButton(8)));
+    new JoystickButton(tx16s, 8).onTrue(new LoadSlideAlign(swerveSubsystem, elevatorSubsystem, grabberSubsystem, leds, () -> -tx16sCOMD.getRawAxis(0), () -> tx16sCOMD.getRawAxis(1), () -> tx16s.getRawButton(8)));
 
     // Apriltag
     //new JoystickButton(tx16s, 8).onTrue(new SwerveAlignBasic(swerveSubsystem, visionSubsystem,

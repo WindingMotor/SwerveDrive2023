@@ -36,13 +36,12 @@ public class Leds  extends SubsystemBase{
     // Mode for when auto align is on
     private boolean autoAlign;
 
+    private boolean isBalanced;
+
     // Mode for when SelfCheck detects something wrong
     private boolean selfcheck;
 
     public Leds(){
-
-        leds = new AddressableLED(port);
-        buffer = new AddressableLEDBuffer(length);
 
         powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
@@ -51,17 +50,31 @@ public class Leds  extends SubsystemBase{
 
         strobe = false; white = false;
 
+        isBalanced = false;
+
+        leds = new AddressableLED(0);
+        buffer = new AddressableLEDBuffer(109);
+
+        leds.setLength(buffer.getLength());
+
+        leds.setData(buffer);
+
+       // setStripColor();
+        leds.start();
 
     }
 
-    public void setGameObject(String string){
-        if(string.equals("cone")){
+    public void setGameObject(boolean isCone){
+        
+        if(isCone){
             cone = true;
-        }else{cube = false;}
-
-        if(string.equals("cube")){
+            cube = false;
+        }
+        else{
             cube = true;
-        }else{cone = false;}
+            cone = false;
+        }
+
     }
 
     public void setStrobe(Boolean value){
@@ -79,15 +92,29 @@ public class Leds  extends SubsystemBase{
         else{autoAlign = false;}
     }
 
-    @Override
-    public synchronized void periodic() {
+    public void setAutoBalance(Boolean value){
+        if(value){isBalanced = true;}
+        else{isBalanced = false;}
+    }
 
+    @Override
+    public void periodic() {
+
+
+        //SmartDashboard.putString("LEDS", buffer.toString());
+
+       // setStripColor();
+
+       // solid(Section.kAll, LedColor.kCyan);
+       // leds.setData(buffer);
+
+        
         // Check if the robot is enabled
         if(DriverStation.isEnabled()){
 
         // Set color to desired game object for human player
-        if(cone){strobe(Section.kAll, LedColor.kYellow, 0.5);}
-        else if(cube){strobe(Section.kAll, LedColor.kPurple, 0.5);}
+        if(cone){strobe(Section.kAll, LedColor.kYellow, 0.75);}
+        if(cube){strobe(Section.kAll, LedColor.kPurple, 0.75);}
 
         // Strobe or set leds to full white
         if(strobe){strobe(Section.kAll, LedColor.kWhite, 0.05);}
@@ -96,8 +123,8 @@ public class Leds  extends SubsystemBase{
         // Flash top leds green during endgame
         double matchTime =  DriverStation.getMatchTime();
         if(matchTime <= 15.0 && matchTime > 0){endgame = true;} else{endgame = false;}
-        if(endgame){strobe(Section.kTopLeft, LedColor.kGreen, 0.15);
-                    strobe(Section.kTopRight, LedColor.kGreen, 0.15);}
+        if(endgame){strobe(Section.kTopLeft, LedColor.kGreen, 0.22);
+                    strobe(Section.kTopRight, LedColor.kGreen, 0.22);}
         
 
         // Flash bottom leds orange is battery voltage is low
@@ -106,8 +133,8 @@ public class Leds  extends SubsystemBase{
                     strobe(Section.kBottomRight, LedColor.kOrange, 0.15);}
 
         if(autoAlign){
-        solid(Section.kTopLeft, LedColor.kOrange);
-        solid(Section.kTopRight, LedColor.kOrange);
+        solid(Section.kTopLeft, LedColor.kCyan);
+        solid(Section.kTopRight, LedColor.kCyan);
         if(DriverStation.getAlliance() == Alliance.Red){
             solid(Section.kBottomLeft, LedColor.kRed);
             solid(Section.kBottomRight, LedColor.kRed);
@@ -115,24 +142,34 @@ public class Leds  extends SubsystemBase{
             solid(Section.kBottomLeft, LedColor.kBlue);
             solid(Section.kBottomRight, LedColor.kBlue);    
             }
+
+        }
+
+        if(DriverStation.isAutonomous()){
+            if(isBalanced){
+                breath(Section.kAll, LedColor.kBlue, LedColor.kBlack, 2.0);
+            }else{
+                breath(Section.kAll, LedColor.kRed, LedColor.kBlack, 2.0);
+            }
         }
             
 
         }else if(DriverStation.isEStopped()){breath(Section.kAll, LedColor.kRed, LedColor.kBlack, 0.25);}  // E-Stopped Red LEDS
         else{
             // Disabled LEDS
-            rainbow(Section.kAll, 25.0, 0.25);
-            breath(Section.kTopLeft, LedColor.kRed, LedColor.kBlack, 1.0);
-            breath(Section.kTopRight, LedColor.kGreen, LedColor.kBlack, 1.0);
+            rainbow(Section.kAll, 50.0, 1);
+            breath(Section.kTopLeft, LedColor.kRed, LedColor.kGreen, 1.0);
+            breath(Section.kTopRight, LedColor.kGreen, LedColor.kRed, 1.0);
         }   
 
         // Update the leds to the buffer
         leds.setData(buffer);
-
+        
     }
 
+
     // Make an entire section a selected color
-    private void solid(Section section, LedColor color){
+    public void solid(Section section, LedColor color){
         for(int i = section.getStart(); i < section.getEnd(); i++){
             buffer.setLED(i, color.getColor());
         }
@@ -146,7 +183,7 @@ public class Leds  extends SubsystemBase{
     }
 
     // Make an entire section black
-    private void solid(Section section){
+    public void solid(Section section){
         for(int i = section.getStart(); i < section.getEnd(); i++){
             buffer.setLED(i, LedColor.kBlack.getColor());
         }

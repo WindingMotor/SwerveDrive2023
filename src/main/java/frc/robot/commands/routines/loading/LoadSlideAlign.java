@@ -14,9 +14,9 @@ import frc.robot.subsystems.GrabberSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.util.Leds;
 
-public class LoadSlide extends SequentialCommandGroup{
+public class LoadSlideAlign extends SequentialCommandGroup{
     
-    public LoadSlide( ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem){
+    public LoadSlideAlign(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, Leds leds, Supplier<Double> xSpeed, Supplier<Double> ySpeed,  Supplier<Boolean> override){
 
         // If the grabber is OPEN close it for clone pickup
         boolean grabberOpen = grabberSubsystem.isGrabberOpen();
@@ -26,11 +26,13 @@ public class LoadSlide extends SequentialCommandGroup{
     
         addCommands(
         // Set grabber angle to horizontal
-        new GrabberDegrees(grabberSubsystem, 110), // CHANGED TO 38 instead of 38 -> 3:00 
+        new GrabberDegrees(grabberSubsystem, 120), // CHANGED TO 38 instead of 38 -> 3:00 
         // Turn on intake
         new GrabberForward(grabberSubsystem),
         // Move the elevator UP to platform height
-        new ElevatorSetpoint(elevatorSubsystem, -0.18 /* Height of platform in meters */) // -1.28 to 1.3 - 0.7in differance
+        new ElevatorSetpoint(elevatorSubsystem, -0.18 /* Height of platform in meters */), // -1.28 to 1.3 - 0.7in differance
+
+        new SwerveAutoAlign(swerveSubsystem, leds, xSpeed, ySpeed, override)
         );
 
     }

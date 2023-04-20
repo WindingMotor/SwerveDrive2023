@@ -77,9 +77,9 @@ public class SwerveAutoAlign extends CommandBase {
 
     double angle;
     if(DriverStation.getAlliance() == Alliance.Red){
-       angle = 90;
+       angle = -90;
     }else{
-      angle = -90;
+      angle = 90;
     }
 
     // Set joystick inputs to speed variables

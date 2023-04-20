@@ -5,12 +5,12 @@ import frc.robot.util.Leds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class SetLedGameObject extends CommandBase {
+public class SetLedBalance extends CommandBase {
 
   private Leds leds;
   private boolean isCone;
 
-  public SetLedGameObject(Leds leds, boolean isCone) {
+  public SetLedBalance(Leds leds, boolean isCone) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(leds);
     this.isCone = isCone;

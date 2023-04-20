@@ -2,6 +2,7 @@
 
 package frc.robot.commands.swerve;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.util.Leds;
 import frc.robot.util.LightStrip;
 import frc.robot.util.Constants.DriveConstants;
 import java.util.function.Supplier;
@@ -30,15 +31,15 @@ public class SwerveAutoBalance extends CommandBase {
   private double xSetpoint;
   private double ySetpoint;
 
-  private LightStrip lightStrip;
+  private Leds leds;
 
   // Command constructor
-  public SwerveAutoBalance(SwerveSubsystem swerveSubsystem,Supplier<Double> headingFunction, LightStrip lightStrip){
+  public SwerveAutoBalance(SwerveSubsystem swerveSubsystem,Supplier<Double> headingFunction, Leds leds){
 
 
     addRequirements(swerveSubsystem);
 
-    this.lightStrip = lightStrip;
+    this.leds = leds;
     this.swerveSubsystem = swerveSubsystem;
     this.headingFunction = headingFunction;
 
@@ -64,7 +65,7 @@ public class SwerveAutoBalance extends CommandBase {
   public void execute(){
 
 
-      lightStrip.setRGB(59, 163, 219);
+      leds.setAutoBalance(false);
 
       // Turning PID
       double turningSpeed;
@@ -73,12 +74,12 @@ public class SwerveAutoBalance extends CommandBase {
 
       double currentRoll = swerveSubsystem.getRoll();
 
-      if(currentRoll < 5.0 && currentRoll > -5.0){
+      if(currentRoll < 10.0 && currentRoll > -10.0){
         finished = true;
-      }else if(currentRoll > 5.0){
-        vY = 0.5;
-      }else if(currentRoll < -5.0){
-        vY = -0.5;
+      }else if(currentRoll > 10.0){
+        vY = 0.65;
+      }else if(currentRoll < -10.0){
+        vY = -0.65;
       }
 
       SmartDashboard.putNumber("vY", vY);
@@ -99,7 +100,7 @@ public class SwerveAutoBalance extends CommandBase {
 
   // Stop all module motor movement when command ends
   @Override
-  public void end(boolean interrupted){swerveSubsystem.stopModules(); lightStrip.setRGB(155, 219, 59);}
+  public void end(boolean interrupted){swerveSubsystem.stopModules(); leds.setAutoBalance(true);}
 
   @Override
   public boolean isFinished(){return finished;}
