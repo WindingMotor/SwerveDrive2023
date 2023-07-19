@@ -70,7 +70,6 @@ public class SwerveJoystick extends CommandBase {
     initialHeading = headingFunction.get();
     added = 0;
    // counter = 0;
-
   }
 
   // Running loop of command

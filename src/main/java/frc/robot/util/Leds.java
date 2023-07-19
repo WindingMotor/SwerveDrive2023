@@ -108,7 +108,7 @@ public class Leds  extends SubsystemBase{
        // solid(Section.kAll, LedColor.kCyan);
        // leds.setData(buffer);
 
-        
+        /* 
         // Check if the robot is enabled
         if(DriverStation.isEnabled()){
 
@@ -125,7 +125,6 @@ public class Leds  extends SubsystemBase{
         if(matchTime <= 15.0 && matchTime > 0){endgame = true;} else{endgame = false;}
         if(endgame){strobe(Section.kTopLeft, LedColor.kGreen, 0.22);
                     strobe(Section.kTopRight, LedColor.kGreen, 0.22);}
-        
 
         // Flash bottom leds orange is battery voltage is low
         if(powerDistribution.getVoltage() < 10){battery = true;} else{battery = false;}
@@ -161,10 +160,14 @@ public class Leds  extends SubsystemBase{
             breath(Section.kTopLeft, LedColor.kRed, LedColor.kGreen, 1.0);
             breath(Section.kTopRight, LedColor.kGreen, LedColor.kRed, 1.0);
         }   
+        */
 
+        rainbow(Section.kAll, 50.0, 1);
+        breath(Section.kTopLeft, LedColor.kRed, LedColor.kGreen, 1.0);
+        breath(Section.kTopRight, LedColor.kGreen, LedColor.kRed, 1.0);
         // Update the leds to the buffer
         leds.setData(buffer);
-        
+
     }
 
 

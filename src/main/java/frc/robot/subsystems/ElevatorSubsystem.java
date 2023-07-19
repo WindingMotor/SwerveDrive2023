@@ -10,6 +10,8 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.networktables.NetworkTable;
@@ -52,6 +54,8 @@ public class ElevatorSubsystem extends SubsystemBase{
     // Elevator Change of speed limiter
     private SlewRateLimiter slewRateLimiter;
 
+    private ElevatorFeedforward elevatorFeedforward;
+
 
     // Lift Subsystem Constructor
     public ElevatorSubsystem(){
@@ -90,7 +94,11 @@ public class ElevatorSubsystem extends SubsystemBase{
             //elevatorPID = new PIDController(0.6, 0.06, 0);
 
         //slew = new SlewRateLimiter(10, 5, 0);
-
+        double ks = 4;
+        double kg = .6;
+        double kv = 10.3;
+        double ka = .06;
+        elevatorFeedforward = new ElevatorFeedforward(ks, kg, kv, ka);
         // Set PID values for elevator
         //elevatorPID = new PIDController(0.5, 0, 0);
         elevatorPID = new PIDController(0.95, 0.08, 0.05);

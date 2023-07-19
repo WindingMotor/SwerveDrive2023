@@ -98,7 +98,7 @@ public final class Constants {
                                         // Need to update values for our specific magnetic fields
                                         // NOT IN RADIANS!
         public static final double kFrontLeftDriveAbsoluteEncoderOffsetRad = 1.658063;//0.98 * 2 * Math.PI;
-        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 1.04719;//(.25+0.0918)  * 2 * Math.PI - Math.PI / 36;
+        public static final double kBackLeftDriveAbsoluteEncoderOffsetRad = 1.4;        // 1.04719      //1.04719
         public static final double kFrontRightDriveAbsoluteEncoderOffsetRad = 1.39626;//(0.0141+.25) * 2 * Math.PI;
         public static final double kBackRightDriveAbsoluteEncoderOffsetRad =  -0.122173;//0.2577 * 2 * Math.PI;
 

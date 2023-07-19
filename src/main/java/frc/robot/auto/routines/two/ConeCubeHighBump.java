@@ -38,11 +38,10 @@ public class ConeCubeHighBump extends SequentialCommandGroup{
 
         List<SetPoint> setpoints = new ArrayList<>();
     setpoints.add(new SetPoint(-0.6, 4.5, 200, true, new Pose2d()));
-    setpoints.add(new SetPoint(-0.7, 5.5, 200, false, null));
+    setpoints.add(new SetPoint( /* */ -0.81, 5.6, 200, false, null));
     setpoints.add(new SetPoint(-0.5, 4.5, 0, false, null));
 
         addCommands(
-
 
         new GrabberHold(grabberSubsystem), // Set grabber to hold mode
         new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
@@ -97,15 +96,14 @@ public class ConeCubeHighBump extends SequentialCommandGroup{
 
     }else{
 
-
         List<SetPoint> setpoints = new ArrayList<>();
         setpoints.add(new SetPoint(0, 4.5, 165, true, new Pose2d()));
-        setpoints.add(new SetPoint(0.35, 5.8, 165, false, null));
+        setpoints.add(new SetPoint(0.24, 5.85, 165, false, null));
         setpoints.add(new SetPoint(0.2, 4.5, 0, false, null));
         //0.25, 6.18
+
             addCommands(
     
-          
             new GrabberHold(grabberSubsystem), // Set grabber to hold mode
             new ScoreTop(elevatorSubsystem, grabberSubsystem), // Raise the elevator to high
             new WaitCommand(0.8), // Wait for elevator

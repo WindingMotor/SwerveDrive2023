@@ -5,6 +5,7 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.auto.commands.TrajectoryWeaver;
@@ -14,6 +15,7 @@ import frc.robot.commands.elevator.ElevatorZero;
 import frc.robot.commands.grabber.intake.GrabberHold;
 import frc.robot.commands.grabber.intake.GrabberSolenoid;
 import frc.robot.commands.routines.scoring.ScoreTop;
+import frc.robot.commands.swerve.SwerveGoTo;
 import frc.robot.commands.util.ResetOdometryInverse;
 import frc.robot.commands.util.ResetYaw;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -55,9 +57,10 @@ public class ConeHighCharge extends SequentialCommandGroup{
         new WaitCommand(1), // wait
         new ElevatorZero(elevatorSubsystem, grabberSubsystem), // zero elevator
         new WaitCommand(1),
+        //new SwerveGoTo(swerveSubsystem, () -> swerveSubsystem.getHeading(), 0, 2.5, 0, true, new Pose2d(), 0.12),
         new TrajectoryWeaver(swerveSubsystem, xController, yController, ppthetaController, back, true, false), // bring robot back
-        new GrabberSolenoid(grabberSubsystem), // close grabber
-        new AutoBalance(swerveSubsystem, leds)
+        new GrabberSolenoid(grabberSubsystem) // close grabber
+        //new AutoBalance(swerveSubsystem, leds)
         //new ResetYaw(swerveSubsystem), // reset gyro yaw
         //new ResetOdometryInverse(swerveSubsystem) // reset odometry
         

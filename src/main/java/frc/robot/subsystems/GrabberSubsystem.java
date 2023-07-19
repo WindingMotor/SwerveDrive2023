@@ -69,14 +69,16 @@ public class GrabberSubsystem extends SubsystemBase{
         angleMotorEncoder.setPositionConversionFactor(360 / 71.5982);
 
         // Set PID controller values
-        anglePID = new PIDController(0.01, 0, 0);
+        anglePID = new PIDController(0, 0, 0);
 
         // Set defualt angle setpoint
-        angleSetpoint = 42.0;
+        angleSetpoint = 0;
 
         grabberOpen = false;
 
         intakeMotor.setSmartCurrentLimit(5);
+
+        angleMotor.setIdleMode(IdleMode.kBrake);
 }
 
 //---------------------// Periodic loop
@@ -123,14 +125,17 @@ public class GrabberSubsystem extends SubsystemBase{
 //---------------------// Angle
 
     public void setAngleSpeed(double x){
-        angleMotor.set(x);
+        angleMotor.set(0);
     }
 
     public void setAngleSetpoint(double d){
-        angleSetpoint = d;
+        angleSetpoint = 0;
     }
 
     public void setAnglePID(double x){
+
+        angleMotor.set(0);
+        /* 
         if(x > 130){
             x = 95;
         }else if(x < 8){
@@ -138,6 +143,7 @@ public class GrabberSubsystem extends SubsystemBase{
         }
         double angle = anglePID.calculate(angleMotorEncoder.getPosition(), x);
         angleMotor.set(angle);
+        */
     }
 
 //---------------------// Motor Data

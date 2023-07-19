@@ -37,10 +37,10 @@ import frc.robot.util.Leds;
 import frc.robot.util.LightStrip;
 
 // Run multiple commands in a routine
-public class BalanceNew extends SequentialCommandGroup{
+public class BalanceOnly extends SequentialCommandGroup{
 
     // Routine command constructor
-    public BalanceNew(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
+    public BalanceOnly(SwerveSubsystem swerveSubsystem, ElevatorSubsystem elevatorSubsystem, GrabberSubsystem grabberSubsystem, PIDController xController,
     PIDController yController,  PIDController ppthetaController, Leds leds){
 
         addCommands(
