@@ -1,3 +1,6 @@
+# Disclaimer 🛑 - This codebase has bugs and forks should be using AdvantageJava2024 with built in advantage kit support!
+https://github.com/WindingMotor/AdvantageJava2024
+
 # SwerveDrive2023 - FRC Team 2106
 A swerve drive base code using SDS MK4 Modules, Neos, and SRX Mag Encoders.
 Fully working and updated for 2023. Designed for our 2023 Robot, Continuity, that
